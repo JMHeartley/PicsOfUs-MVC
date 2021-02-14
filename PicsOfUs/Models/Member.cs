@@ -1,4 +1,6 @@
-﻿namespace PicsOfUs.Models
+﻿using System.Collections.Generic;
+
+namespace PicsOfUs.Models
 {
     public class Member
     {
@@ -7,6 +9,7 @@
         public string LastName { get; set; }
         public Gender Gender { get; set; }
         public Suffix? Suffix { get; set; }
+        private ICollection<Photo> Photos { get; set; }
     }
 
     public enum Gender
