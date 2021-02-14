@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNet.Identity.EntityFramework;
+using System.Data.Entity;
 
 namespace PicsOfUs.Models
 {
@@ -13,5 +14,7 @@ namespace PicsOfUs.Models
         {
             return new ApplicationDbContext();
         }
+
+        public DbSet<Member> Members { get; set; }
     }
 }
