@@ -9,7 +9,7 @@ namespace PicsOfUs.Models
         public string LastName { get; set; }
         public Gender Gender { get; set; }
         public Suffix? Suffix { get; set; }
-        private ICollection<Photo> Photos { get; set; }
+        public ICollection<Photo> Photos { get; set; }
     }
 
     public enum Gender

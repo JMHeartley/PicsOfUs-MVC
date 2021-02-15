@@ -11,6 +11,6 @@ namespace PicsOfUs.Models
         public string Url { get; set; }
         public string Caption { get; set; }
         public DateTime? CaptureDate { get; set; }
-        private ICollection<Member> Members { get; set; }
+        public ICollection<Member> Members { get; set; }
     }
 }

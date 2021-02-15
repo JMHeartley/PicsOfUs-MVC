@@ -16,5 +16,6 @@ namespace PicsOfUs.Models
         }
 
         public DbSet<Member> Members { get; set; }
+        public DbSet<Photo> Photos { get; set; }
     }
 }
