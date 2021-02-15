@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace PicsOfUs.Models
 {
@@ -8,14 +9,15 @@ namespace PicsOfUs.Models
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public Gender Gender { get; set; }
+        public DateTime? BirthDate { get; set; }
         public Suffix? Suffix { get; set; }
         public ICollection<Photo> Photos { get; set; }
     }
 
     public enum Gender
     {
-        Male = 1,
-        Female = 2,
+        Female = 1,
+        Male = 2,
         Other = 3
     }
 
