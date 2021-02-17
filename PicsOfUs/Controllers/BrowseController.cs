@@ -82,7 +82,22 @@ namespace PicsOfUs.Controllers
                 .Where(m => selectedMemberIds.Contains(m.Id))
                 .ToList();
 
-            _context.Photos.Add(photo);
+            if (photo.Id == 0)
+            {
+                _context.Photos.Add(photo);
+            }
+            else
+            {
+                var photoInDb = _context.Photos
+                    .Include(p => p.Members)
+                    .Single(p => p.Id == viewModel.Photo.Id);
+
+                photoInDb.Url = photo.Url;
+                photoInDb.Caption = photo.Caption;
+                photoInDb.CaptureDate = photo.CaptureDate;
+                photoInDb.Members = photo.Members;
+            }
+
             _context.SaveChanges();
 
             return RedirectToAction("Index", "Browse");
