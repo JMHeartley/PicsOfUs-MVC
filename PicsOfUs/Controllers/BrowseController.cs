@@ -34,7 +34,7 @@ namespace PicsOfUs.Controllers
                 .AsEnumerable()
                 .Select(m => new MemberSelectViewModel
                 {
-                    MemberId = 0,
+                    MemberId = m.Id,
                     Name = m.Name,
                     IsSelected = false
                 }).ToList();
@@ -45,6 +45,28 @@ namespace PicsOfUs.Controllers
             };
 
             return View("PhotoForm", viewModel);
+        }
+
+        public ActionResult Save(PhotoFormViewModel viewModel)
+        {
+            var photo = viewModel.Photo;
+
+            //load photo
+            var selectedMemberIds = viewModel.Members
+                .Where(m => m.IsSelected)
+                .Select(m => m.MemberId);
+
+            //add members to photo
+            photo.Members = _context.Members
+                .Where(m => selectedMemberIds.Contains(m.Id))
+                .ToList();
+
+            //save to database
+            _context.Photos.Add(photo);
+
+            _context.SaveChanges();
+
+            return RedirectToAction("Index", "Browse");
         }
     }
 }
