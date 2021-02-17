@@ -1,0 +1,9 @@
+﻿@model PicsOfUs.Models.MemberSelectViewModel
+
+<div class="form-group">
+    @Html.LabelFor(m => m.IsSelected, Model.Name)
+    @Html.CheckBoxFor(m => m.IsSelected)
+</div>
+
+@Html.HiddenFor(m => m.MemberId)
+@Html.HiddenFor(m => m.Name)

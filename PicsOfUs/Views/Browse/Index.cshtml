@@ -5,6 +5,8 @@
 
 <h2>Photos</h2>
 
+<button type="button" class="btn btn-primary">@Html.ActionLink("Add Photo", "New")</button>
+
 @if (!Model.Any())
 {
     <h4>There are no photos to display...</h4>
@@ -12,24 +14,24 @@
 else
 {
     <table class="table table-hover">
-    <thead>
-    <tr>
-        <th scope="col">Id</th>
-        <th scope="col">Caption</th>
-        <th scope="col">Capture Date</th>
-        <th scope="col">Member Count</th>
-    </tr>
-    </thead>
-    <tbody>
-    @foreach (var photo in @Model)
-    {
-        <tr>
-            <th scope="row">@photo.Id</th>
-            <td>@photo.Caption</td>
-            <td>@photo.CaptureDate</td>
-            <td>@photo.Members.Count</td>
-        </tr>
-    }
-    </tbody>
+        <thead>
+            <tr>
+                <th scope="col">Id</th>
+                <th scope="col">Caption</th>
+                <th scope="col">Capture Date</th>
+                <th scope="col">Member Count</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var photo in @Model)
+            {
+                <tr>
+                    <th scope="row">@photo.Id</th>
+                    <td>@photo.Caption</td>
+                    <td>@photo.CaptureDate</td>
+                    <td>@photo.Members.Count</td>
+                </tr>
+            }
+        </tbody>
     </table>
 }

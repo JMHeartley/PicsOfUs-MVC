@@ -1,4 +1,5 @@
 ﻿using PicsOfUs.Models;
+using System.Data.Entity;
 using System.Linq;
 using System.Web.Mvc;
 
@@ -20,9 +21,21 @@ namespace PicsOfUs.Controllers
 
         public ActionResult Index()
         {
-            var photos = _context.Photos.ToList();
+            var photos = _context.Photos
+                .Include(p => p.Members)
+                .ToList();
 
             return View(photos);
+        }
+
+        public ActionResult New()
+        {
+            var viewModel = new PhotoFormViewModel
+            {
+                Members = _context.Members.ToList();
+            }
+
+            return View("PhotoFormView");
         }
     }
 }

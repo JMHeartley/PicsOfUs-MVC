@@ -200,7 +200,9 @@
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
     <Compile Include="Models\Member.cs" />
+    <Compile Include="Models\MemberSelectViewModel.cs" />
     <Compile Include="Models\Photo.cs" />
+    <Compile Include="Models\PhotoFormViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
   </ItemGroup>
@@ -259,6 +261,8 @@
     <Content Include="Views\Shared\Lockout.cshtml" />
     <Content Include="Views\Shared\_LoginPartial.cshtml" />
     <Content Include="Views\Browse\Index.cshtml" />
+    <Content Include="Views\Browse\PhotoForm.cshtml" />
+    <Content Include="Views\Shared\EditorTemplates\MemberSelectViewModel.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
