@@ -30,18 +30,41 @@ namespace PicsOfUs.Controllers
 
         public ActionResult New()
         {
-            var members = _context.Members
-                .AsEnumerable()
-                .Select(m => new MemberSelectViewModel
-                {
-                    MemberId = m.Id,
-                    Name = m.Name,
-                    IsSelected = false
-                }).ToList();
+            var viewModel = new PhotoFormViewModel
+            {
+                Members = _context.Members
+                    .AsEnumerable()
+                    .Select(m => new MemberSelectViewModel
+                    {
+                        MemberId = m.Id,
+                        Name = m.Name,
+                        IsSelected = false
+                    }).ToList()
+            };
+
+            return View("PhotoForm", viewModel);
+        }
+
+        public ActionResult Edit(int id)
+        {
+            var photo = _context.Photos
+                .Include(p => p.Members)
+                .SingleOrDefault(p => p.Id == id);
+
+            if (photo == null)
+                return HttpNotFound();
 
             var viewModel = new PhotoFormViewModel
             {
-                Members = members
+                Photo = photo,
+                Members = _context.Members
+                    .AsEnumerable()
+                    .Select(m => new MemberSelectViewModel
+                    {
+                        MemberId = m.Id,
+                        Name = m.Name,
+                        IsSelected = photo.Members.Contains(m)
+                    }).ToList()
             };
 
             return View("PhotoForm", viewModel);
@@ -51,19 +74,15 @@ namespace PicsOfUs.Controllers
         {
             var photo = viewModel.Photo;
 
-            //load photo
             var selectedMemberIds = viewModel.Members
                 .Where(m => m.IsSelected)
                 .Select(m => m.MemberId);
 
-            //add members to photo
             photo.Members = _context.Members
                 .Where(m => selectedMemberIds.Contains(m.Id))
                 .ToList();
 
-            //save to database
             _context.Photos.Add(photo);
-
             _context.SaveChanges();
 
             return RedirectToAction("Index", "Browse");
