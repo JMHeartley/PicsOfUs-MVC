@@ -30,12 +30,21 @@ namespace PicsOfUs.Controllers
 
         public ActionResult New()
         {
+            var members = _context.Members
+                .AsEnumerable()
+                .Select(m => new MemberSelectViewModel
+                {
+                    MemberId = 0,
+                    Name = m.Name,
+                    IsSelected = false
+                }).ToList();
+
             var viewModel = new PhotoFormViewModel
             {
-                Members = _context.Members.ToList();
-            }
+                Members = members
+            };
 
-            return View("PhotoFormView");
+            return View("PhotoForm", viewModel);
         }
     }
 }
