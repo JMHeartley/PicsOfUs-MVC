@@ -1,10 +1,18 @@
-﻿@model PicsOfUs.Models.PhotoFormViewModel
+﻿@using System.Activities.Expressions
+@model PicsOfUs.Models.PhotoFormViewModel
 
 @{
     ViewBag.Title = "PhotoForm";
 }
 
-<h2>PhotoFormView</h2>
+@if (Model.Photo.Id == 0)
+{
+    <h2>New Photo</h2>
+}
+else
+{
+    <h2>Edit Photo</h2>
+}
 
 @using (Html.BeginForm("Save", "Browse"))
 {
@@ -21,7 +29,9 @@
         @Html.TextBoxFor(p => p.Photo.CaptureDate, "{0:MM/dd/yyyy}", new { @class = "form-control" })
     </div>
 
-    @Html.EditorFor(m => m.Members)
+    <div class="overflow-auto">
+        @Html.EditorFor(m => m.Members)
+    </div>
 
 
     @Html.HiddenFor(m => m.Photo.Id)

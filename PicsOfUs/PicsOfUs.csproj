@@ -263,6 +263,7 @@
     <Content Include="Views\Browse\Index.cshtml" />
     <Content Include="Views\Browse\PhotoForm.cshtml" />
     <Content Include="Views\Shared\EditorTemplates\MemberSelectViewModel.cshtml" />
+    <Content Include="Views\Browse\Details.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
