@@ -13,5 +13,16 @@ namespace PicsOfUs.Models
         public string Caption { get; set; }
         public DateTime? CaptureDate { get; set; }
         public ICollection<Member> Members { get; set; }
+
+        public string CaptureDateShort
+        {
+            get
+            {
+                if (CaptureDate == null)
+                    return "";
+
+                return (CaptureDate.GetValueOrDefault()).ToString("{0:MM/dd/yyyy}");
+            }
+        }
     }
 }
