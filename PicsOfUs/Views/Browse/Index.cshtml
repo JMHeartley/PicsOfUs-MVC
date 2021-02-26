@@ -18,9 +18,9 @@ else
             <tr>
                 <th scope="col">Id</th>
                 <th scope="col">Caption</th>
+                <th scope="col">Details</th>
                 <th scope="col">Capture Date</th>
                 <th scope="col">Member Count</th>
-                <th scope="col">Details</th>
             </tr>
         </thead>
         <tbody>
@@ -29,9 +29,9 @@ else
                 <tr>
                     <th scope="row">@Html.ActionLink(@photo.Id.ToString(), "Edit", new { id = photo.Id })</th>
                     <td>@photo.Caption</td>
-                    <td>@photo.CaptureDate</td>
-                    <td>@photo.Members.Count</td>
                     <td>@Html.ActionLink("Details", "Details", new { id = photo.Id })</td>
+                    <td>@photo.CaptureDateDisplay</td>
+                    <td>@photo.Members.Count</td>
                 </tr>
             }
         </tbody>
