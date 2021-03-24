@@ -21,7 +21,7 @@ namespace PicsOfUs.Models
                 if (CaptureDate == null)
                     return "";
 
-                return (CaptureDate.GetValueOrDefault()).ToString("{MM/dd/yyyy}");
+                return (CaptureDate.GetValueOrDefault()).ToString("MM/dd/yyyy");
             }
         }
     }
