@@ -13,8 +13,6 @@ namespace PicsOfUs.Models
         public string Caption { get; set; }
         public DateTime? CaptureDate { get; set; }
         public ICollection<Member> Members { get; set; }
-        public int Height { get; set; }
-        public int Width { get; set; }
 
         public string CaptureDateDisplay
         {
@@ -23,7 +21,7 @@ namespace PicsOfUs.Models
                 if (CaptureDate == null)
                     return "";
 
-                return (CaptureDate.GetValueOrDefault()).ToString("{0:MM/dd/yyyy}");
+                return (CaptureDate.GetValueOrDefault()).ToString("{MM/dd/yyyy}");
             }
         }
     }
