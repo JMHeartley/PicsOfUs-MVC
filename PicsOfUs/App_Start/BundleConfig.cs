@@ -22,7 +22,7 @@ namespace PicsOfUs
                       "~/Scripts/bootstrap.js"));
 
             bundles.Add(new StyleBundle("~/Content/css").Include(
-                      "~/Content/bootstrap-4-lumen.css",
+                      "~/Content/bootstrap-4-darky.css",
                       "~/Content/site.css"));
         }
     }
