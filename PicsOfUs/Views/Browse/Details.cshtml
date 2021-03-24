@@ -4,31 +4,43 @@
 	ViewBag.Title = "Details";
 }
 
+<div class="row no-gutters">
+    <div class="col-12 text-center my-3" id="main-pic">
+        <img src="@Model.Url" alt="@Model.Caption" class="img-fluid mx-auto">
+    </div>
+    <div class="col">
+        <div class="row no-gutters justify-content-end align-items-center">
+            <div class="col-sm-12 col-md-5 px-3">
+                <h4>@Model.Caption</h4>
+                <span>Captured on @Model.CaptureDateDisplay</span>
+            </div>
+            <div class="col col-md-6 text-center py-4">
+                LOVE PIC
+            </div>
+        </div>
+        <div class="d-flex justify-content-center">
+            @foreach (var member in @Model.Members)
+            {
 
+            <div class="gradient-wrap mini-profile">
+                <div class="gradient-background d-flex flex-row align-items-center text-center py-3">
+                    <!--                        
+                        <img src="@member.ProfilePic" alt="So and so's profile picture" class="rounded-circle mx-3">
+                    -->
+                    <div class="mx-3">
+                        <h5>@member.Name</h5>
+                        <div class="row no-gutters align-items-center">
+                            <div class="col-sm-8 col-12">Age In Pic</div>
+                            <div class="col-sm-4 col-12">@member.AgeInPhoto(Model.CaptureDate)</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
 
-<img id="image" src="@Model.Url" alt="unloaded-image" style="
-									  border: 1px solid black;
-									  display: block;
-									  height: 300px;
-									  width: 300px;">
-
-<p>URL: @Model.Url</p>
-
-<h4>@Model.Caption</h4>
-<p>(Caption)</p>
-
-<h4>Captured:</h4>
-<p>@Model.CaptureDateShort</p>
-
-<div class=""></div>
-<h4>Members</h4>
-
-<div class="list-group">
-    @foreach (var member in @Model.Members)
-    {
-        <a href="#" class="list-group-item list-group-item-action flex-column align-items-start">
-            <p class="mb-1">@member.Name</p>
-            <small class="text-muted">@member.AgeInPhoto(@Model.CaptureDate)</small>
-        </a>
-    }
+            }
+        </div>
+    </div>
+    <div class="col-12">
+        <!-- comments area -->
+    </div>
 </div>

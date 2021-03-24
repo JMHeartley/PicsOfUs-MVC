@@ -1,31 +1,50 @@
 ﻿@{
-    ViewBag.Title = "Home Page";
+	ViewBag.Title = "Home";
 }
 
-<div class="jumbotron">
-    <h1>ASP.NET</h1>
-    <p class="lead">ASP.NET is a free web framework for building great Web sites and Web applications using HTML, CSS and JavaScript.</p>
-    <p><a href="https://asp.net" class="btn btn-primary btn-lg">Learn more &raquo;</a></p>
-</div>
-
-<div class="row">
-    <div class="col-md-4">
-        <h2>Getting started</h2>
-        <p>
-            ASP.NET MVC gives you a powerful, patterns-based way to build dynamic websites that
-            enables a clean separation of concerns and gives you full control over markup
-            for enjoyable, agile development.
-        </p>
-        <p><a class="btn btn-default" href="https://go.microsoft.com/fwlink/?LinkId=301865">Learn more &raquo;</a></p>
-    </div>
-    <div class="col-md-4">
-        <h2>Get more libraries</h2>
-        <p>NuGet is a free Visual Studio extension that makes it easy to add, remove, and update libraries and tools in Visual Studio projects.</p>
-        <p><a class="btn btn-default" href="https://go.microsoft.com/fwlink/?LinkId=301866">Learn more &raquo;</a></p>
-    </div>
-    <div class="col-md-4">
-        <h2>Web Hosting</h2>
-        <p>You can easily find a web hosting company that offers the right mix of features and price for your applications.</p>
-        <p><a class="btn btn-default" href="https://go.microsoft.com/fwlink/?LinkId=301867">Learn more &raquo;</a></p>
-    </div>
+<ul class="nav nav-tabs">
+	<li class="nav-item">
+		<a class="nav-link active" data-toggle="tab" href="#loved-pics">Loved Pics</a>
+	</li>
+	<li class="nav-item">
+		<a class="nav-link" data-toggle="tab" href="#account">Account Settings</a>
+	</li>
+</ul>
+<div id="myTabContent" class="tab-content">
+	<div class="tab-pane fade show active" id="loved-pics">
+		<p>Loved pics, recent comments, or "featured" pics.</p>
+		<div class="container-fluid" id="loved-pics-body">
+			<img src="https://lh3.googleusercontent.com/pw/ACtC-3eAUU1XTY1r8aR9VkjgTu-U2TC2gAHjPrHpWf4jET-JMFWP9jrkgCg3esdq0Os8-L3VG_biWrjN1KWiF9NFqpsgvznTCzGT7FX38bnmh6c16a5M-vgSiU_RTvGmyE_FC9sMk55x5ibrzVII9dlbaCXXDA" alt="Weird chair" class="img-fluid result-pic gradient-wrap">
+			<img src="https://lh3.googleusercontent.com/ZooW1btFBgRaMaH40T8WZkVo8JEnDuItylXNYgTdhyV6kXh_cgGo8M922VHoe3z-v3Wn2DF48tZXuRPU0h-TjoODyY_Ly5tFWFC4gSmTdCAXcQhZgPFKEsoQz-UiGievMZhB7FRRF-4" alt="Curving pumpkins" class="img-fluid gradient-wrap result-pic gradient-wrap">
+			<img src="https://lh3.googleusercontent.com/pw/ACtC-3e9HUFEJ2ZYZlPhOopSls_SGO06FJRKyzltIQ7MgKEuD1resSdcqQvZtho3GhjvoNri-lqFiPY7SmkPxQOMCJLLlyOVbzN1Z4CAPx0r814PeQgcKwJJ7kY0FMn3fVZbN7d4bS5y0RRu0mnw3VjWVmpx2w" alt="RJ's Graduation" class="img-fluid result-pic gradient-wrap">
+		</div>
+	</div>
+	<div class="tab-pane fade" id="account">
+		<div class="gradient-wrap">
+			<div class="gradient-background p-2">
+				<div class="row no-gutters justify-content-center align-items-center">
+					<img src="https://bit.ly/3r4iGzf" alt="So and so's profile picture" class="rounded-circle mx-3 my-2">
+					<span class="text-center" id="name">Justin Heartley</span>
+				</div>
+			<div class="row no-gutters align-items-center my-4">
+				<div class="flex-fill ml-sm-5">
+					<h6>EMAIL</h6>
+					<span>heartleyjm@gmail.com</span>
+				</div>
+				<div class="mr-sm-5">
+					<button class="btn btn-primary">Edit</button>
+				</div>
+			</div>
+			<div class="row no-gutters align-items-center my-4">
+				<div class="flex-fill ml-sm-5">
+					<h6>PASSWORD</h6>
+					<span>Last updated: 3/20/2021</span>
+				</div>
+				<div class="mr-sm-5">
+					<button class="btn btn-primary">Update</button>
+				</div>
+			</div>
+		</div>
+		</div>
+	</div>
 </div>

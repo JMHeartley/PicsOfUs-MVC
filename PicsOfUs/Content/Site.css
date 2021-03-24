@@ -1,24 +1,120 @@
 ﻿/*body {
-    padding-top: 50px;
-    padding-bottom: 20px;
+	padding-top: 50px;
+	padding-bottom: 20px;
 }*/
 
 /* Set padding to keep content from hitting the edges */
-.body-content {
-    padding-left: 15px;
-    padding-right: 15px;
+/*.body-content {
+	padding-left: 15px;
+	padding-right: 15px;
 }
-
+*/
 /* Override the default bootstrap behavior where horizontal description lists 
    will truncate terms that are too long to fit in the left column 
 */
 .dl-horizontal dt {
-    white-space: normal;
+	white-space: normal;
 }
 
 /* Set width on the form input elements since they're 100% wide by default */
 input,
 select,
 textarea {
-    max-width: 280px;
+	max-width: 280px;
+}
+
+
+/**** custom styles ****/
+
+:root {
+	--red: #e61d2f;
+	--blue: #2d9cdb;
+	--white: #ffffff;
+	--black: #121212;
+	--grey: #8b8b8b;
+}
+
+#navbar-desktop {
+	display: none;
+}
+#navbar-mobile,
+#navbar-mobile-banner {
+	display: block;
+}
+
+/**** tablet and bigger view ****/
+@media (min-width: 768px) {
+	#navbar-desktop {
+		display: block;
+	}
+	#navbar-mobile,
+	#navbar-mobile-banner {
+		display: none;
+	}
+	body {
+		margin-top: 5rem;
+		margin-bottom: 0 !important;
+	}
+	#upload-button {
+		display: none;
+	}
+}
+body {
+	padding: 0 1.875rem;
+	margin-bottom: 6.25rem;
+}
+
+.gradient-wrap {
+	background: linear-gradient(135deg, var(--red), var(--blue));
+	padding: 0.125rem;
+	border-radius: 1rem;
+}
+
+.gradient-background {
+	background: black;
+	border-radius: 1rem;
+}
+
+.mini-profile {
+	max-width: 20rem;
+}
+
+.mini-profile img {
+	width: 6rem;
+}
+
+.result-pic {
+	max-height: 9.375rem;
+	margin: 0.313rem;
+}
+
+.img-fluid {
+	height: 100%;
+}
+
+#main-pic {
+	height: 40vh;
+}
+
+#main-pic,
+#loved-pics-body,
+#results-body {
+	background-color: hsla(0, 0%, 0%, 0.5);
+	border-radius: 0.5rem;
+}
+
+#loved-pics,
+#account {
+	margin: 1rem auto;
+	padding: 1vh 5vw;
+	max-width: 1000px;
+}
+
+#account img {
+	width: 15vh;
+	min-width: 6.25rem;
+}
+
+#account #name {
+	font-size: 1.5rem;
 }
