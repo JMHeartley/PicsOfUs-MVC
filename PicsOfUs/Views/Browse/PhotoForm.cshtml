@@ -14,27 +14,48 @@ else
     <h2>Edit Photo</h2>
 }
 
-@using (Html.BeginForm("Save", "Browse"))
-{
-    <div class="form-group">
-        @Html.LabelFor(p => p.Photo.Url)
-        @Html.TextBoxFor(p => p.Photo.Url, new { @class = "form-control" })
-    </div>
-    <div class="form-group">
-        @Html.LabelFor(p => p.Photo.Caption)
-        @Html.TextBoxFor(p => p.Photo.Caption, new { @class = "form-control" })
-    </div>
-    <div class="form-group">
-        @Html.LabelFor(p => p.Photo.CaptureDate)
-        @Html.TextBoxFor(p => p.Photo.CaptureDate, "{0:MM/dd/yyyy}", new { @class = "form-control" })
-    </div>
 
-    <div class="overflow-auto">
-        @Html.EditorFor(m => m.Members)
+<div class="d-flex align-items-center">
+    <div class="col">
+        @using (Html.BeginForm("Save", "Browse"))
+        {
+            <div class="form-group">
+                @Html.LabelFor(p => p.Photo.Url)
+                @Html.TextBoxFor(p => p.Photo.Url, new {@class = "form-control"})
+            </div>
+            <div class="form-group">
+                @Html.LabelFor(p => p.Photo.Caption)
+                @Html.TextBoxFor(p => p.Photo.Caption, new {@class = "form-control"})
+            </div>
+            <div class="form-group">
+                @Html.LabelFor(p => p.Photo.CaptureDate)
+                @Html.TextBoxFor(p => p.Photo.CaptureDate, "{0:MM/dd/yyyy}", new {@class = "form-control"})
+            </div>
+
+            <label>Subjects</label>
+            <div class="overflow-auto mb-3" id="member-select-overflow">
+                @Html.EditorFor(m => m.Members)
+            </div>
+
+
+            @Html.HiddenFor(m => m.Photo.Id)
+
+            <button type="submit" class="btn btn-primary">Save</button>
+        }
     </div>
+    <div class="col text-center">
+                <div class="text-center mb-4">
+            <button class="btn btn-primary" onclick="preview()">Preview Pic</button>
+        </div>
+        <img src="@Model.Photo.Url" alt="@Model.Photo.Caption" class="img-fluid" id="photoform-preview">
+    </div>
+</div>
 
+<script>
+    var urlInput = document.querySelector("#Photo_Url");
+    var photoPreview = document.querySelector("#photoform-preview");
 
-    @Html.HiddenFor(m => m.Photo.Id)
-
-    <button type="submit" class="btn btn-primary">Save</button>
-}
+    function preview () {
+        photoPreview.src = urlInput.value;
+    };
+</script>
