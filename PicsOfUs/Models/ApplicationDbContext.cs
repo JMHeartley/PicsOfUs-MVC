@@ -15,6 +15,25 @@ namespace PicsOfUs.Models
             return new ApplicationDbContext();
         }
 
+        protected override void OnModelCreating(DbModelBuilder modelBuilder)
+        {
+            base.OnModelCreating(modelBuilder);
+
+            modelBuilder.Entity<Member>().HasMany(m => m.Siblings).WithMany().Map(m =>
+            {
+                m.MapLeftKey("MemberId");
+                m.MapRightKey("SiblingId");
+                m.ToTable("MemberSiblings");
+            });
+
+            modelBuilder.Entity<Member>().HasMany(m => m.Parents).WithMany().Map(m =>
+            {
+                m.MapLeftKey("ChildId");
+                m.MapRightKey("ParentId");
+                m.ToTable("ChildParents");
+            });
+        }
+
         public DbSet<Member> Members { get; set; }
         public DbSet<Photo> Photos { get; set; }
     }
