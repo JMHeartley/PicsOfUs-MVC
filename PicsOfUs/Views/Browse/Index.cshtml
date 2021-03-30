@@ -3,9 +3,7 @@
     ViewBag.Title = "Index";
 }
 
-<h2>Photos</h2>
-
-<button type="button" class="btn btn-outline-primary">@Html.ActionLink("Add Photo", "New")</button>
+@Html.ActionLink("Add Pic", "New", null, new {@class="btn btn-primary my-3"})
 
 @if (!Model.Any())
 {
@@ -13,50 +11,33 @@
 }
 else
 {
-    <table class="table table-hover">
-        <thead>
-        <tr>
-            <th scope="col">Id</th>
-            <th scope="col">Caption</th>
-            <th scope="col">Details</th>
-            <th scope="col">Capture Date</th>
-            <th scope="col">Member Count</th>
-        </tr>
-        </thead>
-        <tbody>
-        @foreach (var photo in @Model)
-        {
-            <tr>
-                <th scope="row">@Html.ActionLink(@photo.Id.ToString(), "Edit", new { id = photo.Id })</th>
-                <td>@photo.Caption</td>
-                <td>@Html.ActionLink("Details", "Details", new { id = photo.Id })</td>
-                <td>@photo.CaptureDateDisplay</td>
-                <td>@photo.Members.Count</td>
-            </tr>
-        }
-        </tbody>
-    </table>
-
     <div class="row no-gutters justify-content-center">
 	    <div class="px-5 my-3 ml-md-5 text-center">
 		    <h4>Date</h4>
-            <button class="btn btn-primary">Add date</button>
+            <a href="#" class="btn btn-primary">Add date</a>
 	    </div>
 	    <div class="px-5 my-3 ml-md-5 text-center">
 		    <h4>People</h4>
-            <button class="btn btn-primary">Add person</button>
+            <a href="#" class="btn btn-primary">Add person</a>
 	    </div>
     </div>
     <div>
-	    <h4 class="text-md-left text-center ml-md-5 pl-md-5">Results</h4>
-        <div class="px-md-5 mx-md-3 " id="results-body">
-            @foreach (var photo in @Model)
+        <h4 class="text-md-left text-center ml-md-5 pl-md-5">Results</h4>
+        <div class="d-flex py-3 px-4" id="results-body">
+            @foreach (var photo in Model)
             {
-                <img src="@photo.Url" alt="@photo.Caption" class="img-fluid result-pic gradient-wrap">
+                <div class="card mx-2 my-1">
+                    <div class="card-img-wrap d-flex justify-content-center align-content-center">
+                        <img src="@photo.Url" alt="@photo.Caption">
+                    </div>
+                    <div class="card-body">
+                        <h5 class="card-title">@photo.Caption</h5>
+                        <h6 class="card-subtitle text-muted mb-3">taken on @photo.CaptureDateDisplay</h6>
+                        @Html.ActionLink("Edit", "Edit", new { id = photo.Id }, new {@class= "btn btn-secondary card-link"})
+                        @Html.ActionLink("Details", "Details", new { id = photo.Id }, new {@class= "btn btn-primary card-link"})
+                    </div>
+                </div>
             }
         </div>
     </div>
 }
-
-<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>

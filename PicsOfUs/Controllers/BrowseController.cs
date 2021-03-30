@@ -72,6 +72,11 @@ namespace PicsOfUs.Controllers
 
         public ActionResult Save(PhotoFormViewModel viewModel)
         {
+            if (!ModelState.IsValid)
+            {
+                View("PhotoForm", viewModel);
+            }
+
             var photo = viewModel.Photo;
 
             var selectedMemberIds = viewModel.Members
