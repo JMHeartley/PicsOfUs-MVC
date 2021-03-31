@@ -214,8 +214,12 @@
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
     <Compile Include="Models\Member.cs" />
+    <Compile Include="Models\MemberDetailsViewModel.cs" />
     <Compile Include="Models\MemberSelectViewModel.cs" />
+    <Compile Include="Models\MiniProfileViewModel.cs" />
+    <Compile Include="Models\PicProfileViewModel.cs" />
     <Compile Include="Models\Photo.cs" />
+    <Compile Include="Models\PhotoDetailsViewModel.cs" />
     <Compile Include="Models\PhotoFormViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
@@ -367,7 +371,9 @@
     <Content Include="Scripts\popper.js.map" />
     <Content Include="Scripts\popper-utils.min.js.map" />
     <Content Include="Scripts\popper-utils.js.map" />
-    <Content Include="Views\Browse\Member.cshtml" />
+    <Content Include="Views\Browse\MemberDetails.cshtml" />
+    <Content Include="Views\Shared\DisplayTemplates\PicProfileViewModel.cshtml" />
+    <Content Include="Views\Shared\DisplayTemplates\MiniProfileViewModel.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

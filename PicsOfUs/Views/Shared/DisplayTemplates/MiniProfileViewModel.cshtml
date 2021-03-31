@@ -1,0 +1,15 @@
+﻿@model PicsOfUs.Models.MiniProfileViewModel
+
+<div class="gradient-wrap mini-profile">
+	<div class="gradient-background d-flex flex-row align-items-center text-center py-3">
+		<!--                        
+			<img src="@@member.ProfilePic" alt="So and so's profile picture" class="rounded-circle mx-3">
+		-->
+		<div class="mx-3">
+			<h5>@Model.Name</h5>
+		</div>
+	</div>
+</div>
+
+
+@Html.ActionLink("View Member", "MemberDetails", new { id = Model.MemberId }, new {@class= "btn btn-primary"})

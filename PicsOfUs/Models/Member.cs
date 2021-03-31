@@ -12,7 +12,8 @@ namespace PicsOfUs.Models
         public DateTime? BirthDate { get; set; }
         public Suffix? Suffix { get; set; }
         public ICollection<Photo> Photos { get; set; }
-
+        public ICollection<Member> Siblings { get; set; }
+        public ICollection<Member> Parents { get; set; }
         public string Name
         {
             get
