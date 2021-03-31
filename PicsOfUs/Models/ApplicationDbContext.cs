@@ -26,7 +26,7 @@ namespace PicsOfUs.Models
                 m.ToTable("MemberSiblings");
             });
 
-            modelBuilder.Entity<Member>().HasMany(m => m.Parents).WithMany().Map(m =>
+            modelBuilder.Entity<Member>().HasMany(m => m.Parents).WithMany(m => m.Children).Map(m =>
             {
                 m.MapLeftKey("ChildId");
                 m.MapRightKey("ParentId");

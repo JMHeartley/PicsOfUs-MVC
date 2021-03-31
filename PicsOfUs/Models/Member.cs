@@ -14,6 +14,7 @@ namespace PicsOfUs.Models
         public ICollection<Photo> Photos { get; set; }
         public ICollection<Member> Siblings { get; set; }
         public ICollection<Member> Parents { get; set; }
+        public ICollection<Member> Children { get; set; }
         public string Name
         {
             get
