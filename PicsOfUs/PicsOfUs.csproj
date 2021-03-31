@@ -173,6 +173,7 @@
     <Compile Include="Controllers\BrowseController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
+    <Compile Include="Controllers\MembersController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -215,6 +216,7 @@
     <Compile Include="Models\ManageViewModels.cs" />
     <Compile Include="Models\Member.cs" />
     <Compile Include="Models\MemberDetailsViewModel.cs" />
+    <Compile Include="Models\MemberFormViewModel.cs" />
     <Compile Include="Models\MemberSelectViewModel.cs" />
     <Compile Include="Models\MiniProfileViewModel.cs" />
     <Compile Include="Models\PicProfileViewModel.cs" />
@@ -371,9 +373,10 @@
     <Content Include="Scripts\popper.js.map" />
     <Content Include="Scripts\popper-utils.min.js.map" />
     <Content Include="Scripts\popper-utils.js.map" />
-    <Content Include="Views\Browse\MemberDetails.cshtml" />
+    <Content Include="Views\Members\Details.cshtml" />
     <Content Include="Views\Shared\DisplayTemplates\PicProfileViewModel.cshtml" />
     <Content Include="Views\Shared\DisplayTemplates\MiniProfileViewModel.cshtml" />
+    <Content Include="Views\Members\MemberForm.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
