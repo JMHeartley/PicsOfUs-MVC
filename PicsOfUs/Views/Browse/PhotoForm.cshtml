@@ -5,7 +5,7 @@
     ViewBag.Title = "PhotoForm";
 }
 
-@if (Model.Photo == null)
+@if (Model.Photo.Id == 0)
 {
     <h2>New Photo</h2>
 }
@@ -33,7 +33,7 @@ else
             </div>
 
             <label>Subjects</label>
-            <div class="overflow-auto mb-3" id="member-select-overflow">
+            <div class="overflow-auto mb-3 member-select-overflow">
                 @Html.EditorFor(m => m.Members)
             </div>
 

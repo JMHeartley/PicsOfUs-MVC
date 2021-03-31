@@ -119,7 +119,7 @@ body {
 	font-size: 1.5rem;
 }
 
-#member-select-overflow {
+.member-select-overflow {
 	max-height: 10rem;
 	border: 1px dashed white;
 	border-radius: 0.25rem;

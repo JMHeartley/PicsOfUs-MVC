@@ -1,43 +1,45 @@
 ﻿@model IEnumerable<PicsOfUs.Models.Photo>
 @{
-    ViewBag.Title = "Index";
+	ViewBag.Title = "Index";
 }
 
 @Html.ActionLink("Add Pic", "New", null, new {@class="btn btn-primary my-3"})
 
+@Html.ActionLink("Add Member", "New", "Members", null, new {@class="btn btn-primary my-3"})
+
 @if (!Model.Any())
 {
-    <h4>There are no photos to display...</h4>
+	<h4>There are no photos to display...</h4>
 }
 else
 {
-    <div class="row no-gutters justify-content-center">
-	    <div class="px-5 my-3 ml-md-5 text-center">
-		    <h4>Date</h4>
-            <a href="#" class="btn btn-primary">Add date</a>
-	    </div>
-	    <div class="px-5 my-3 ml-md-5 text-center">
-		    <h4>People</h4>
-            <a href="#" class="btn btn-primary">Add person</a>
-	    </div>
-    </div>
-    <div>
-        <h4 class="text-md-left text-center ml-md-5 pl-md-5">Results</h4>
-        <div class="d-flex py-3 px-4" id="results-body">
-            @foreach (var photo in Model)
-            {
-                <div class="card mx-2 my-1">
-                    <div class="card-img-wrap d-flex justify-content-center align-content-center">
-                        <img src="@photo.Url" alt="@photo.Caption">
-                    </div>
-                    <div class="card-body">
-                        <h5 class="card-title">@photo.Caption</h5>
-                        <h6 class="card-subtitle text-muted mb-3">taken on @photo.CaptureDateDisplay</h6>
-                        @Html.ActionLink("Edit", "Edit", new { id = photo.Id }, new {@class= "btn btn-secondary card-link"})
-                        @Html.ActionLink("Details", "Details", new { id = photo.Id }, new {@class= "btn btn-primary card-link"})
-                    </div>
-                </div>
-            }
-        </div>
-    </div>
+	<div class="row no-gutters justify-content-center">
+		<div class="px-5 my-3 ml-md-5 text-center">
+			<h4>Date</h4>
+			<a href="#" class="btn btn-primary">Add date</a>
+		</div>
+		<div class="px-5 my-3 ml-md-5 text-center">
+			<h4>People</h4>
+			<a href="#" class="btn btn-primary">Add person</a>
+		</div>
+	</div>
+	<div>
+		<h4 class="text-md-left text-center ml-md-5 pl-md-5">Results</h4>
+		<div class="d-flex py-3 px-4" id="results-body">
+			@foreach (var photo in Model)
+			{
+				<div class="card mx-2 my-1">
+					<div class="card-img-wrap d-flex justify-content-center align-content-center">
+						<img src="@photo.Url" alt="@photo.Caption">
+					</div>
+					<div class="card-body">
+						<h5 class="card-title">@photo.Caption</h5>
+						<h6 class="card-subtitle text-muted mb-3">taken on @photo.CaptureDateDisplay</h6>
+						@Html.ActionLink("Edit", "Edit", new { id = photo.Id }, new {@class= "btn btn-secondary card-link"})
+						@Html.ActionLink("Details", "Details", new { id = photo.Id }, new {@class= "btn btn-primary card-link"})
+					</div>
+				</div>
+			}
+		</div>
+	</div>
 }

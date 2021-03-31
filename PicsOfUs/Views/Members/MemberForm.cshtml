@@ -1,0 +1,60 @@
+﻿@model PicsOfUs.Models.MemberFormViewModel
+
+@{
+    ViewBag.Title = "MemberForm";
+}
+
+@if (Model.Member.Id == 0)
+{
+    <h2>New Member</h2>
+}
+else
+{
+    <h2>Edit Member</h2>
+}
+
+@using (Html.BeginForm("Save", "Members"))
+{
+    <div class="form-group">
+        @Html.LabelFor(m => m.Member.FirstName)
+        @Html.TextBoxFor(m => m.Member.FirstName, new { @class = "form-control" })
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(m => m.Member.LastName)
+        @Html.TextBoxFor(m => m.Member.LastName, new { @class = "form-control" })
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(m => m.Member.Suffix)
+        @Html.EnumDropDownListFor(m => m.Member.Suffix, "N/A", new { @class = "form-control" })
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(m => m.Member.Gender)
+        @Html.EnumDropDownListFor(m => m.Member.Gender, "Select a gender", new { @class = "form-control" })
+    </div>
+    <div class="form-group">
+        <div class="form-group">
+            @Html.LabelFor(m => m.Member.BirthDate)
+            @Html.TextBoxFor(m => m.Member.BirthDate, "{0:MM/dd/yyyy}", new { @class = "form-control" })
+        </div>
+    </div>
+    
+    <label>Siblings</label>
+    <div class="overflow-auto mb-3 member-select-overflow">
+        @Html.EditorFor(m => m.Siblings)
+    </div>
+
+    <label>Parents</label>
+    <div class="overflow-auto mb-3 member-select-overflow">
+        @Html.EditorFor(m => m.Parents)
+    </div>
+    
+    <label>Children</label>
+    <div class="overflow-auto mb-3 member-select-overflow">
+        @Html.EditorFor(m => m.Children)
+    </div>
+
+
+    @Html.HiddenFor(m => m.Member.Id)
+
+    <button type="submit" class="btn btn-primary">Save</button>
+}

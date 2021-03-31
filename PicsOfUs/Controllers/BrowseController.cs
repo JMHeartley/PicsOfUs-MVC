@@ -32,6 +32,7 @@ namespace PicsOfUs.Controllers
         {
             var viewModel = new PhotoFormViewModel
             {
+                Photo = new Photo(),
                 Members = _context.Members
                     .AsEnumerable()
                     .Select(m => new MemberSelectViewModel
@@ -118,34 +119,12 @@ namespace PicsOfUs.Controllers
             var viewModel = new PhotoDetailsViewModel
             {
                 Photo = photo,
-                Subjects = photo.Members.Select(m => new PicProfileViewModel
+                Subjects = photo.Members
+                .Select(m => new PicProfileViewModel
                 {
                     MemberId = m.Id,
                     Name = m.Name,
                     AgeInPhoto = m.AgeInPhoto(photo.CaptureDate)
-                })
-            };
-
-            return View(viewModel);
-        }
-        
-        public ActionResult MemberDetails(int id)
-        {
-            var member = _context.Members
-                .SingleOrDefault(m => m.Id == id);
-
-            var viewModel = new MemberDetailsViewModel
-            {
-                Member = member,
-                Siblings = member.Siblings.Select(m => new MiniProfileViewModel
-                {
-                    MemberId = m.Id,
-                    Name = m.Name
-                }),
-                Parents = member.Parents.Select(m => new MiniProfileViewModel
-                {
-                    MemberId = m.Id,
-                    Name = m.Name
                 })
             };
 
