@@ -93,6 +93,7 @@ namespace PicsOfUs.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public ActionResult Save(MemberFormViewModel viewModel)
         {
             if (!ModelState.IsValid)

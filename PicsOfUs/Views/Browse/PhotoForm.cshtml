@@ -39,6 +39,7 @@ else
 
 
             @Html.HiddenFor(m => m.Photo.Id)
+            @Html.AntiForgeryToken()
 
             <button type="submit" class="btn btn-primary">Save</button>
         }

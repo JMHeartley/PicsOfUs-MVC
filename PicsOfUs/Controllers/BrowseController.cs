@@ -72,6 +72,7 @@ namespace PicsOfUs.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public ActionResult Save(PhotoFormViewModel viewModel)
         {
             if (!ModelState.IsValid)
