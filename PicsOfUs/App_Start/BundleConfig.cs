@@ -13,6 +13,7 @@ namespace PicsOfUs
                         "~/Scripts/bootstrap.js",
                         "~/Scripts/datatables/datatables.bootstrap.js",
                         "~/Scripts/datatables/jquery.datatables.js",
+                        "~/Scripts/isomosaic.js",
                         "~/Scripts/popper.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/jqueryval").Include(
