@@ -20,31 +20,31 @@ namespace PicsOfUs.Controllers.Api
         }
 
         // GET  /api/members
-        public IEnumerable<MemberDto> GetMembers()
+        public IHttpActionResult GetMembers()
         {
-            return _context.Members.ToList().Select(Mapper.Map<Member, MemberDto>);
+            return Ok(_context.Members.ToList().Select(Mapper.Map<Member, MemberDto>));
         }
 
         // GET /api/members/1
-        public MemberDto GeMember(int id)
+        public IHttpActionResult GetMember(int id)
         {
             var member = _context.Members.SingleOrDefault(m => m.Id == id);
 
             if (member == null)
             {
-                throw new HttpResponseException(HttpStatusCode.BadRequest);
+                return BadRequest();
             }
 
-            return Mapper.Map<Member, MemberDto>(member);
+            return Ok(Mapper.Map<Member, MemberDto>(member));
         }
 
         // POST /api/members
         [HttpPost]
-        public MemberDto CreateMember(MemberDto memberDto)
+        public IHttpActionResult CreateMember(MemberDto memberDto)
         {
             if (!ModelState.IsValid)
             {
-                throw new HttpResponseException(HttpStatusCode.BadRequest);
+                BadRequest();
             }
 
             var member = Mapper.Map<MemberDto, Member>(memberDto);
@@ -53,33 +53,35 @@ namespace PicsOfUs.Controllers.Api
 
             memberDto.Id = member.Id;
 
-            return memberDto;
+            return Created(new Uri(Request.RequestUri + "/api/members/" + memberDto.Id), memberDto);
         }
 
         // PUT /api/member/1
         [HttpPut]
-        public void UpdateMember(int id, MemberDto memberDto)
+        public IHttpActionResult UpdateMember(int id, MemberDto memberDto)
         {
             if (!ModelState.IsValid)
             {
-                throw new HttpResponseException(HttpStatusCode.BadRequest);
+                return BadRequest();
             }
 
             var memberInDb = _context.Members.SingleOrDefault(m => m.Id == id);
 
             if (memberInDb == null)
             {
-                throw new HttpResponseException(HttpStatusCode.NotFound);
+                return NotFound();
             }
 
             Mapper.Map(memberDto, memberInDb);
 
             _context.SaveChanges();
+
+            return StatusCode(HttpStatusCode.NoContent);
         }
 
         // DELETE /api/member/1
         [HttpDelete]
-        public void DeleteMember(int id)
+        public IHttpActionResult DeleteMember(int id)
         {
             var member = _context.Members.SingleOrDefault(m => m.Id == id);
 
@@ -90,6 +92,8 @@ namespace PicsOfUs.Controllers.Api
 
             _context.Members.Remove(member);
             _context.SaveChanges();
+
+            return StatusCode(HttpStatusCode.NoContent);
         }
     }
 }
