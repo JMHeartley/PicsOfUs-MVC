@@ -14,6 +14,8 @@ namespace PicsOfUs.App_Start
         {
             Mapper.CreateMap<Member, MemberDto>();
             Mapper.CreateMap<MemberDto, Member>();
+            Mapper.CreateMap<Photo, PhotoDto>();
+            Mapper.CreateMap<PhotoDto, Photo>();
         }
     }
 }
