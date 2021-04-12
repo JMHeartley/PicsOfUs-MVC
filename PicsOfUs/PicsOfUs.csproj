@@ -185,6 +185,7 @@
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\Api\MembersController.cs" />
+    <Compile Include="Dtos\MiniMemberDto.cs" />
     <Compile Include="Controllers\Api\PhotosController.cs" />
     <Compile Include="Controllers\BrowseController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
@@ -354,10 +355,12 @@
     <Content Include="Content\DataTables\images\sort_desc.png" />
     <Content Include="Content\DataTables\images\sort_desc_disabled.png" />
     <Content Include="Content\DataTables\swf\flashExport.swf" />
+    <Content Include="Content\lightbox.css" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
+    <Content Include="Scripts\ajax-common.js" />
     <Content Include="Scripts\bootbox.js" />
     <Content Include="Scripts\bootbox.min.js" />
     <Content Include="Scripts\bootstrap.js" />
@@ -437,23 +440,24 @@
     <Content Include="Scripts\esm\popper-utils.js.map" />
     <Content Include="Content\DataTables\css\mixins.scss" />
     <Content Include="Content\DataTables\css\common.scss" />
-    <None Include="Scripts\jquery-3.4.1.intellisense.js" />
+    <None Include="Scripts\jQuery\jquery-3.4.1.intellisense.js" />
     <Content Include="Scripts\isomosaic.js" />
     <Content Include="Scripts\isomosaic_min.js" />
-    <Content Include="Scripts\jquery-3.4.1.js" />
-    <Content Include="Scripts\jquery-3.4.1.min.js" />
-    <Content Include="Scripts\jquery-3.4.1.slim.js" />
-    <Content Include="Scripts\jquery-3.4.1.slim.min.js" />
-    <None Include="Scripts\jquery.validate-vsdoc.js" />
-    <Content Include="Scripts\jquery.validate.js" />
-    <Content Include="Scripts\jquery.validate.min.js" />
-    <Content Include="Scripts\jquery.validate.unobtrusive.js" />
-    <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
+    <Content Include="Scripts\jQuery\jquery-3.4.1.js" />
+    <Content Include="Scripts\jQuery\jquery-3.4.1.min.js" />
+    <Content Include="Scripts\jQuery\jquery-3.4.1.slim.js" />
+    <Content Include="Scripts\jQuery\jquery-3.4.1.slim.min.js" />
+    <None Include="Scripts\jQuery\jquery.validate-vsdoc.js" />
+    <Content Include="Scripts\jQuery\jquery.validate.js" />
+    <Content Include="Scripts\jQuery\jquery.validate.min.js" />
+    <Content Include="Scripts\jQuery\jquery.validate.unobtrusive.js" />
+    <Content Include="Scripts\jQuery\jquery.validate.unobtrusive.min.js" />
+    <Content Include="Scripts\My Scripts\lightbox.js" />
     <Content Include="Scripts\modernizr-2.8.3.js" />
-    <Content Include="Scripts\popper-utils.js" />
-    <Content Include="Scripts\popper-utils.min.js" />
-    <Content Include="Scripts\popper.js" />
-    <Content Include="Scripts\popper.min.js" />
+    <Content Include="Scripts\Popper\popper-utils.js" />
+    <Content Include="Scripts\Popper\popper-utils.min.js" />
+    <Content Include="Scripts\Popper\popper.js" />
+    <Content Include="Scripts\Popper\popper.min.js" />
     <Content Include="Scripts\src\index.js" />
     <Content Include="Scripts\src\methods\defaults.js" />
     <Content Include="Scripts\src\methods\destroy.js" />
@@ -521,6 +525,7 @@
     <Content Include="Scripts\umd\popper-utils.min.js" />
     <Content Include="Scripts\umd\popper.js" />
     <Content Include="Scripts\umd\popper.min.js" />
+    <Content Include="Static\PicProfile.html" />
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
@@ -564,14 +569,15 @@
     <Content Include="Scripts\umd\popper-utils.min.js.map" />
     <Content Include="Scripts\umd\popper-utils.js.map" />
     <Content Include="Scripts\README.md" />
-    <Content Include="Scripts\popper.min.js.map" />
-    <Content Include="Scripts\popper.js.map" />
-    <Content Include="Scripts\popper-utils.min.js.map" />
-    <Content Include="Scripts\popper-utils.js.map" />
+    <Content Include="Scripts\Popper\popper.min.js.map" />
+    <Content Include="Scripts\Popper\popper.js.map" />
+    <Content Include="Scripts\Popper\popper-utils.min.js.map" />
+    <Content Include="Scripts\Popper\popper-utils.js.map" />
     <Content Include="Views\Members\Details.cshtml" />
     <Content Include="Views\Shared\DisplayTemplates\PicProfileViewModel.cshtml" />
     <Content Include="Views\Shared\DisplayTemplates\MiniProfileViewModel.cshtml" />
     <Content Include="Views\Members\MemberForm.cshtml" />
+    <Content Include="Views\Members\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -582,8 +588,8 @@
     <Content Include="fonts\glyphicons-halflings-regular.ttf" />
     <Content Include="fonts\glyphicons-halflings-regular.eot" />
     <None Include="packages.config" />
-    <Content Include="Scripts\jquery-3.4.1.slim.min.map" />
-    <Content Include="Scripts\jquery-3.4.1.min.map" />
+    <Content Include="Scripts\jQuery\jquery-3.4.1.slim.min.map" />
+    <Content Include="Scripts\jQuery\jquery-3.4.1.min.map" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Migrations\202102141912206_InitialModel.resx">
