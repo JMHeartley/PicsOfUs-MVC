@@ -15,7 +15,8 @@ namespace PicsOfUs
                         "~/Scripts/datatables/datatables.bootstrap.js",
                         "~/Scripts/datatables/jquery.datatables.js",
                         "~/Scripts/isomosaic.js",
-                        "~/Scripts/Popper/popper.js"));
+                        "~/Scripts/Popper/popper.js",
+                        "~/Scripts/My Scripts/*.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/jqueryval").Include(
                         "~/Scripts/jQuery/jquery.validate*"));
@@ -28,7 +29,8 @@ namespace PicsOfUs
             bundles.Add(new StyleBundle("~/Content/css").Include(
                       "~/Content/bootstrap-4-darkly.css",
                       "~/Content/datatables/css/datatables.bootstrap.css",
-                      "~/Content/site.css"));
+                      "~/Content/site.css",
+                      "~/Content/lightbox.css"));
         }
     }
 }

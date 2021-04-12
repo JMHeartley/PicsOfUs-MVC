@@ -1,0 +1,211 @@
+body {
+    height: 150vh;
+}
+
+.restrict-scroll {
+    max-height: 100vh !important;
+    overflow: hidden !important;
+}
+
+#lightbox-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    background-color: rgba(0, 0, 0, 50%);
+    height: 100vh;
+    width: 100%;
+    overflow-y: auto;
+}
+
+/* Hide scrollbar for Chrome, Safari and Opera */
+#lightbox-container::-webkit-scrollbar {
+    display: none;
+}
+
+/* Hide scrollbar for IE, Edge and Firefox */
+#lightbox-container {
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;  /* Firefox */
+}
+
+#lightbox {
+    background-color: black;
+}
+
+#member-details {
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    background-color: rgba(0, 0, 0, 85%);
+    z-index: 2;
+}
+
+#lightbox-main {
+    height: 100vh;
+}
+
+#lightbox-pic {
+    width: auto;
+    height: 100%;
+    max-width: 100%;
+    object-fit: contain;
+}
+
+#left-arrow,
+#right-arrow {
+    position: absolute;
+    background-color: rgba(0, 0, 0, 50%);
+    z-index: 1;
+    height: 100%;
+    width: 15%;
+    text-align: center;
+    cursor: pointer;
+}
+
+#left-arrow {
+    left: 0;
+}
+
+#right-arrow  {
+    right: 0;
+}
+
+#left-arrow .fas,
+#right-arrow .fas {
+    position: relative;
+    top: 50%;
+}
+
+#lightbox-closer-x {
+    font-size: 2rem;
+    position: absolute;
+    top: -1rem;
+    right: -1rem;
+    z-index: 1;
+    color: yellowgreen;
+    cursor: pointer;
+    display: none;
+}
+
+#lightbox-closer-button {
+    height: 10vh;
+}
+
+.mobile-nav-button {
+    width: 100%;
+    z-index: 10;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    background-color: black;
+}
+
+.hidden {
+    height: 0 !important;
+    overflow: hidden !important;
+}
+
+#lightbox-details {
+    overflow-y: auto;
+    flex-direction: column;
+}
+
+#love-pic {
+    font-size: 1.25rem;
+    cursor: pointer;
+}
+
+#pic-subjects {
+    flex-wrap: wrap;
+    overflow-y: auto;
+    /* max-height: 5.5%; */
+}
+
+/* Hide scrollbar for Chrome, Safari and Opera */
+#pic-subjects::-webkit-scrollbar {
+    display: none;
+}
+
+/* Hide scrollbar for IE, Edge and Firefox */
+#pic-subjects {
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;  /* Firefox */
+}
+
+.fake-profile {
+    background-color: purple;
+    flex-direction: column;
+    text-align: center;
+    cursor: pointer;
+
+    border-radius: 0.75rem;
+    flex-grow: 1;
+}
+
+.fake-profile .fa-user-circle {
+    font-size: 3.25rem;
+}
+
+#comments {
+    overflow-y: auto;
+}
+
+/* laptops and larger */
+@media (min-width: 992px) {
+    #lightbox-container {
+        overflow-y: unset;
+    }
+    
+    #lightbox {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        height: 80vh;
+    }
+
+    #lightbox-main {
+        height: 100%;
+    }
+
+    #lightbox-closer-x {
+        display: block;
+    }
+
+    .mobile-nav-button {
+        display: none !important;
+    }
+
+    #lightbox-details {
+        height: 100%;
+    }
+
+    #comments {
+        height: 100%;
+    }
+
+    /* Hide scrollbar for Chrome, Safari and Opera */
+    #comments::-webkit-scrollbar {
+        display: none;
+    }
+
+    /* Hide scrollbar for IE, Edge and Firefox */
+    #comments {
+    -ms-overflow-style: none;  /* IE and Edge */
+    scrollbar-width: none;  /* Firefox */
+    }
+}
+
+.red-border {
+    border: 1px solid red;
+}
+.blue-border {
+    border: 1px solid blue;
+}
+.green-border {
+    border: 1px solid green;
+}
+
+.make-long {
+    height: 150vh;
+}
