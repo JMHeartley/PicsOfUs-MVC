@@ -15,6 +15,6 @@ namespace PicsOfUs.Dtos
         public string Url { get; set; }
         public string Caption { get; set; }
         public DateTime? CaptureDate { get; set; }
-        public ICollection<Member> Members { get; set; }
+        public ICollection<MiniMemberDto> Members { get; set; }
     }
 }

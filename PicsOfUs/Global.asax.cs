@@ -6,9 +6,7 @@ using System.Web.Mvc;
 using System.Web.Optimization;
 using System.Web.Routing;
 using System.Web.Http;
-using System.Web.Routing;
 using AutoMapper;
-using PicsOfUs.App_Start;
 
 namespace PicsOfUs
 {

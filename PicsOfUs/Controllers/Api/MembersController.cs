@@ -7,6 +7,7 @@ using System.Web.Http;
 using AutoMapper;
 using PicsOfUs.Dtos;
 using PicsOfUs.Models;
+using System.Data.Entity;
 
 namespace PicsOfUs.Controllers.Api
 {
@@ -22,13 +23,24 @@ namespace PicsOfUs.Controllers.Api
         // GET  /api/members
         public IHttpActionResult GetMembers()
         {
-            return Ok(_context.Members.ToList().Select(Mapper.Map<Member, MemberDto>));
+            return Ok(
+                _context.Members
+                    .Include(m => m.Siblings)
+                    .Include(m => m.Parents)
+                    .Include(m => m.Children)
+                    .ToList()
+                    .Select(Mapper.Map<Member, MemberDto>)
+                );
         }
 
         // GET /api/members/1
         public IHttpActionResult GetMember(int id)
         {
-            var member = _context.Members.SingleOrDefault(m => m.Id == id);
+            var member = _context.Members
+                .Include(m => m.Siblings)
+                .Include(m => m.Parents)
+                .Include(m => m.Children)
+                .SingleOrDefault(m => m.Id == id);
 
             if (member == null)
             {

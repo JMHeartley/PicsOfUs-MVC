@@ -1,12 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using AutoMapper;
+﻿using AutoMapper;
 using PicsOfUs.Dtos;
 using PicsOfUs.Models;
 
-namespace PicsOfUs.App_Start
+namespace PicsOfUs
 {
     public class MappingProfile : Profile
     {
@@ -14,6 +10,9 @@ namespace PicsOfUs.App_Start
         {
             Mapper.CreateMap<Member, MemberDto>();
             Mapper.CreateMap<MemberDto, Member>();
+
+            Mapper.CreateMap<Member, MiniMemberDto>();
+
             Mapper.CreateMap<Photo, PhotoDto>();
             Mapper.CreateMap<PhotoDto, Photo>();
         }

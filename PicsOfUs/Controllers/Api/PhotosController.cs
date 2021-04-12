@@ -7,6 +7,7 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
+using System.Data.Entity;
 
 namespace PicsOfUs.Controllers.Api
 {
@@ -22,13 +23,20 @@ namespace PicsOfUs.Controllers.Api
         // GET  /api/photos
         public IHttpActionResult GetPhotos()
         {
-            return Ok(_context.Photos.ToList().Select(Mapper.Map<Photo, PhotoDto>));
+            return Ok(
+                _context.Photos
+                    .Include(p => p.Members)
+                    .ToList()
+                    .Select(Mapper.Map<Photo, PhotoDto>)
+                );
         }
 
         // GET /api/photos/1
         public IHttpActionResult GetPhoto(int id)
         {
-            var photo = _context.Photos.SingleOrDefault(p => p.Id == id);
+            var photo = _context.Photos
+                .Include(p => p.Members)
+                .SingleOrDefault(p => p.Id == id);
 
             if (photo == null)
             {
