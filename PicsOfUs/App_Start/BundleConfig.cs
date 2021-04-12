@@ -8,16 +8,17 @@ namespace PicsOfUs
         public static void RegisterBundles(BundleCollection bundles)
         {
             bundles.Add(new ScriptBundle("~/bundles/lib").Include(
-                        "~/Scripts/jquery-{version}.js", 
+                        "~/Scripts/jQuery/jquery-{version}.js", 
+                        "~/Scripts/ajax-common.js",
                         "~/Scripts/bootbox.js",
                         "~/Scripts/bootstrap.js",
                         "~/Scripts/datatables/datatables.bootstrap.js",
                         "~/Scripts/datatables/jquery.datatables.js",
                         "~/Scripts/isomosaic.js",
-                        "~/Scripts/popper.js"));
+                        "~/Scripts/Popper/popper.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/jqueryval").Include(
-                        "~/Scripts/jquery.validate*"));
+                        "~/Scripts/jQuery/jquery.validate*"));
 
             // Use the development version of Modernizr to develop with and learn from. Then, when you're
             // ready for production, use the build tool at https://modernizr.com to pick only the tests you need.
@@ -25,7 +26,7 @@ namespace PicsOfUs
                         "~/Scripts/modernizr-*"));
 
             bundles.Add(new StyleBundle("~/Content/css").Include(
-                      "~/Content/bootstrap-4-lumen.css",
+                      "~/Content/bootstrap-4-darkly.css",
                       "~/Content/datatables/css/datatables.bootstrap.css",
                       "~/Content/site.css"));
         }
