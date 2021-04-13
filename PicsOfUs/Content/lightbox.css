@@ -1,12 +1,3 @@
-body {
-    height: 150vh;
-}
-
-.restrict-scroll {
-    max-height: 100vh !important;
-    overflow: hidden !important;
-}
-
 #lightbox-container {
     position: fixed;
     top: 0;
@@ -91,20 +82,6 @@ body {
     height: 10vh;
 }
 
-.mobile-nav-button {
-    width: 100%;
-    z-index: 10;
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    background-color: black;
-}
-
-.hidden {
-    height: 0 !important;
-    overflow: hidden !important;
-}
-
 #lightbox-details {
     overflow-y: auto;
     flex-direction: column;
@@ -118,7 +95,6 @@ body {
 #pic-subjects {
     flex-wrap: wrap;
     overflow-y: auto;
-    /* max-height: 5.5%; */
 }
 
 /* Hide scrollbar for Chrome, Safari and Opera */
@@ -172,10 +148,6 @@ body {
         display: block;
     }
 
-    .mobile-nav-button {
-        display: none !important;
-    }
-
     #lightbox-details {
         height: 100%;
     }
@@ -194,18 +166,4 @@ body {
     -ms-overflow-style: none;  /* IE and Edge */
     scrollbar-width: none;  /* Firefox */
     }
-}
-
-.red-border {
-    border: 1px solid red;
-}
-.blue-border {
-    border: 1px solid blue;
-}
-.green-border {
-    border: 1px solid green;
-}
-
-.make-long {
-    height: 150vh;
 }
