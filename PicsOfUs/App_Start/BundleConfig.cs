@@ -12,9 +12,6 @@ namespace PicsOfUs
                         "~/Scripts/ajax-common.js",
                         "~/Scripts/bootbox.js",
                         "~/Scripts/bootstrap.js",
-                        "~/Scripts/datatables/datatables.bootstrap.js",
-                        "~/Scripts/datatables/jquery.datatables.js",
-                        "~/Scripts/isomosaic.js",
                         "~/Scripts/Popper/popper.js",
                         "~/Scripts/My Scripts/*.js"));
 
@@ -28,7 +25,6 @@ namespace PicsOfUs
 
             bundles.Add(new StyleBundle("~/Content/css").Include(
                       "~/Content/bootstrap-4-darkly.css",
-                      "~/Content/datatables/css/datatables.bootstrap.css",
                       "~/Content/site.css",
                       "~/Content/lightbox.css"));
         }
