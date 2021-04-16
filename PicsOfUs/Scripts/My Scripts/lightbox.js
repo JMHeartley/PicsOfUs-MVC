@@ -1,5 +1,9 @@
 $(function () {
     // pre-load needed static HTML components via ajax
+
+    let navbarDesktop = $('#navbar-desktop');
+    let navbarMobile = $('#navbar-mobile');
+
     let lightbox = $("#lightbox");
     let lightboxContainer = $("#lightbox-container");
     let lightboxCloserButton = $("#lightbox-closer-button");
@@ -48,6 +52,8 @@ $(function () {
         // insert lightbox into DOM with $('body').append()
         lightboxContainer.scrollTop(0);
         lightboxContainer.removeClass("hidden");
+        navbarDesktop.addClass('hidden');
+        navbarMobile.addClass('hidden');
         MoveToPic(resultId);
         $('body').addClass('restrict-scroll');
     }
@@ -55,13 +61,15 @@ $(function () {
         // 1. replace this line with code that removes lightbox from the DOM
         lightboxContainer.addClass("hidden");
         lightboxCloserButton.addClass("hidden");
+        navbarDesktop.removeClass('hidden');
+        navbarMobile.removeClass('hidden');
         CloseMemberDetails();
         $('body').removeClass('restrict-scroll');
     }
     function MoveToPic(resultId) {
-        alert('populate lightbox with data from picture with data-result-id: ' + resultId);
+        console.log('populate lightbox with data from picture with data-result-id: ' + resultId);
         let photoId = $('#results-body').find('[data-result-id=' + resultId + ']').attr('data-photo-id');
-        alert('photoId: ' + photoId);
+        console.log('photoId: ' + photoId);
         let def = $.Deferred();
         let cachedPhotoMembers;
         let cachedCaptureDate;

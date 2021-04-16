@@ -24,7 +24,7 @@ textarea {
 }
 
 
-/**** custom styles ****/
+/**** global styles ****/
 
 :root {
 	--red: #e61d2f;
@@ -47,27 +47,6 @@ body {
 #navbar-mobile-banner {
 	display: block;
     width: 100%;
-}
-
-/* laptops and larger */
-@media (min-width: 992px) {
-	#navbar-desktop {
-		display: block;
-	}
-
-	#navbar-mobile,
-	#navbar-mobile-banner {
-		display: none;
-	}
-
-	body {
-		margin-top: 5rem;
-		margin-bottom: 0 !important;
-	}
-
-    .mobile-nav-button {
-        display: none !important;
-    }
 }
 
 .gradient-wrap {
@@ -94,8 +73,11 @@ body {
 	margin: 0.313rem;
 }
 
-.img-fluid {
-	height: 100%;
+#results-body {
+    flex-wrap: wrap;
+} 
+#results-body > div {
+    height: 12rem;
 }
 
 #main-pic {
@@ -156,16 +138,50 @@ body {
 	height: 100%;
 }
 
+/* laptops and larger */
+@media (min-width: 992px) {
+    #navbar-desktop {
+        display: block;
+    }
+
+    #navbar-mobile,
+    #navbar-mobile-banner {
+        display: none;
+    }
+
+    body {
+        margin-top: 5rem;
+        margin-bottom: 0 !important;
+    }
+
+    .mobile-nav-button {
+        display: none !important;
+    }
+}
+
 /****** utility styling *********/
 
-.hidden {
+.hidden,
+.hidden > * {
     height: 0 !important;
     overflow: hidden !important;
+    z-index: -1 !important;
+}
+
+.trigger {
+    cursor: pointer;
 }
 
 .restrict-scroll {
     max-height: 100vh !important;
     overflow: hidden !important;
+}
+
+.image-fluid {
+    width: auto;
+    height: 100%;
+    max-width: 100%;
+    object-fit: contain;
 }
 
 .mobile-nav-button {

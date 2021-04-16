@@ -25,27 +25,15 @@ else
     </div>
     <div>
         <h4 class="text-md-left text-center ml-md-5 pl-md-5">Results</h4>
-        <div class="d-flex flex-wrap justify-content-around py-3 px-4" id="results-body">
-            @*@foreach (var photo in Model)*@
+        <div class="d-flex py-3 px-4" id="results-body">
             @for (int i = 0; i < Model.Count(); i++)
             {
-                <div class="card m-2">
-                    <div class="card-img-wrap d-flex justify-content-center align-content-center">
-                        <img src="@Model[i].Url" alt="@Model[i].Caption">
-                    </div>
-                    <div class="card-body">
-                        <h5 class="card-title">@Model[i].Caption</h5>
-                        <h6 class="card-subtitle text-muted mb-3">taken on @Model[i].CaptureDateDisplay</h6>
-                        @Html.ActionLink("Edit", "Edit", new {id = Model[i].Id}, new {@class = "btn btn-secondary card-link"})
-                        @*@Html.ActionLink("Details", "Details", new { id = photo.Id }, new { @class = "btn btn-primary card-link" })*@
-                        <button class="btn btn-primary js-delete" data-photo-id="@Model[i].Id">Delete</button>
-                        <button class="btn btn-primary trigger" data-result-id="@i" data-photo-id="@Model[i].Id">open lightbox</button>
-                    </div>
+                <div class="photo-result trigger m-2" data-result-id="@i" data-photo-id="@Model[i].Id">
+                    <img src="@Model[i].Url" alt="@Model[i].Caption" class="image-fluid"/>
                 </div>
             }
         </div>
     </div>
-
     <div class="row no-gutters hidden" id="lightbox-container">
         <div id="lightbox" class="col-12 col-lg-10 row no-gutters red-border">
             <i class="fas fa-times-circle lightbox-closer" aria-hidden="true" id="lightbox-closer-x"></i>
@@ -57,7 +45,7 @@ else
                 <div class="green-border" id="left-arrow">
                     <i class="fas fa-arrow-left" aria-hidden="true"></i>
                 </div>
-                <img src="https://d2gg9evh47fn9z.cloudfront.net/800px_COLOURBOX2301800.jpg" alt="pic" id="lightbox-pic">
+                <img src="https://d2gg9evh47fn9z.cloudfront.net/800px_COLOURBOX2301800.jpg" alt="pic" id="lightbox-pic" class="image-fluid">
                 <div class="green-border" id="right-arrow">
                     <i class="fas fa-arrow-right" aria-hidden="true"></i>
                 </div>
@@ -85,33 +73,4 @@ else
             </div>
         </div>
     </div>
-}
-
-@section scripts
-{
-    <script>
-        function ShowDetails(photoId) {
-            window.location.href = "/Browse/Details/" + photoId;
-        }
-        $(document).ready(function () {
-
-            $("#results-body").on("click", "js-delete", function () {
-                var button = $(this);
-
-                bootbox.confirm("Are you sure you want to delete this pic?", function (result) {
-
-                    if (result) {
-                        $.ajax({
-                            url: "/api/photos/" + button.attr("data-photo-id"),
-                            method: "DELETE",
-                            success: function () {
-                                button.parent("div").parent("div .card").remove();
-                                console.log("photo deleted!");
-                            }
-                        });
-                    }
-                });
-            });
-        });
-    </script>
 }
