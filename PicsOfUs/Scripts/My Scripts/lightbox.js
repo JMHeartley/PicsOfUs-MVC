@@ -8,15 +8,19 @@ $(function () {
   let lovePic = $('#love-pic');
   let leftArrow = $('#left-arrow');
   let rightArrow = $('#right-arrow');
+  let mobileNavHeight =
+    navbarMobile.height() +
+    parseInt(navbarMobile.css('padding-top')) +
+    parseInt(navbarMobile.css('padding-bottom'));
 
   //#region Move to site.js
 
   // dynamically set the height of the mobile nav buttons, which will overlay on the mobile navbar
   let mobileNavButtons = $('.mobile-nav-button');
-  let mobileNavHeight =
-    navbarMobile.height() +
-    parseInt(navbarMobile.css('padding-top')) +
-    parseInt(navbarMobile.css('padding-bottom'));
+  // let mobileNavHeight =
+  //   navbarMobile.height() +
+  //   parseInt(navbarMobile.css('padding-top')) +
+  //   parseInt(navbarMobile.css('padding-bottom'));
   console.log('mobileNavHeight', mobileNavHeight);
   mobileNavButtons.height(mobileNavHeight);
 
@@ -64,7 +68,7 @@ $(function () {
     navbarDesktop.addClass('hidden');
     navbarMobile.addClass('hidden');
     moveToPic(resultId);
-    lightboxContainer.css('padding-bottom', $('.mobile-nav-button').height());
+    lightboxContainer.css('padding-bottom', mobileNavHeight);
     $('body').addClass('restrict-scroll');
   }
 
