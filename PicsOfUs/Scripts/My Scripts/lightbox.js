@@ -1,194 +1,232 @@
 $(function () {
-    // pre-load needed static HTML components via ajax
+  let navbarDesktop = $('#navbar-desktop');
+  let navbarMobile = $('#navbar-mobile');
 
-    let navbarDesktop = $('#navbar-desktop');
-    let navbarMobile = $('#navbar-mobile');
+  let lightboxContainer = $('#lightbox-container');
+  let lightboxCloserButton = $('#lightbox-closer-button');
+  let memberDetailsSection = $('#member-details');
+  let lovePic = $('#love-pic');
+  let leftArrow = $('#left-arrow');
+  let rightArrow = $('#right-arrow');
 
-    let lightbox = $("#lightbox");
-    let lightboxContainer = $("#lightbox-container");
-    let lightboxCloserButton = $("#lightbox-closer-button");
-    let memberDetailsSection = $('#member-details');
-    let lovePic = $("#love-pic");
-    // dynamically set the height of the mobile nav buttons, which will overlay on the mobile navbar
-    // let mobileNavButtons = $(".mobile-nav-button");
-    // let mobileNavbar = $("#mobile-navbar");
-    // mobileNavButtons.css('height', mobileNavbar.css('height'));
-    //#region Event Listener Setup
-    // convert to listener on results body that filters by result-pic class
-    //  therefore 1 listener
-    $(".trigger").on('click', '', function () {
-        let resultId = parseInt($(this).attr('data-result-id'));
-        OpenLightbox(resultId);
-    });
-    $(".lightbox-closer").on('click', '', function () {
-        CloseLightbox();
-    });
-    $('#left-arrow').on('click', '', function () {
-        MoveToPic(parseInt(lightboxContainer.attr("data-result-id")) - 1);
-    });
-    $('#right-arrow').on('click', '', function () {
-        MoveToPic(parseInt(lightboxContainer.attr("data-result-id")) + 1);
-    });
-    lovePic.on('click', '', function () {
-        ToggleLovePic(lovePic.attr('data-is-loved') === 'true');
-    });
-    $("#pic-subjects").on('click', '.fake-profile', function () {
-        OpenMemberDetails(parseInt($(this).attr('data-member-id')));
-    });
-    $("#back").on('click', '', function () {
-        CloseMemberDetails();
-    });
-    lightboxContainer.on('scroll', '', function () {
-        if (lightboxContainer.scrollTop() > 10) {
-            lightboxCloserButton.removeClass('hidden');
-        }
-        else {
-            lightboxCloserButton.addClass('hidden');
-        }
-    });
-    //#endregion
-    //#region Lightbox Functions
-    function OpenLightbox(resultId) {
-        // insert lightbox into DOM with $('body').append()
-        lightboxContainer.scrollTop(0);
-        lightboxContainer.removeClass("hidden");
-        navbarDesktop.addClass('hidden');
-        navbarMobile.addClass('hidden');
-        MoveToPic(resultId);
-        $('body').addClass('restrict-scroll');
+  //#region Move to site.js
+
+  // dynamically set the height of the mobile nav buttons, which will overlay on the mobile navbar
+  let mobileNavButtons = $('.mobile-nav-button');
+  let mobileNavHeight =
+    navbarMobile.height() +
+    parseInt(navbarMobile.css('padding-top')) +
+    parseInt(navbarMobile.css('padding-bottom'));
+  console.log('mobileNavHeight', mobileNavHeight);
+  mobileNavButtons.height(mobileNavHeight);
+
+  //#endregion
+
+  //#region Event Listener Setup
+
+  $('#results-body').on('click', '.trigger', function () {
+    let resultId = parseInt($(this).attr('data-result-id'));
+    openLightbox(resultId);
+  });
+  $('.lightbox-closer').on('click', '', function () {
+    closeLightbox();
+  });
+  leftArrow.on('click', '', function () {
+    moveToPic(parseInt(lightboxContainer.attr('data-result-id')) - 1);
+  });
+  rightArrow.on('click', '', function () {
+    moveToPic(parseInt(lightboxContainer.attr('data-result-id')) + 1);
+  });
+  lovePic.on('click', '', function () {
+    toggleLovePic(lovePic.attr('data-is-loved') === 'true');
+  });
+  $('#pic-subjects').on('click', '.fake-profile', function () {
+    openMemberDetails(parseInt($(this).attr('data-member-id')));
+  });
+  $('#back').on('click', '', function () {
+    closeMemberDetails();
+  });
+
+  lightboxContainer.on('scroll', '', function () {
+    if (lightboxContainer.scrollTop() > mobileNavHeight / 2) {
+      lightboxCloserButton.removeClass('hidden');
+    } else {
+      lightboxCloserButton.addClass('hidden');
     }
-    function CloseLightbox() {
-        // 1. replace this line with code that removes lightbox from the DOM
-        lightboxContainer.addClass("hidden");
-        lightboxCloserButton.addClass("hidden");
-        navbarDesktop.removeClass('hidden');
-        navbarMobile.removeClass('hidden');
-        CloseMemberDetails();
-        $('body').removeClass('restrict-scroll');
-    }
-    function MoveToPic(resultId) {
-        console.log('populate lightbox with data from picture with data-result-id: ' + resultId);
-        let photoId = $('#results-body').find('[data-result-id=' + resultId + ']').attr('data-photo-id');
-        console.log('photoId: ' + photoId);
-        let def = $.Deferred();
-        let cachedPhotoMembers;
-        let cachedCaptureDate;
-        // make ajax call for photo data using URL query string
-        def
-            .then(function () {
-                // get photoId using jQuery to select element using data-resutlId attribute
-                return $.get('/api/photos/' + photoId).done(function (photo) {
-                console.log('call to retrieve photo with id: ' + photo.id);
-                // populate form
-                console.log(photo);
-                //      update lightbox-container-result-id attr
-                lightboxContainer.attr("data-result-id", resultId);
-                // lightbox-pic
-                let pic = $('#lightbox-pic');
-                pic.attr('src', photo.url);
-                pic.attr('alt', photo.caption);
-                // lightbox-details
-                //     caption
-                $("#caption").text(photo.caption);
-                //     capture date
-                let formattedDate = new Date(photo.captureDate);
-                $("#capture-date").text(formattedDate.toLocaleDateString());
-                //     love-pic (isLoved)
-                //      set intital loved pic val
-                //      ToggleLovePic(!actualValue);
-                // caching for next call
-                cachedPhotoMembers = photo.members;
-                cachedCaptureDate = formattedDate;
-            });
-        })
-            .then(function () {
-            //  get profile html
-            return $.get('/Static/PicProfile.html').done(function (picProfile) {
-                console.log('second call made');
-                let subjectsArea = $('#pic-subjects');
-                subjectsArea.html("");
-                $.each(cachedPhotoMembers, function (index, element) {
-                    let newProfile = $(picProfile).clone();
-                    $(newProfile).filter('.fake-profile').attr('data-member-id', element.id);
-                    $(newProfile).find('.name').text(element.name);
-                    let birthDate = new Date(element.birthDate);
-                    let yearsInMilliseconds = (1000 * 3600 * 24 * 365);
-                    let ageInYears = Math.floor((cachedCaptureDate.getTime() - birthDate.getTime())
-                        / yearsInMilliseconds);
-                    console.log('age: ' + ageInYears);
-                    //$(newProfile).find('.age').text(ageInYears);
-                    $(newProfile).appendTo(subjectsArea);
-                });
-            });
-        })
-            .fail(function (error) {
-            alert('there was an error!');
-            console.error(error);
-            // if error display message and log to global logger
-        })
-            .always(function () {
-            console.log('always');
+  });
+
+  //#endregion
+
+  //#region Lightbox Functions
+
+  function openLightbox(resultId) {
+    lightboxContainer.removeClass('hidden');
+    navbarDesktop.addClass('hidden');
+    navbarMobile.addClass('hidden');
+    moveToPic(resultId);
+    lightboxContainer.css('padding-bottom', $('.mobile-nav-button').height());
+    $('body').addClass('restrict-scroll');
+  }
+
+  function closeLightbox() {
+    lightboxContainer.addClass('hidden');
+    lightboxCloserButton.addClass('hidden');
+    navbarDesktop.removeClass('hidden');
+    navbarMobile.removeClass('hidden');
+    closeMemberDetails();
+    lightboxContainer.css('padding-bottom', 0);
+    $('body').removeClass('restrict-scroll');
+  }
+
+  function moveToPic(resultId) {
+    
+    let resultPicMaxId = parseInt(
+      $('#results-body .photo-result:last-child').attr('data-result-id')
+    );
+    leftArrow.removeClass('hidden');
+    rightArrow.removeClass('hidden');
+
+    if (resultId === resultPicMaxId) rightArrow.addClass('hidden');
+    else if (resultId === 0) leftArrow.addClass('hidden');
+
+    let photoId = $('#results-body')
+      .find('[data-result-id=' + resultId + ']')
+      .attr('data-photo-id');
+    let cachedPhotoMembers;
+    let cachedCaptureDate;
+    let def = $.Deferred();
+    def
+      .then(function () {
+        return $.get('/api/photos/' + photoId).done(function (photo) {
+          console.log('photo loaded to lightbox', photo);
+          
+          lightboxContainer.attr('data-result-id', resultId);
+
+          let pic = $('#lightbox-pic');
+          pic.attr('src', photo.url);
+          pic.attr('alt', photo.caption);
+
+          $('#caption').text(photo.caption);
+
+          let captureArea = $('#capture-date');
+          let formattedDate;
+
+          if (photo.captureDate !== null) {
+            formattedDate = new Date(photo.captureDate);
+            captureArea.text(formattedDate.toLocaleDateString());
+            captureArea.removeClass('hidden');
+          } else {
+            captureArea.addClass('hidden');
+            console.log(formattedDate);
+          }
+
+          console.log('photo.captureDate', formattedDate);
+
+          cachedPhotoMembers = photo.members;
+          cachedCaptureDate = formattedDate;
+
+          // set initial loved pic val
+          // toggleLovePic(!photo.isLoved);
         });
-        def.resolve();
-    }
-    function ToggleLovePic(isLoved) {
-        isLoved = !isLoved;
-        // 1. make ajax call
-        alert('make ajax call to toggle love pic! isLoved: ' + isLoved);
-        //    a. if sucessful change icon and text
-        //{
-        $("#love-pic").attr('data-is-loved', isLoved.toString());
-        let text;
-        if (isLoved) {
-            text = 'Loved Pic';
-            lovePic.children('.fa-heart').addClass('fas');
-            lovePic.children('.fa-heart').removeClass('far');
-        }
-        else {
-            text = 'Love Pic';
-            lovePic.children('.fa-heart').addClass('far');
-            lovePic.children('.fa-heart').removeClass('fas');
-        }
-        lovePic.children('span').text(text);
-        //}
-        //    b. if error display message and log to global logger
-    }
-    function OpenMemberDetails(memberId) {
-        alert('open the details section for member with id: ' + memberId);
-        // 2. show member section 
-        memberDetailsSection.removeClass("hidden");
-        // 3. make ajax call for member data
-        $.ajax({
-            url: '/api/members/' + memberId,
-            type: 'GET',
-            contentType: 'application/json',
-        })
-            .done(function (data) {
-                alert('member retrieved!');
-            })
-            .fail(function (error) {
-                alert('there was an error');
-                switch (error.status) {
-                    case 404:
-                        console.log(error.responseText);
-                        break;
-                    case 500:
-                        console.log(error.responseText);
-                        break;
-                    default:
-                        console.log(error);
-                        break;
-                }
-            })
-            .always(function () {
-                alert('api call is finished!');
+      })
+      .then(function () {
+        return $.get('/Static/PicProfile.html').done(function (picProfile) {
+          console.log('loading photo.members', cachedPhotoMembers);
+          let subjectsArea = $('#pic-subjects');
+          subjectsArea.html('');
+
+          if (cachedPhotoMembers !== undefined) {
+            $.each(cachedPhotoMembers, function (index, element) {
+              let newProfile = $(picProfile).clone();
+
+              newProfile
+                .filter('.fake-profile')
+                .attr('data-member-id', element.id);
+
+              newProfile.find('.name').text(element.name);
+
+              let ageArea = newProfile.find('.age');
+
+              if (cachedCaptureDate === undefined) {
+                ageArea.addClass('hidden');
+              } else {
+                let birthDate = new Date(element.birthDate);
+                let yearsInMilliseconds = 1000 * 3600 * 24 * 365;
+                let ageInYears = Math.floor(
+                  (cachedCaptureDate.getTime() - birthDate.getTime()) /
+                  yearsInMilliseconds
+                );
+                ageArea.append(ageInYears);
+              }
+
+              newProfile.appendTo(subjectsArea);
             });
-        //   a. if successful populate member details section with data
+          }
+        });
+      })
+      .fail(function (error) {
+        console.log('there was an error!, log to global logger', error);
+      })
+      .always(function () {
         lightboxContainer.scrollTop(0);
-        //   b. if error display message and log to global logger
+      });
+    def.resolve();
+  }
+
+  function toggleLovePic(isLoved) {
+    isLoved = !isLoved;
+
+    console.log('make ajax call to toggle love pic', isLoved);
+
+    $('#love-pic').attr('data-is-loved', isLoved.toString());
+
+    let lovedPicIcon = lovePic.children('.fa-heart');
+    let lovedPicText = lovePic.children('span');
+
+    if (isLoved) {
+      lovedPicText.text('Loved Pic');
+      lovedPicIcon.addClass('fas');
+      lovedPicIcon.removeClass('far');
+    } else {
+      lovedPicText.text('Love Pic');
+      lovedPicIcon.addClass('far');
+      lovedPicIcon.removeClass('fas');
     }
-    function CloseMemberDetails() {
-        memberDetailsSection.addClass("hidden");
-    }
-    //#endregion
+    //}
+  }
+
+  function openMemberDetails(memberId) {
+
+    console.log('open the details section for member with id: ' + memberId);
+    memberDetailsSection.removeClass('hidden');
+
+    $.ajax({
+      url: '/api/members/' + memberId,
+      type: 'GET',
+      contentType: 'application/json',
+    })
+      .done(function (data) {
+        console.log("loading member-details", data);
+
+        memberDetailsSection.find('#member-name').text(data.name);
+
+        let birthDate = new Date(data.birthDate);
+        let birthday = birthDate.getMonth() + 1 + ' ' + birthDate.getDate();
+        memberDetailsSection.find('#member-birthday').text(birthday);
+      })
+      .fail(function (error) {
+        console.log('member call failed, display message and log to global logger', error);
+      })
+      .always(function () {
+        lightboxContainer.scrollTop(0);
+        lightboxContainer.addClass("restrict-scroll");
+      });
+  }
+
+  function closeMemberDetails() {
+    memberDetailsSection.addClass('hidden');
+    lightboxContainer.removeClass("restrict-scroll");
+  }
+
+  //#endregion
 });

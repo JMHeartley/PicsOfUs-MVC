@@ -25,7 +25,7 @@ else
     </div>
     <div>
         <h4 class="text-md-left text-center ml-md-5 pl-md-5">Results</h4>
-        <div class="d-flex py-3 px-4" id="results-body">
+        <div class="d-flex p-2" id="results-body">
             @for (int i = 0; i < Model.Count(); i++)
             {
                 <div class="photo-result trigger m-2" data-result-id="@i" data-photo-id="@Model[i].Id">
@@ -35,32 +35,51 @@ else
         </div>
     </div>
     <div class="row no-gutters hidden" id="lightbox-container">
-        <div id="lightbox" class="col-12 col-lg-10 row no-gutters red-border">
+        <div id="lightbox" class="col-12 col-lg-10 row no-gutters">
             <i class="fas fa-times-circle lightbox-closer" aria-hidden="true" id="lightbox-closer-x"></i>
-            <div class="col-12 col-lg-8 d-flex justify-content-center green-border" id="lightbox-main">
+            <div class="col-12 col-lg-8 d-flex justify-content-center" id="lightbox-main">
                 <div id="member-details" class="hidden">
-                    member details
+                    @* profile pic
+                        name
+                        birthday
+
+                        parents
+
+                        siblings
+
+                        children*@
+
+                    
+                    <div>
+                        <i class="fas fa-user-circle my-1"></i>
+                        <span id="member-name"></span>
+                        <span id="member-birthday"></span>
+                    </div>
+                    <div id="member-parents">parents</div>
+                    <div id="member-siblings">siblings</div>
+                    <div id="member-children">children</div>
+
                     <p id="back">back</p>
                 </div>
-                <div class="green-border" id="left-arrow">
+                <div id="left-arrow">
                     <i class="fas fa-arrow-left" aria-hidden="true"></i>
                 </div>
-                <img src="https://d2gg9evh47fn9z.cloudfront.net/800px_COLOURBOX2301800.jpg" alt="pic" id="lightbox-pic" class="image-fluid">
-                <div class="green-border" id="right-arrow">
+                <img src="" alt="" id="lightbox-pic" class="image-fluid">
+                <div id="right-arrow">
                     <i class="fas fa-arrow-right" aria-hidden="true"></i>
                 </div>
             </div>
-            <div class="lightbox-closer d-flex justify-content-center align-items-center mobile-nav-button hidden red-border" id="lightbox-closer-button">
+            <div class="lightbox-closer d-flex justify-content-center align-items-center mobile-nav-button hidden" id="lightbox-closer-button">
                 <h4 class="font-weight-normal">Back</h4>
             </div>
-            <div id="lightbox-details" class="col-12 col-lg-4 pt-3 px-3 d-flex blue-border">
+            <div id="lightbox-details" class="col-12 col-lg-4 pt-3 px-3 d-flex">
                 <h3 id="caption" class="font-weight-bolder">Caption!</h3>
                 <p id="capture-date" class="font-weight-lighter">Capture date</p>
                 <div class="d-flex align-items-center" id="love-pic" data-is-loved="false">
                     <i class="far fa-heart mx-2" aria-hidden="true"></i>
                     <span class="font-weight-normal">Love Pic</span>
                 </div>
-                <div id="pic-subjects" class="my-3 p-1 d-flex red-border">
+                <div id="pic-subjects" class="my-3 p-1 d-flex">
                     <!-- this is where the mini profiles go! -->
                 </div>
                 <!-- 
