@@ -12,8 +12,10 @@ namespace PicsOfUs
                         "~/Scripts/ajax-common.js",
                         "~/Scripts/bootbox.js",
                         "~/Scripts/bootstrap.js",
-                        "~/Scripts/Popper/popper.js",
-                        "~/Scripts/My Scripts/*.js"));
+                        "~/Scripts/Popper/popper.js"));
+
+            bundles.Add(new ScriptBundle("~/bundles/lib-internal").Include(
+                "~/Scripts/My Scripts/*.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/jqueryval").Include(
                         "~/Scripts/jQuery/jquery.validate*"));
