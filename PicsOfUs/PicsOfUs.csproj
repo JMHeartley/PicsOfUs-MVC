@@ -228,6 +228,10 @@
     <Compile Include="Migrations\202103302145587_AddParentsToMember.Designer.cs">
       <DependentUpon>202103302145587_AddParentsToMember.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202104242144365_SeedUsers.cs" />
+    <Compile Include="Migrations\202104242144365_SeedUsers.Designer.cs">
+      <DependentUpon>202104242144365_SeedUsers.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\ApplicationDbContext.cs" />
@@ -242,6 +246,7 @@
     <Compile Include="Models\Photo.cs" />
     <Compile Include="Models\PhotoDetailsViewModel.cs" />
     <Compile Include="Models\PhotoFormViewModel.cs" />
+    <Compile Include="Models\RoleName.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
   </ItemGroup>
@@ -439,6 +444,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202103302145587_AddParentsToMember.resx">
       <DependentUpon>202103302145587_AddParentsToMember.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202104242144365_SeedUsers.resx">
+      <DependentUpon>202104242144365_SeedUsers.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
