@@ -152,6 +152,10 @@ body {
     .mobile-nav-button {
         display: none !important;
     }
+
+    .add-mobile-nav-buffer {
+        padding-bottom: 0 !important;
+    }
 }
 
 /****** utility styling *********/
@@ -160,7 +164,7 @@ body {
 .hidden > * {
     height: 0 !important;
     overflow: hidden !important;
-    z-index: -1 !important;
+    z-index: -10 !important;
 }
 
 .trigger {
@@ -172,9 +176,30 @@ body {
     overflow: hidden !important;
 }
 
+.scroll-y-no-bar {
+    overflow-y: auto;
+}
+
+/* Hide scrollbar for Chrome, Safari and Opera */
+.scroll-y-no-bar::-webkit-scrollbar {
+    display: none;
+}
+
+/* Hide scrollbar for IE, Edge and Firefox */
+.scroll-y-no-bar {
+    -ms-overflow-style: none; /* IE and Edge */
+    scrollbar-width: none; /* Firefox */
+}
+
 .image-fluid {
     width: auto;
     height: 100%;
+    max-width: 100%;
+    object-fit: contain;
+}
+
+.profile-pic {
+    width: auto;
     max-width: 100%;
     object-fit: contain;
 }

@@ -34,33 +34,11 @@ else
             }
         </div>
     </div>
-    <div class="row no-gutters hidden" id="lightbox-container">
+    <div class="row no-gutters hidden add-mobile-nav-buffer scroll-y-no-bar" id="lightbox-container">
         <div id="lightbox" class="col-12 col-lg-10 row no-gutters">
             <i class="fas fa-times-circle lightbox-closer" aria-hidden="true" id="lightbox-closer-x"></i>
             <div class="col-12 col-lg-8 d-flex justify-content-center" id="lightbox-main">
-                <div id="member-details" class="hidden">
-                    @* profile pic
-                        name
-                        birthday
-
-                        parents
-
-                        siblings
-
-                        children*@
-
-                    
-                    <div>
-                        <i class="fas fa-user-circle my-1"></i>
-                        <span id="member-name"></span>
-                        <span id="member-birthday"></span>
-                    </div>
-                    <div id="member-parents">parents</div>
-                    <div id="member-siblings">siblings</div>
-                    <div id="member-children">children</div>
-
-                    <p id="back">back</p>
-                </div>
+                
                 <div id="left-arrow">
                     <i class="fas fa-arrow-left" aria-hidden="true"></i>
                 </div>
@@ -79,16 +57,45 @@ else
                     <i class="far fa-heart mx-2" aria-hidden="true"></i>
                     <span class="font-weight-normal">Love Pic</span>
                 </div>
-                <div id="pic-subjects" class="my-3 p-1 d-flex">
+                <div id="pic-subjects" class="my-1 p-1 d-flex scroll-y-no-bar">
                     <!-- this is where the mini profiles go! -->
                 </div>
-                <!-- 
-                <div id="comments" class="mb-3 blue-border">
+                <!--
+                <div id="comments" class="mb-3 blue-border scroll-y-no-bar">
                     <div class="make-long">
                         this is where the comments go!
                     </div>
-                </div> 
+                </div>
                 -->
+            </div>
+            <div id="member-details" class="hidden row no-gutters add-mobile-nav-buffer scroll-y-no-bar">
+                <i class="fas fa-times-circle member-details-closer" aria-hidden="true" id="member-details-closer-x"></i>
+                <div class="col-12 col-lg-6 row no-gutters red-border" id="member-summary">
+                    <div class="col-6 p-3 red-border">
+                        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/7/7e/Circle-icons-profile.svg/1024px-Circle-icons-profile.svg.png1" alt="profile pic" class="profile-pic"/>
+                    </div>
+                    <div class="col-6 p-2 green-border">
+                        <h5>Birthday</h5>
+                        <p id="member-birthday"></p>
+                        <h5>Details</h5>
+                        <p>Blah blah blah...</p>
+                    </div>
+                    <div class="col-12 text-center red-border">
+                        <h3 id="member-name"></h3>
+                    </div>
+                </div>
+                <div class="col-12 col-lg-6 blue-border add-mobile-nav-buffer">
+                    <h5>Parents</h5>
+                    <div id="member-parents"></div>
+
+                    <h5>Siblings</h5>
+                    <div id="member-siblings"></div>
+
+                    <h5>Children</h5>
+                    <div id="member-children"></div>
+                </div>
+
+                <div class="d-flex justify-content-center align-items-center mobile-nav-button member-details-closer">Back to Pic</div>
             </div>
         </div>
     </div>
