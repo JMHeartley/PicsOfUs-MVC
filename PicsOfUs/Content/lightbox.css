@@ -5,30 +5,10 @@
     background-color: rgba(0, 0, 0, 50%);
     height: 100vh;
     width: 100%;
-    overflow-y: auto;
-}
-
-/* Hide scrollbar for Chrome, Safari and Opera */
-#lightbox-container::-webkit-scrollbar {
-    display: none;
-}
-
-/* Hide scrollbar for IE, Edge and Firefox */
-#lightbox-container {
-  -ms-overflow-style: none;  /* IE and Edge */
-  scrollbar-width: none;  /* Firefox */
 }
 
 #lightbox {
     background-color: black;
-}
-
-#member-details {
-    position: absolute;
-    height: 100%;
-    width: 100%;
-    background-color: rgba(0, 0, 0, 85%);
-    z-index: 2;
 }
 
 #lightbox-main {
@@ -67,9 +47,27 @@
     top: 50%;
 }
 
-#lightbox-closer-x {
-    font-size: 2rem;
+#member-details {
     position: absolute;
+    height: 100%;
+    width: 100%;
+    background-color: rgba(0, 0, 0, 85%);
+    z-index: 2;
+}
+
+#member-summary {
+    height: 100%;
+}
+
+#lightbox-details {
+    overflow-y: auto;
+    flex-direction: column;
+}
+
+#lightbox-closer-x,
+#member-details-closer-x {
+    font-size: 2rem;
+    position: fixed;
     top: -1rem;
     right: -1rem;
     z-index: 1;
@@ -78,34 +76,13 @@
     display: none;
 }
 
-#lightbox-closer-button {
-    height: 10vh;
-}
-
-#lightbox-details {
-    overflow-y: auto;
-    flex-direction: column;
-}
-
 #love-pic {
     font-size: 1.25rem;
     cursor: pointer;
 }
 
-#pic-subjects {
-    flex-wrap: wrap;
-    overflow-y: auto;
-}
-
-/* Hide scrollbar for Chrome, Safari and Opera */
-#pic-subjects::-webkit-scrollbar {
-    display: none;
-}
-
-/* Hide scrollbar for IE, Edge and Firefox */
-#pic-subjects {
-  -ms-overflow-style: none;  /* IE and Edge */
-  scrollbar-width: none;  /* Firefox */
+#pic-subjects { 
+    flex-wrap: wrap; 
 }
 
 .fake-profile {
@@ -144,7 +121,8 @@
         height: 100%;
     }
 
-    #lightbox-closer-x {
+    #lightbox-closer-x,
+    #member-details-closer-x {
         display: block;
     }
 
@@ -154,16 +132,5 @@
 
     #comments {
         height: 100%;
-    }
-
-    /* Hide scrollbar for Chrome, Safari and Opera */
-    #comments::-webkit-scrollbar {
-        display: none;
-    }
-
-    /* Hide scrollbar for IE, Edge and Firefox */
-    #comments {
-    -ms-overflow-style: none;  /* IE and Edge */
-    scrollbar-width: none;  /* Firefox */
     }
 }
