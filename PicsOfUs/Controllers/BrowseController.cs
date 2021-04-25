@@ -116,26 +116,5 @@ namespace PicsOfUs.Controllers
 
             return RedirectToAction("Index", "Browse");
         }
-
-        public ActionResult Details(int id)
-        {
-            var photo = _context.Photos
-                .Include(p => p.Members)
-                .SingleOrDefault(p => p.Id == id);
-
-            var viewModel = new PhotoDetailsViewModel
-            {
-                Photo = photo,
-                Subjects = photo.Members
-                .Select(m => new PicProfileViewModel
-                {
-                    MemberId = m.Id,
-                    Name = m.Name,
-                    AgeInPhoto = m.AgeInPhoto(photo.CaptureDate)
-                })
-            };
-
-            return View(viewModel);
-        }
     }
 }

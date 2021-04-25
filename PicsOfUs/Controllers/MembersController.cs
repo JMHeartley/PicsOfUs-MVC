@@ -58,40 +58,6 @@ namespace PicsOfUs.Controllers
             return View("MemberForm", viewModel);
         }
 
-        public ActionResult Details(int id)
-        {
-            var member = _context.Members
-                .Include(m => m.Siblings)
-                .Include(m => m.Parents)
-                .Include(m => m.Children)
-                .SingleOrDefault(m => m.Id == id);
-
-            var viewModel = new MemberDetailsViewModel
-            {
-                Member = member,
-                Siblings = member.Siblings
-                .Select(m => new MiniProfileViewModel
-                {
-                    MemberId = m.Id,
-                    Name = m.Name
-                }),
-                Parents = member.Parents
-                .Select(m => new MiniProfileViewModel
-                {
-                    MemberId = m.Id,
-                    Name = m.Name
-                }),
-                Children = member.Children
-                .Select(m => new MiniProfileViewModel
-                {
-                    MemberId = m.Id,
-                    Name = m.Name
-                }),
-            };
-
-            return View(viewModel);
-        }
-
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Save(MemberFormViewModel viewModel)
