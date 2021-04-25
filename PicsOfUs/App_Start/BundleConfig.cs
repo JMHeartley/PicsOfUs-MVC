@@ -9,13 +9,13 @@ namespace PicsOfUs
         {
             bundles.Add(new ScriptBundle("~/bundles/lib").Include(
                         "~/Scripts/jQuery/jquery-{version}.js", 
-                        "~/Scripts/ajax-common.js",
                         "~/Scripts/bootbox.js",
                         "~/Scripts/bootstrap.js",
                         "~/Scripts/Popper/popper.js"));
 
-            bundles.Add(new ScriptBundle("~/bundles/lib-internal").Include(
-                "~/Scripts/My Scripts/*.js"));
+            bundles.Add(new ScriptBundle("~/bundles/internal").Include(
+                        "~/Scripts/ajax-common.js",
+                        "~/Scripts/My Scripts/*.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/jqueryval").Include(
                         "~/Scripts/jQuery/jquery.validate*"));

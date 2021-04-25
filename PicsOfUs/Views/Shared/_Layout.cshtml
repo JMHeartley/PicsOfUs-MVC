@@ -22,11 +22,12 @@
         <p>&copy; @DateTime.Now.Year - Pics of. Us</p>
     </footer>
 </div>
-    @if (User.Identity.IsAuthenticated)
+    @Scripts.Render("~/bundles/lib")
+    @RenderSection("scripts", required: false)
+
+@if (User.Identity.IsAuthenticated)
     {
-        Scripts.Render("~/bundles/lib-internal");
+        @Scripts.Render("~/bundles/internal");
     }
-        @Scripts.Render("~/bundles/lib")
-        @RenderSection("scripts", required: false)
 </body>
 </html>
