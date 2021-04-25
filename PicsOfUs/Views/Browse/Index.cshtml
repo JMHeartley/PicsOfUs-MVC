@@ -1,5 +1,5 @@
 ﻿@using PicsOfUs.Models
-@model List<PicsOfUs.Models.Photo>
+@model BrowseIndexViewModel
 @{
     ViewBag.Title = "Index";
 }
@@ -21,19 +21,22 @@
         <a href="#" class="btn btn-primary">Add person</a>
     </div>
 </div>
+@using (Html.BeginForm("Index", "Browse", ""))
+{
+}
 <div>
     <h4 class="text-md-left text-center ml-md-5 pl-md-5">Results</h4>
     <div class="d-flex p-2" id="results-body">
-    @if (!Model.Any())
+    @if (!Model.ResultPics.Any())
     {
         <h4>There are no photos to display...</h4>
     }
     else
     {
-        for (var i = 0; i < Model.Count(); i++)
+        for (var i = 0; i < Model.ResultPics.Count(); i++)
         {
-            <div class="photo-result trigger m-2" data-result-id="@i" data-photo-id="@Model[i].Id">
-                <img src="@Model[i].Url" alt="@Model[i].Caption" class="image-fluid"/>
+            <div class="photo-result trigger m-2" data-result-id="@i" data-photo-id="@Model.ResultPics[i].Id">
+                <img src="@Model.ResultPics[i].Url" alt="@Model.ResultPics[i].Caption" class="image-fluid"/>
             </div>
         }
     }

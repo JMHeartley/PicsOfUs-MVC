@@ -1,6 +1,7 @@
 ﻿using PicsOfUs.Models;
 using System.Data.Entity;
 using System.Linq;
+using System.Security.Permissions;
 using System.Web.Mvc;
 
 namespace PicsOfUs.Controllers
@@ -25,7 +26,12 @@ namespace PicsOfUs.Controllers
                 .Include(p => p.Members)
                 .ToList();
 
-            return View(photos);
+            var viewModel = new BrowseIndexViewModel
+            {
+                ResultPics = photos
+            };
+
+            return View(viewModel);
         }
 
         public ActionResult New()
