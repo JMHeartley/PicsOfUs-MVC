@@ -1,5 +1,8 @@
-﻿using PicsOfUs.Models;
+﻿using System;
+using System.Collections.Generic;
+using PicsOfUs.Models;
 using System.Data.Entity;
+using System.Diagnostics.Eventing.Reader;
 using System.Linq;
 using System.Security.Permissions;
 using System.Web.Mvc;
@@ -20,16 +23,65 @@ namespace PicsOfUs.Controllers
             _context.Dispose();
         }
 
-        public ActionResult Index()
+        public ActionResult Index(BrowseIndexViewModel viewModel)
         {
-            var photos = _context.Photos
-                .Include(p => p.Members)
-                .ToList();
-
-            var viewModel = new BrowseIndexViewModel
+            if (viewModel.SearchForm == null)
             {
-                ResultPics = photos
-            };
+                viewModel.SearchForm = new SearchFormViewModel
+                {
+                    PicSubjects = _context.Members
+                        .AsEnumerable()
+                        .Select(m => new MemberSelectViewModel
+                        {
+                            MemberId = m.Id,
+                            Name = m.Name,
+                            IsSelected = false
+                        }).ToList()
+                };
+            }
+            else if (ModelState.IsValid)
+            {
+                var form = viewModel.SearchForm;
+
+                // load photos from database
+                var photos = _context.Photos.Include(p => p.Members).AsQueryable();
+
+                // remove photos taken before form.CaptureDateFrom
+                if (form.CaptureDateFrom != null)
+                {
+                    photos = photos.Where(p => p.CaptureDate >= form.CaptureDateFrom);
+                }
+
+                // remove photos taken after form.CaptureDateTo
+                if (form.CaptureDateTo != null)
+                {
+                    photos = photos.Where(p => p.CaptureDate <= form.CaptureDateTo);
+                }
+
+                // filter photos by form.PicSubjects
+                var selectedIds = form.PicSubjects
+                    .Where(m => m.IsSelected)
+                    .Select(m => m.MemberId)
+                    .ToList();
+
+                if (selectedIds.Any())
+                {
+                    if (form.hasOnlySelectedMembers)
+                    {
+                        photos = photos.Where(p => p.Members
+                                .All(m => selectedIds
+                                    .Contains(m.Id)));
+                    }
+                    else
+                    {
+                        photos = photos.Where(p => p.Members
+                                            .Any(m => selectedIds
+                                                .Contains(m.Id)));
+                    }
+                }
+
+                viewModel.ResultPics = photos.ToList();
+            }
 
             return View(viewModel);
         }

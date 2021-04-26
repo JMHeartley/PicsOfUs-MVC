@@ -21,32 +21,53 @@
         <a href="#" class="btn btn-primary">Add person</a>
     </div>
 </div>
-@using (Html.BeginForm("Index", "Browse", ""))
+@using (Html.BeginForm("Index", "Browse"))
 {
+    <div class="form-group">
+        @Html.LabelFor(m => m.SearchForm.CaptureDateFrom)
+        @Html.TextBoxFor(m => m.SearchForm.CaptureDateFrom, "{0:MM/dd/yyyy}", new { @class = "form-control" })
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(m => m.SearchForm.CaptureDateTo)
+        @Html.TextBoxFor(m => m.SearchForm.CaptureDateTo, "{0:MM/dd/yyyy}", new { @class = "form-control" })
+    </div>
+
+    <label>Subjects</label>
+    <div class="overflow-auto mb-3 member-select-overflow">
+        @Html.EditorFor(m => m.SearchForm.PicSubjects)
+    </div>
+
+    <div class="form-group">
+        <label>Show me pics with only the selected members</label>
+        @Html.CheckBoxFor(m => m.SearchForm.hasOnlySelectedMembers)
+    </div>
+
+    <button type="submit" class="btn btn-primary">Search</button>
 }
 <div>
     <h4 class="text-md-left text-center ml-md-5 pl-md-5">Results</h4>
     <div class="d-flex p-2" id="results-body">
-    @if (!Model.ResultPics.Any())
-    {
-        <h4>There are no photos to display...</h4>
-    }
-    else
-    {
-        for (var i = 0; i < Model.ResultPics.Count(); i++)
+        @if (Model.ResultPics == null || !Model.ResultPics.Any())
         {
-            <div class="photo-result trigger m-2" data-result-id="@i" data-photo-id="@Model.ResultPics[i].Id">
-                <img src="@Model.ResultPics[i].Url" alt="@Model.ResultPics[i].Caption" class="image-fluid"/>
-            </div>
+            <p>There are no pics to display...</p>
         }
-    }
+        else
+        {
+            for (var i = 0; i < Model.ResultPics.Count(); i++)
+            {
+                <div class="photo-result trigger m-2" data-result-id="@i" data-photo-id="@Model.ResultPics[i].Id">
+                    <img src="@Model.ResultPics[i].Url" alt="@Model.ResultPics[i].Caption" class="image-fluid" />
+                </div>
+            }
+        }
     </div>
 </div>
 <div class="row no-gutters hidden add-mobile-nav-buffer scroll-y-no-bar" id="lightbox-container">
     <div id="lightbox" class="col-12 col-lg-10 row no-gutters">
         <i class="fas fa-times-circle lightbox-closer" aria-hidden="true" id="lightbox-closer-x"></i>
         <div class="col-12 col-lg-8 d-flex justify-content-center" id="lightbox-main">
-            
+
             <div id="left-arrow">
                 <i class="fas fa-arrow-left" aria-hidden="true"></i>
             </div>
@@ -80,7 +101,7 @@
             <i class="fas fa-times-circle member-details-closer" aria-hidden="true" id="member-details-closer-x"></i>
             <div class="col-12 col-lg-6 row no-gutters red-border" id="member-summary">
                 <div class="col-6 p-3 red-border">
-                    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/7/7e/Circle-icons-profile.svg/1024px-Circle-icons-profile.svg.png1" alt="profile pic" class="profile-pic"/>
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/7/7e/Circle-icons-profile.svg/1024px-Circle-icons-profile.svg.png1" alt="profile pic" class="profile-pic" />
                 </div>
                 <div class="col-6 p-2 green-border">
                     <h5>Birthday</h5>
