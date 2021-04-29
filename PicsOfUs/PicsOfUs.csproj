@@ -232,11 +232,15 @@
     <Compile Include="Migrations\202104242144365_SeedUsers.Designer.cs">
       <DependentUpon>202104242144365_SeedUsers.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202104292107543_AddFirstAndLastNameToUser.cs" />
+    <Compile Include="Migrations\202104292107543_AddFirstAndLastNameToUser.Designer.cs">
+      <DependentUpon>202104292107543_AddFirstAndLastNameToUser.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\ApplicationDbContext.cs" />
     <Compile Include="Models\BrowseIndexViewModel.cs" />
-    <Compile Include="Models\IdentityModels.cs" />
+    <Compile Include="Models\ApplicationUser.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
     <Compile Include="Models\Member.cs" />
     <Compile Include="Models\MemberDetailsViewModel.cs" />
@@ -447,6 +451,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202104242144365_SeedUsers.resx">
       <DependentUpon>202104242144365_SeedUsers.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202104292107543_AddFirstAndLastNameToUser.resx">
+      <DependentUpon>202104292107543_AddFirstAndLastNameToUser.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
