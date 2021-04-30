@@ -21,10 +21,10 @@ $(function () {
   //   navbarMobile.height() +
   //   parseInt(navbarMobile.css('padding-top')) +
   //   parseInt(navbarMobile.css('padding-bottom'));
-    mobileNavButtons.height(mobileNavHeight);
-    mobileNavBuffers.css('padding-bottom', mobileNavHeight);
+  mobileNavButtons.height(mobileNavHeight);
+  mobileNavBuffers.css('padding-bottom', mobileNavHeight);
 
-    //#endregion
+  //#endregion
 
   //#region Event Listener Setup
 
@@ -109,6 +109,7 @@ $(function () {
           console.log('photo loaded to lightbox', photo);
 
           lightboxContainer.attr('data-result-id', resultId);
+          lightboxContainer.attr('data-photo-id', photoId);
 
           const pic = $('#lightbox-pic');
           pic.attr('src', photo.url);
@@ -128,6 +129,7 @@ $(function () {
 
           // set initial loved pic val
           // toggleLovePic(!photo.isLoved);
+          setLovedPic(photo.isLoved);
         });
       })
       .then(function (photo) {
@@ -154,25 +156,28 @@ $(function () {
   }
 
   function toggleLovePic(isLoved) {
+
     isLoved = !isLoved;
 
-    console.log('make ajax call to toggle love pic', isLoved);
-
-    $('#love-pic').attr('data-is-loved', isLoved.toString());
-
-    const lovedPicIcon = lovePic.children('.fa-heart');
-    const lovedPicText = lovePic.children('span');
-
-    if (isLoved) {
-      lovedPicText.text('Pic Loved');
-      lovedPicIcon.addClass('fas');
-      lovedPicIcon.removeClass('far');
-    } else {
-      lovedPicText.text('Love Pic');
-      lovedPicIcon.addClass('far');
-      lovedPicIcon.removeClass('fas');
-    }
-    //}
+    let def = $.Deferred();
+    def
+      .then(function () {
+        return $.ajax({
+          url: "/api/photos/" + lightboxContainer.attr("data-photo-id"),
+          type: "PATCH",
+          contentType: "application/json",
+          data: JSON.stringify({
+            IsLoved: isLoved
+          })
+        });
+      })
+      .then(function () {
+        setLovedPic(isLoved)
+      })
+      .fail(function (error) {
+        console.log("An error occurred", error);
+      });
+    def.resolve();
   }
 
   function openMemberDetails(memberId) {
@@ -187,11 +192,11 @@ $(function () {
 
           memberDetailsSection.find('#member-name').text(data.name);
 
-            const months =
-                ['January', 'February', 'March', 'April', 'May', 'June', 'July',
-                    'August', 'September', 'October', 'November', 'December'];
-            const birthDate = new Date(data.birthDate);
-            const birthMonth = months[birthDate.getMonth()];
+          const months =
+            ['January', 'February', 'March', 'April', 'May', 'June', 'July',
+              'August', 'September', 'October', 'November', 'December'];
+          const birthDate = new Date(data.birthDate);
+          const birthMonth = months[birthDate.getMonth()];
           const birthday = birthMonth + ' ' + birthDate.getDate();
           memberDetailsSection.find('#member-birthday').text(birthday);
         });
@@ -234,16 +239,16 @@ $(function () {
       .always(function () {
         lightboxContainer.scrollTop(0);
         lightboxContainer.addClass('restrict-scroll');
-          memberDetailsSection.removeClass('hidden');
-          //memberDetailsSection.css('padding-bottom', mobileNavHeight);
+        memberDetailsSection.removeClass('hidden');
+        //memberDetailsSection.css('padding-bottom', mobileNavHeight);
       });
     def.resolve();
   }
 
   function closeMemberDetails() {
     memberDetailsSection.addClass('hidden');
-      lightboxContainer.removeClass('restrict-scroll');
-      //memberDetailsSection.css('padding-bottom', 0);
+    lightboxContainer.removeClass('restrict-scroll');
+    //memberDetailsSection.css('padding-bottom', 0);
   }
 
   function resetMemberDetails() {
@@ -277,6 +282,23 @@ $(function () {
     }
 
     return cloneProfile;
+  }
+
+  function setLovedPic(isLoved) {
+    $('#love-pic').attr('data-is-loved', isLoved.toString());
+
+    const lovedPicIcon = lovePic.children('.fa-heart');
+    const lovedPicText = lovePic.children('span');
+
+    if (isLoved) {
+      lovedPicText.text('Loved');
+      lovedPicIcon.addClass('fas');
+      lovedPicIcon.removeClass('far');
+    } else {
+      lovedPicText.text('Love');
+      lovedPicIcon.addClass('far');
+      lovedPicIcon.removeClass('fas');
+    }
   }
   //#endregion
 });

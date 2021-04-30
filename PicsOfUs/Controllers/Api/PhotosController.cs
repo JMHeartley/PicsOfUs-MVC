@@ -8,6 +8,8 @@ using System.Net;
 using System.Net.Http;
 using System.Web.Http;
 using System.Data.Entity;
+using System.Net.Configuration;
+using Microsoft.AspNet.Identity;
 
 namespace PicsOfUs.Controllers.Api
 {
@@ -36,12 +38,16 @@ namespace PicsOfUs.Controllers.Api
         {
             var photo = _context.Photos
                 .Include(p => p.Members)
+                .Include(p => p.Users)
                 .SingleOrDefault(p => p.Id == id);
 
             if (photo == null)
             {
                 return BadRequest();
             }
+
+            photo.IsLoved = photo.Users.Select(u => u.Id)
+                .Contains(User.Identity.GetUserId());
 
             return Ok(Mapper.Map<Photo, PhotoDto>(photo));
         }
@@ -82,7 +88,41 @@ namespace PicsOfUs.Controllers.Api
                 return NotFound();
             }
 
-            Mapper.Map(photoDto, photoInDb);
+                Mapper.Map(photoDto, photoInDb);
+
+            _context.SaveChanges();
+
+            return StatusCode(HttpStatusCode.NoContent);
+        }
+
+        // PATCH /api/photo/1
+        [HttpPatch]
+        public IHttpActionResult LovePhoto(int id, LovedPicDto photoDto)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest();
+            }
+
+            var photoInDb = _context.Photos
+                .Include(m => m.Users)
+                .SingleOrDefault(m => m.Id == id);
+
+            if (photoInDb == null)
+            {
+                return NotFound();
+            }
+
+            var userId = User.Identity.GetUserId();
+
+            if (photoDto.IsLoved)
+            {
+                photoInDb.Users.Add(_context.Users.Single(u => u.Id == userId));
+            }
+            else
+            {
+                photoInDb.Users.Remove(_context.Users.Single(u => u.Id == userId));
+            }
 
             _context.SaveChanges();
 

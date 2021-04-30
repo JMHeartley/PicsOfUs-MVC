@@ -185,6 +185,7 @@
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\Api\MembersController.cs" />
+    <Compile Include="Dtos\LovedPicDto.cs" />
     <Compile Include="Dtos\MiniMemberDto.cs" />
     <Compile Include="Controllers\Api\PhotosController.cs" />
     <Compile Include="Controllers\BrowseController.cs" />
@@ -235,6 +236,14 @@
     <Compile Include="Migrations\202104292107543_AddFirstAndLastNameToUser.cs" />
     <Compile Include="Migrations\202104292107543_AddFirstAndLastNameToUser.Designer.cs">
       <DependentUpon>202104292107543_AddFirstAndLastNameToUser.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202104301815194_AddUserLovedPicsTable.cs" />
+    <Compile Include="Migrations\202104301815194_AddUserLovedPicsTable.Designer.cs">
+      <DependentUpon>202104301815194_AddUserLovedPicsTable.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202104301830510_AddIsLovedToPhotoTable.cs" />
+    <Compile Include="Migrations\202104301830510_AddIsLovedToPhotoTable.Designer.cs">
+      <DependentUpon>202104301830510_AddIsLovedToPhotoTable.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
@@ -454,6 +463,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202104292107543_AddFirstAndLastNameToUser.resx">
       <DependentUpon>202104292107543_AddFirstAndLastNameToUser.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202104301815194_AddUserLovedPicsTable.resx">
+      <DependentUpon>202104301815194_AddUserLovedPicsTable.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202104301830510_AddIsLovedToPhotoTable.resx">
+      <DependentUpon>202104301830510_AddIsLovedToPhotoTable.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
