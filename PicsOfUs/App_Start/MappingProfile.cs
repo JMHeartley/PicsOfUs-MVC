@@ -9,12 +9,12 @@ namespace PicsOfUs
         public MappingProfile()
         {
             Mapper.CreateMap<Member, MemberDto>();
-            Mapper.CreateMap<MemberDto, Member>();
-
             Mapper.CreateMap<Member, MiniMemberDto>();
+            Mapper.CreateMap<MemberDto, Member>();
 
             Mapper.CreateMap<Photo, PhotoDto>();
             Mapper.CreateMap<PhotoDto, Photo>();
+            Mapper.CreateMap<LovedPicDto, Photo>();
         }
     }
 }
