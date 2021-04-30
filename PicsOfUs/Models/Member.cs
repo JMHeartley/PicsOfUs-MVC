@@ -38,14 +38,6 @@ namespace PicsOfUs.Models
                 return $"{(Month)birthdate.Month} {birthdate.Day}";
             }
         }
-
-        public int? AgeInPhoto(DateTime? captureDateTime)
-        {
-            if (BirthDate == null || captureDateTime == null)
-                return null;
-
-            return (int)((captureDateTime.GetValueOrDefault() - BirthDate.GetValueOrDefault()).TotalDays / 365.25);
-        }
     }
 
     public enum Gender
