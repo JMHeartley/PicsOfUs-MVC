@@ -2,6 +2,7 @@
 using System.Web.Mvc;
 using PicsOfUs.Models;
 using System.Data.Entity;
+using System.EnterpriseServices;
 
 namespace PicsOfUs.Controllers
 {
@@ -24,6 +25,7 @@ namespace PicsOfUs.Controllers
             return RedirectToAction("Index", "Browse");
         }
 
+        [SecurityRole(RoleName.CanManagePicsAndTree)]
         public ActionResult New()
         {
             var viewModel = new MemberFormViewModel
@@ -60,6 +62,7 @@ namespace PicsOfUs.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [SecurityRole(RoleName.CanManagePicsAndTree)]
         public ActionResult Save(MemberFormViewModel viewModel)
         {
             if (!ModelState.IsValid)
