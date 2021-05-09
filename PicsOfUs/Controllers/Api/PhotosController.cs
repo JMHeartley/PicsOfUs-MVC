@@ -38,7 +38,7 @@ namespace PicsOfUs.Controllers.Api
         {
             var photo = _context.Photos
                 .Include(p => p.Members)
-                .Include(p => p.Users)
+                .Include(p => p.Lovers)
                 .SingleOrDefault(p => p.Id == id);
 
             if (photo == null)
@@ -46,7 +46,7 @@ namespace PicsOfUs.Controllers.Api
                 return BadRequest();
             }
 
-            photo.IsLoved = photo.Users.Select(u => u.Id)
+            photo.IsLoved = photo.Lovers.Select(u => u.Id)
                 .Contains(User.Identity.GetUserId());
 
             return Ok(Mapper.Map<Photo, PhotoDto>(photo));
@@ -81,14 +81,15 @@ namespace PicsOfUs.Controllers.Api
                 return BadRequest();
             }
 
-            var photoInDb = _context.Photos.SingleOrDefault(m => m.Id == id);
+            var photoInDb = _context.Photos
+                .SingleOrDefault(m => m.Id == id);
 
             if (photoInDb == null)
             {
                 return NotFound();
             }
 
-                Mapper.Map(photoDto, photoInDb);
+            Mapper.Map(photoDto, photoInDb);
 
             _context.SaveChanges();
 
@@ -97,7 +98,7 @@ namespace PicsOfUs.Controllers.Api
 
         // PATCH /api/photo/1
         [HttpPatch]
-        public IHttpActionResult LovePhoto(int id, LovedPicDto photoDto)
+        public IHttpActionResult LovePhoto(int id, LovedPicDto lovedDto)
         {
             if (!ModelState.IsValid)
             {
@@ -105,7 +106,7 @@ namespace PicsOfUs.Controllers.Api
             }
 
             var photoInDb = _context.Photos
-                .Include(m => m.Users)
+                .Include(m => m.Lovers)
                 .SingleOrDefault(m => m.Id == id);
 
             if (photoInDb == null)
@@ -115,13 +116,13 @@ namespace PicsOfUs.Controllers.Api
 
             var userId = User.Identity.GetUserId();
 
-            if (photoDto.IsLoved)
+            if (lovedDto.IsLoved)
             {
-                photoInDb.Users.Add(_context.Users.Single(u => u.Id == userId));
+                photoInDb.Lovers.Add(_context.Users.Single(u => u.Id == userId));
             }
             else
             {
-                photoInDb.Users.Remove(_context.Users.Single(u => u.Id == userId));
+                photoInDb.Lovers.Remove(_context.Users.Single(u => u.Id == userId));
             }
 
             _context.SaveChanges();

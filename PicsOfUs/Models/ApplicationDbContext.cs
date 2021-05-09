@@ -33,7 +33,7 @@ namespace PicsOfUs.Models
                 m.ToTable("ChildParents");
             });
 
-            modelBuilder.Entity<ApplicationUser>().HasMany(m => m.LovedPics).WithMany(m => m.Users).Map(m =>
+            modelBuilder.Entity<ApplicationUser>().HasMany(m => m.LovedPics).WithMany(m => m.Lovers).Map(m =>
             {
                 m.MapLeftKey("PicId");
                 m.MapRightKey("UserId");

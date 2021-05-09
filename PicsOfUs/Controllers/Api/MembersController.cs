@@ -79,7 +79,11 @@ namespace PicsOfUs.Controllers.Api
                 return BadRequest();
             }
 
-            var memberInDb = _context.Members.SingleOrDefault(m => m.Id == id);
+            var memberInDb = _context.Members
+                .Include(m => m.Siblings)
+                .Include(m => m.Parents)
+                .Include(m => m.Children)
+                .SingleOrDefault(m => m.Id == id);
 
             if (memberInDb == null)
             {
@@ -98,7 +102,11 @@ namespace PicsOfUs.Controllers.Api
         [HttpDelete]
         public IHttpActionResult DeleteMember(int id)
         {
-            var member = _context.Members.SingleOrDefault(m => m.Id == id);
+            var member = _context.Members
+                .Include(m => m.Siblings)
+                .Include(m => m.Parents)
+                .Include(m => m.Children)
+                .SingleOrDefault(m => m.Id == id);
 
             if (member == null)
             {

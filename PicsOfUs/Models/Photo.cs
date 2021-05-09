@@ -13,7 +13,7 @@ namespace PicsOfUs.Models
         public string Caption { get; set; }
         public DateTime? CaptureDate { get; set; }
         public ICollection<Member> Members { get; set; }
-        public ICollection<ApplicationUser> Users { get; set; }
+        public ICollection<ApplicationUser> Lovers { get; set; }
         public bool IsLoved { get; set; }
     }
 }
