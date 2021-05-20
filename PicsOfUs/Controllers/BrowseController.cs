@@ -4,9 +4,12 @@ using PicsOfUs.Models;
 using System.Data.Entity;
 using System.Diagnostics.Eventing.Reader;
 using System.EnterpriseServices;
+using System.IO;
 using System.Linq;
 using System.Security.Permissions;
+using System.Web;
 using System.Web.Mvc;
+using Microsoft.AspNet.Identity;
 
 namespace PicsOfUs.Controllers
 {
@@ -144,9 +147,11 @@ namespace PicsOfUs.Controllers
 
             var photo = viewModel.Photo;
 
+            photo.Url = UploadToFolder(viewModel.File);
+
             var selectedMemberIds = viewModel.Members
-                .Where(m => m.IsSelected)
-                .Select(m => m.MemberId);
+                    .Where(m => m.IsSelected)
+                    .Select(m => m.MemberId);
 
             photo.Members = _context.Members
                 .Where(m => selectedMemberIds.Contains(m.Id))
@@ -171,6 +176,20 @@ namespace PicsOfUs.Controllers
             _context.SaveChanges();
 
             return RedirectToAction("Index", "Browse");
+        }
+
+        private string UploadToFolder(HttpPostedFileBase pic)
+        {
+            var uploadedFile = new byte[pic.InputStream.Length];
+            pic.InputStream.Read(uploadedFile, 0, uploadedFile.Length);
+
+            var fileName = pic.FileName;
+            var filePath = Server.MapPath("/Uploads");
+            var savedFileName = Path.Combine(filePath, fileName);
+            pic.SaveAs(savedFileName);
+
+            var url = "/Uploads/" + fileName;
+            return url;
         }
     }
 }

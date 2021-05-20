@@ -7,8 +7,6 @@ namespace PicsOfUs.Models
     public class Photo
     {
         public int Id { get; set; }
-
-        [Required]
         public string Url { get; set; }
         public string Caption { get; set; }
         public DateTime? CaptureDate { get; set; }
