@@ -51,7 +51,6 @@ namespace PicsOfUs.Controllers.Api
         }
 
         // POST /api/members
-        [Authorize(Roles = RoleName.CanManagePicsAndTree)]
         [HttpPost]
         public IHttpActionResult CreateMember(MemberDto memberDto)
         {
@@ -70,7 +69,6 @@ namespace PicsOfUs.Controllers.Api
         }
 
         // PUT /api/member/1
-        [Authorize(Roles = RoleName.CanManagePicsAndTree)]
         [HttpPut]
         public IHttpActionResult UpdateMember(int id, MemberDto memberDto)
         {
@@ -98,7 +96,6 @@ namespace PicsOfUs.Controllers.Api
         }
 
         // DELETE /api/member/1
-        [Authorize(Roles = RoleName.CanManagePicsAndTree)]
         [HttpDelete]
         public IHttpActionResult DeleteMember(int id)
         {

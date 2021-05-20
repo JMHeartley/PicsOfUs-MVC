@@ -90,7 +90,6 @@ namespace PicsOfUs.Controllers
             return View(viewModel);
         }
 
-        [SecurityRole(RoleName.CanManagePicsAndTree)]
         public ActionResult New()
         {
             var viewModel = new PhotoFormViewModel
@@ -109,7 +108,6 @@ namespace PicsOfUs.Controllers
             return View("PhotoForm", viewModel);
         }
 
-        [SecurityRole(RoleName.CanManagePicsAndTree)]
         public ActionResult Edit(int id)
         {
             var photo = _context.Photos
@@ -137,7 +135,6 @@ namespace PicsOfUs.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [SecurityRole(RoleName.CanManagePicsAndTree)]
         public ActionResult Save(PhotoFormViewModel viewModel)
         {
             if (!ModelState.IsValid)
