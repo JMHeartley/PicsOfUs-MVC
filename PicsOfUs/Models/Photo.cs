@@ -13,5 +13,7 @@ namespace PicsOfUs.Models
         public ICollection<Member> Members { get; set; }
         public ICollection<ApplicationUser> Lovers { get; set; }
         public bool IsLoved { get; set; }
+        public ApplicationUser Uploader { get; set; }
+        public DateTime UploadDate { get; set; }
     }
 }

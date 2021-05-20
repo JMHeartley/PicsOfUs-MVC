@@ -149,6 +149,11 @@ namespace PicsOfUs.Controllers
 
             photo.Url = UploadToFolder(viewModel.File);
 
+            var userId = User.Identity.GetUserId();
+            photo.Uploader = _context.Users.Single(u => u.Id == userId);
+
+            photo.UploadDate = DateTime.Now;
+
             var selectedMemberIds = viewModel.Members
                     .Where(m => m.IsSelected)
                     .Select(m => m.MemberId);
