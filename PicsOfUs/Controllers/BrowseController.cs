@@ -182,16 +182,41 @@ namespace PicsOfUs.Controllers
 
         private string UploadToFolder(HttpPostedFileBase pic)
         {
-            var uploadedFile = new byte[pic.InputStream.Length];
-            pic.InputStream.Read(uploadedFile, 0, uploadedFile.Length);
+            //var uploadedFile = new byte[pic.InputStream.Length];
+            //pic.InputStream.Read(uploadedFile, 0, uploadedFile.Length);
 
-            var fileName = pic.FileName;
-            var filePath = Server.MapPath("/Uploads");
+            var fileName = $"{DateTime.Now:yyyyMMddHHmmssff}{pic.FileName}";
+
+            var userId = User.Identity.GetUserId();
+            var appUser = _context.Users.Single(u => u.Id == userId);
+
+            var filePath = Server.MapPath(appUser.UploadsFolder);
             var savedFileName = Path.Combine(filePath, fileName);
             pic.SaveAs(savedFileName);
 
-            var url = "/Uploads/" + fileName;
+            var url = $"{appUser.UploadsFolder}/{fileName}"; 
             return url;
+        }
+
+        public ActionResult Delete(int id)
+        {
+            var photo = _context.Photos.SingleOrDefault(p => p.Id == id);
+
+            if (photo == null)
+            {
+                return HttpNotFound();
+            }
+
+            var fullPath = Request.MapPath($"~{photo.Url}");
+            if (System.IO.File.Exists(fullPath))
+            {
+                System.IO.File.Delete(fullPath);
+            }
+
+            _context.Photos.Remove(photo);
+            _context.SaveChanges();
+
+            return RedirectToAction("Uploads", "Account"); ;
         }
     }
 }

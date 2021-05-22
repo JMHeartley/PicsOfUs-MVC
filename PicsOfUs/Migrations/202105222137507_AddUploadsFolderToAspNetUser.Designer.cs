@@ -7,13 +7,13 @@ namespace PicsOfUs.Migrations
     using System.Resources;
     
     [GeneratedCode("EntityFramework.Migrations", "6.2.0-61023")]
-    public sealed partial class SeedUsers : IMigrationMetadata
+    public sealed partial class AddUploadsFolderToAspNetUser : IMigrationMetadata
     {
-        private readonly ResourceManager Resources = new ResourceManager(typeof(SeedUsers));
+        private readonly ResourceManager Resources = new ResourceManager(typeof(AddUploadsFolderToAspNetUser));
         
         string IMigrationMetadata.Id
         {
-            get { return "202104242144365_SeedUsers"; }
+            get { return "202105222137507_AddUploadsFolderToAspNetUser"; }
         }
         
         string IMigrationMetadata.Source

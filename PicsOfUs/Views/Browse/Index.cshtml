@@ -4,12 +4,9 @@
     ViewBag.Title = "Index";
 }
 
-@if (User.IsInRole(RoleName.CanManagePicsAndTree))
-{
-    @Html.ActionLink("Add Pic", "New", null, new { @class = "btn btn-primary my-3" })
+@Html.ActionLink("Add Pic", "New", null, new { @class = "btn btn-primary my-3" })
 
-    @Html.ActionLink("Add Member", "New", "Members", null, new { @class = "btn btn-primary my-3" })
-}
+@Html.ActionLink("Add Member", "New", "Members", null, new { @class = "btn btn-primary my-3" })
 
 <div class="row no-gutters justify-content-center">
     <div class="px-5 my-3 ml-md-5 text-center">
@@ -98,7 +95,7 @@
             <!--
             <div id="comments" class="mb-3 blue-border scroll-y-no-bar">
                 <div class="make-long">
-                    <!--this is where the comments go!-->
+                    <!--this is where the comments go!- ->
                 </div>
             </div>
             -->

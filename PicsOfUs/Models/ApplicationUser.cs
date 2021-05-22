@@ -15,7 +15,7 @@ namespace PicsOfUs.Models
         public string FirstName { get; set; }
         [Required]
         public string LastName { get; set; }
-
+        public string UploadsFolder { get; set; }
         public ICollection<Photo> LovedPics { get; set; }
         public ICollection<Photo> Uploads { get; set; }
         public async Task<ClaimsIdentity> GenerateUserIdentityAsync(UserManager<ApplicationUser> manager)

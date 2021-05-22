@@ -229,10 +229,6 @@
     <Compile Include="Migrations\202103302145587_AddParentsToMember.Designer.cs">
       <DependentUpon>202103302145587_AddParentsToMember.cs</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\202104242144365_SeedUsers.cs" />
-    <Compile Include="Migrations\202104242144365_SeedUsers.Designer.cs">
-      <DependentUpon>202104242144365_SeedUsers.cs</DependentUpon>
-    </Compile>
     <Compile Include="Migrations\202104292107543_AddFirstAndLastNameToUser.cs" />
     <Compile Include="Migrations\202104292107543_AddFirstAndLastNameToUser.Designer.cs">
       <DependentUpon>202104292107543_AddFirstAndLastNameToUser.cs</DependentUpon>
@@ -252,6 +248,10 @@
     <Compile Include="Migrations\202105161702169_AddUploaderUserAndDateToPhoto.cs" />
     <Compile Include="Migrations\202105161702169_AddUploaderUserAndDateToPhoto.Designer.cs">
       <DependentUpon>202105161702169_AddUploaderUserAndDateToPhoto.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202105222137507_AddUploadsFolderToAspNetUser.cs" />
+    <Compile Include="Migrations\202105222137507_AddUploadsFolderToAspNetUser.Designer.cs">
+      <DependentUpon>202105222137507_AddUploadsFolderToAspNetUser.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
@@ -468,9 +468,6 @@
     <EmbeddedResource Include="Migrations\202103302145587_AddParentsToMember.resx">
       <DependentUpon>202103302145587_AddParentsToMember.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\202104242144365_SeedUsers.resx">
-      <DependentUpon>202104242144365_SeedUsers.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202104292107543_AddFirstAndLastNameToUser.resx">
       <DependentUpon>202104292107543_AddFirstAndLastNameToUser.cs</DependentUpon>
     </EmbeddedResource>
@@ -485,6 +482,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202105161702169_AddUploaderUserAndDateToPhoto.resx">
       <DependentUpon>202105161702169_AddUploaderUserAndDateToPhoto.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202105222137507_AddUploadsFolderToAspNetUser.resx">
+      <DependentUpon>202105222137507_AddUploadsFolderToAspNetUser.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
