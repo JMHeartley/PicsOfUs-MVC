@@ -1,0 +1,35 @@
+﻿@model IEnumerable<PicsOfUs.Models.Photo>
+@{
+    ViewBag.Title = "Uploads";
+}
+
+<h2>Uploads</h2>
+
+@if (!Model.Any())
+{
+    <p>You have no uploads yet...</p>
+}
+else
+{
+    <table class="table table-hover">
+        <thead>
+            <tr>
+                <th scope="col">Caption</th>
+                <th scope="col">Upload Date</th>
+                <th></th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var pic in Model)
+            {
+                <tr>
+                    <td>@pic.Caption</td>
+                    <td>@pic.UploadDate.ToShortDateString()</td>
+                    <td><a href="@Url.Action("Edit", "Browse", new {id = pic.Id})">Edit</a></td>
+                    <td><a href="@Url.Action("Delete", "Browse", new {id = pic.Id})">Delete</a></td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}

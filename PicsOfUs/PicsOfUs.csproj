@@ -428,6 +428,7 @@
     <Content Include="Views\Shared\DisplayTemplates\PicProfileViewModel.cshtml" />
     <Content Include="Views\Shared\DisplayTemplates\MiniProfileViewModel.cshtml" />
     <Content Include="Views\Members\MemberForm.cshtml" />
+    <Content Include="Views\Account\Uploads.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
