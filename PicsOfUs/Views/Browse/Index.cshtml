@@ -6,7 +6,7 @@
 
 @Html.ActionLink("Add Pic", "New", null, new { @class = "btn btn-primary my-3" })
 
-@Html.ActionLink("Add Member", "New", "Members", null, new { @class = "btn btn-primary my-3" })
+@Html.ActionLink("Add Member", "New", "Member", null, new { @class = "btn btn-primary my-3" })
 
 <div class="row no-gutters justify-content-center">
     <div class="px-5 my-3 ml-md-5 text-center">
@@ -37,7 +37,7 @@
 
     <div class="form-group">
         <label>Show me pics with only the selected members</label>
-        @Html.CheckBoxFor(m => m.SearchForm.hasOnlySelectedMembers)
+        @Html.CheckBoxFor(m => m.SearchForm.RequireAll)
     </div>
 
     <button type="submit" class="btn btn-primary">Search</button>
@@ -53,7 +53,7 @@
         {
             for (var i = 0; i < Model.ResultPics.Count(); i++)
             {
-                <div class="photo-result trigger m-2" data-result-id="@i" data-photo-id="@Model.ResultPics[i].Id">
+                <div class="pic-result trigger m-2" data-result-id="@i" data-pic-id="@Model.ResultPics[i].Id">
                     <img src="@Model.ResultPics[i].Url" alt="@Model.ResultPics[i].Caption" class="image-fluid" />
                 </div>
             }

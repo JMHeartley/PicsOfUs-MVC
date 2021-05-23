@@ -165,7 +165,7 @@ namespace PicsOfUs.Controllers
                 Email = viewModel.Email,
                 FirstName = viewModel.FirstName,
                 LastName = viewModel.LastName,
-                UploadsFolder = CreateUploadsFolder()
+                UploadsFolder = CreateUploadsSubfolder()
             };
             var result = await UserManager.CreateAsync(user, viewModel.Password);
 
@@ -198,7 +198,7 @@ namespace PicsOfUs.Controllers
             // If we got this far, something failed, redisplay form
             return View(viewModel);
 
-            string CreateUploadsFolder()
+            string CreateUploadsSubfolder()
             {
                 var folderName = $"/Uploads/{DateTime.Now:yyyyMMdd}{viewModel.FirstName}{viewModel.LastName}";
                 Directory.CreateDirectory(Server.MapPath($"~{folderName}"));
@@ -521,9 +521,9 @@ namespace PicsOfUs.Controllers
         public ActionResult Uploads()
         {
             var userId = User.Identity.GetUserId();
-            var userPhotos = _context.Photos.Where(p => p.Uploader.Id == userId);
+            var userPics = _context.Pics.Where(p => p.Uploader.Id == userId);
 
-            return View(userPhotos);
+            return View(userPics);
         }
     }
 }

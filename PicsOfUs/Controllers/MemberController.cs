@@ -6,11 +6,11 @@ using System.EnterpriseServices;
 
 namespace PicsOfUs.Controllers
 {
-    public class MembersController : Controller
+    public class MemberController : Controller
     {
         private ApplicationDbContext _context;
 
-        public MembersController()
+        public MemberController()
         {
             _context = new ApplicationDbContext();
         }

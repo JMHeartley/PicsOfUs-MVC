@@ -7,13 +7,13 @@ namespace PicsOfUs.Migrations
     using System.Resources;
     
     [GeneratedCode("EntityFramework.Migrations", "6.2.0-61023")]
-    public sealed partial class RemoveDimensionsFromPhoto : IMigrationMetadata
+    public sealed partial class RenamePhotoToPic : IMigrationMetadata
     {
-        private readonly ResourceManager Resources = new ResourceManager(typeof(RemoveDimensionsFromPhoto));
+        private readonly ResourceManager Resources = new ResourceManager(typeof(RenamePhotoToPic));
         
         string IMigrationMetadata.Id
         {
-            get { return "202103240255133_RemoveDimensionsFromPhoto"; }
+            get { return "202105231706023_RenamePhotoToPic"; }
         }
         
         string IMigrationMetadata.Source

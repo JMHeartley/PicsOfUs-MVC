@@ -13,101 +13,101 @@ using Microsoft.AspNet.Identity;
 
 namespace PicsOfUs.Controllers.Api
 {
-    public class PhotosController : ApiController
+    public class PicsController : ApiController
     {
         private ApplicationDbContext _context;
 
-        public PhotosController()
+        public PicsController()
         {
             _context = new ApplicationDbContext();
         }
 
-        // GET  /api/photos
-        public IHttpActionResult GetPhotos()
+        // GET  /api/pics
+        public IHttpActionResult GetPics()
         {
             return Ok(
-                _context.Photos
-                    .Include(p => p.Members)
+                _context.Pics
+                    .Include(p => p.Subjects)
                     .ToList()
-                    .Select(Mapper.Map<Photo, PhotoDto>)
+                    .Select(Mapper.Map<Pic, PicDto>)
                 );
         }
 
-        // GET /api/photos/1
-        public IHttpActionResult GetPhoto(int id)
+        // GET /api/pics/1
+        public IHttpActionResult GetPic(int id)
         {
-            var photo = _context.Photos
-                .Include(p => p.Members)
+            var pic = _context.Pics
+                .Include(p => p.Subjects)
                 .Include(p => p.Lovers)
                 .SingleOrDefault(p => p.Id == id);
 
-            if (photo == null)
+            if (pic == null)
             {
                 return BadRequest();
             }
 
-            photo.IsLoved = photo.Lovers.Select(u => u.Id)
+            pic.IsLoved = pic.Lovers.Select(u => u.Id)
                 .Contains(User.Identity.GetUserId());
 
-            return Ok(Mapper.Map<Photo, PhotoDto>(photo));
+            return Ok(Mapper.Map<Pic, PicDto>(pic));
         }
 
-        // POST /api/photos
+        // POST /api/pics
         [HttpPost]
-        public IHttpActionResult CreatePhoto(PhotoDto photoDto)
+        public IHttpActionResult CreatePic(PicDto picDto)
         {
             if (!ModelState.IsValid)
             {
                 BadRequest();
             }
 
-            var photo = Mapper.Map<PhotoDto, Photo>(photoDto);
-            _context.Photos.Add(photo);
+            var pic = Mapper.Map<PicDto, Pic>(picDto);
+            _context.Pics.Add(pic);
             _context.SaveChanges();
 
-            photoDto.Id = photo.Id;
+            picDto.Id = pic.Id;
 
-            return Created(new Uri(Request.RequestUri + "/api/photos/" + photoDto.Id), photoDto);
+            return Created(new Uri(Request.RequestUri + "/api/pics/" + picDto.Id), picDto);
         }
 
-        // PUT /api/photo/1
+        // PUT /api/pic/1
         [HttpPut]
-        public IHttpActionResult UpdatePhoto(int id, PhotoDto photoDto)
+        public IHttpActionResult UpdatePic(int id, PicDto picDto)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest();
             }
 
-            var photoInDb = _context.Photos
+            var picInDb = _context.Pics
                 .SingleOrDefault(m => m.Id == id);
 
-            if (photoInDb == null)
+            if (picInDb == null)
             {
                 return NotFound();
             }
 
-            Mapper.Map(photoDto, photoInDb);
+            Mapper.Map(picDto, picInDb);
 
             _context.SaveChanges();
 
             return StatusCode(HttpStatusCode.NoContent);
         }
 
-        // PATCH /api/photo/1
+        // PATCH /api/pic/1
         [HttpPatch]
-        public IHttpActionResult LovePhoto(int id, LovedPicDto lovedDto)
+        public IHttpActionResult LovePic(int id, LovedPicDto lovedDto)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest();
             }
 
-            var photoInDb = _context.Photos
+            var picInDb = _context.Pics
                 .Include(m => m.Lovers)
                 .SingleOrDefault(m => m.Id == id);
 
-            if (photoInDb == null)
+            if (picInDb == null)
             {
                 return NotFound();
             }
@@ -116,11 +116,11 @@ namespace PicsOfUs.Controllers.Api
 
             if (lovedDto.IsLoved)
             {
-                photoInDb.Lovers.Add(_context.Users.Single(u => u.Id == userId));
+                picInDb.Lovers.Add(_context.Users.Single(u => u.Id == userId));
             }
             else
             {
-                photoInDb.Lovers.Remove(_context.Users.Single(u => u.Id == userId));
+                picInDb.Lovers.Remove(_context.Users.Single(u => u.Id == userId));
             }
 
             _context.SaveChanges();
@@ -128,18 +128,18 @@ namespace PicsOfUs.Controllers.Api
             return StatusCode(HttpStatusCode.NoContent);
         }
 
-        // DELETE /api/photos/1
+        // DELETE /api/pics/1
         [HttpDelete]
-        public IHttpActionResult DeletePhoto(int id)
+        public IHttpActionResult DeletePic(int id)
         {
-            var photo = _context.Photos.SingleOrDefault(p => p.Id == id);
+            var pic = _context.Pics.SingleOrDefault(p => p.Id == id);
 
-            if (photo == null)
+            if (pic == null)
             {
                 throw new HttpResponseException(HttpStatusCode.NotFound);
             }
 
-            _context.Photos.Remove(photo);
+            _context.Pics.Remove(pic);
             _context.SaveChanges();
 
             return StatusCode(HttpStatusCode.NoContent);

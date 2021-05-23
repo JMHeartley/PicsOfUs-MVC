@@ -4,11 +4,11 @@ using System.Web;
 
 namespace PicsOfUs.Models
 {
-    public class PhotoFormViewModel
+    public class PicFormViewModel
     {
         [Required]
         public HttpPostedFileBase File { get; set; }
-        public Photo Photo { get; set; }
+        public Pic Pic { get; set; }
         public IEnumerable<MemberSelectViewModel> Members { get; set; }
     }
 }
