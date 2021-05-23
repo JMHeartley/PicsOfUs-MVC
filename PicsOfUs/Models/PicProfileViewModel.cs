@@ -9,6 +9,6 @@ namespace PicsOfUs.Models
     {
         public int MemberId { get; set; }
         public string Name { get; set; }
-        public int? AgeInPhoto { get; set; }
+        public int? AgeInPic { get; set; }
     }
 }

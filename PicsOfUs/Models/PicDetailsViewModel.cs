@@ -5,9 +5,9 @@ using System.Web;
 
 namespace PicsOfUs.Models
 {
-    public class PhotoDetailsViewModel
+    public class PicDetailsViewModel
     {
-        public Photo Photo { get; set; }
+        public Pic Pic { get; set; }
         public IEnumerable<PicProfileViewModel> Subjects { get; set; }
     }
 }

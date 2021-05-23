@@ -12,9 +12,9 @@ namespace PicsOfUs
             Mapper.CreateMap<Member, MiniMemberDto>();
             Mapper.CreateMap<MemberDto, Member>();
 
-            Mapper.CreateMap<Photo, PhotoDto>();
-            Mapper.CreateMap<PhotoDto, Photo>();
-            Mapper.CreateMap<LovedPicDto, Photo>();
+            Mapper.CreateMap<Pic, PicDto>();
+            Mapper.CreateMap<PicDto, Pic>();
+            Mapper.CreateMap<LovedPicDto, Pic>();
         }
     }
 }

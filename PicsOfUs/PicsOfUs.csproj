@@ -187,13 +187,13 @@
     <Compile Include="Controllers\Api\MembersController.cs" />
     <Compile Include="Dtos\LovedPicDto.cs" />
     <Compile Include="Dtos\MiniMemberDto.cs" />
-    <Compile Include="Controllers\Api\PhotosController.cs" />
+    <Compile Include="Controllers\Api\PicsController.cs" />
     <Compile Include="Controllers\BrowseController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="Controllers\MembersController.cs" />
     <Compile Include="Dtos\MemberDto.cs" />
-    <Compile Include="Dtos\PhotoDto.cs" />
+    <Compile Include="Dtos\PicDto.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -216,10 +216,6 @@
     <Compile Include="Migrations\202102172240438_AddValidationToPhoto.cs" />
     <Compile Include="Migrations\202102172240438_AddValidationToPhoto.Designer.cs">
       <DependentUpon>202102172240438_AddValidationToPhoto.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\202103240255133_RemoveDimensionsFromPhoto.cs" />
-    <Compile Include="Migrations\202103240255133_RemoveDimensionsFromPhoto.Designer.cs">
-      <DependentUpon>202103240255133_RemoveDimensionsFromPhoto.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\202103301528458_AddSiblingsToMember.cs" />
     <Compile Include="Migrations\202103301528458_AddSiblingsToMember.Designer.cs">
@@ -253,6 +249,10 @@
     <Compile Include="Migrations\202105222137507_AddUploadsFolderToAspNetUser.Designer.cs">
       <DependentUpon>202105222137507_AddUploadsFolderToAspNetUser.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202105231706023_RenamePhotoToPic.cs" />
+    <Compile Include="Migrations\202105231706023_RenamePhotoToPic.Designer.cs">
+      <DependentUpon>202105231706023_RenamePhotoToPic.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\ApplicationDbContext.cs" />
@@ -265,9 +265,9 @@
     <Compile Include="Models\MemberSelectViewModel.cs" />
     <Compile Include="Models\MiniProfileViewModel.cs" />
     <Compile Include="Models\PicProfileViewModel.cs" />
-    <Compile Include="Models\Photo.cs" />
-    <Compile Include="Models\PhotoDetailsViewModel.cs" />
-    <Compile Include="Models\PhotoFormViewModel.cs" />
+    <Compile Include="Models\Pic.cs" />
+    <Compile Include="Models\PicDetailsViewModel.cs" />
+    <Compile Include="Models\PicFormViewModel.cs" />
     <Compile Include="Models\RoleName.cs" />
     <Compile Include="Models\SearchFormViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -412,7 +412,7 @@
     <Content Include="Views\Shared\Lockout.cshtml" />
     <Content Include="Views\Shared\_LoginPartial.cshtml" />
     <Content Include="Views\Browse\Index.cshtml" />
-    <Content Include="Views\Browse\PhotoForm.cshtml" />
+    <Content Include="Views\Browse\PicForm.cshtml" />
     <Content Include="Views\Shared\EditorTemplates\MemberSelectViewModel.cshtml" />
     <Content Include="Views\Shared\_Navbar.cshtml" />
     <Content Include="Scripts\umd\popper.min.js.map" />
@@ -459,9 +459,6 @@
     <EmbeddedResource Include="Migrations\202102172240438_AddValidationToPhoto.resx">
       <DependentUpon>202102172240438_AddValidationToPhoto.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\202103240255133_RemoveDimensionsFromPhoto.resx">
-      <DependentUpon>202103240255133_RemoveDimensionsFromPhoto.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202103301528458_AddSiblingsToMember.resx">
       <DependentUpon>202103301528458_AddSiblingsToMember.cs</DependentUpon>
     </EmbeddedResource>
@@ -485,6 +482,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202105222137507_AddUploadsFolderToAspNetUser.resx">
       <DependentUpon>202105222137507_AddUploadsFolderToAspNetUser.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202105231706023_RenamePhotoToPic.resx">
+      <DependentUpon>202105231706023_RenamePhotoToPic.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>

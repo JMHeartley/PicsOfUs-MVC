@@ -11,7 +11,7 @@ namespace PicsOfUs.Models
         public Gender Gender { get; set; }
         public DateTime? BirthDate { get; set; }
         public Suffix? Suffix { get; set; }
-        public ICollection<Photo> Photos { get; set; }
+        public ICollection<Pic> Pics { get; set; }
         public ICollection<Member> Siblings { get; set; }
         public ICollection<Member> Parents { get; set; }
         public ICollection<Member> Children { get; set; }

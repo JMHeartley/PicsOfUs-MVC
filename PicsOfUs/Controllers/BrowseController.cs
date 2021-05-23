@@ -47,22 +47,18 @@ namespace PicsOfUs.Controllers
             {
                 var form = viewModel.SearchForm;
 
-                // load photos from database
-                var photos = _context.Photos.Include(p => p.Members).AsQueryable();
+                var pics = _context.Pics.Include(p => p.Subjects).AsQueryable();
 
-                // remove photos taken before form.CaptureDateFrom
                 if (form.CaptureDateFrom != null)
                 {
-                    photos = photos.Where(p => p.CaptureDate >= form.CaptureDateFrom);
+                    pics = pics.Where(p => p.CaptureDate >= form.CaptureDateFrom);
                 }
 
-                // remove photos taken after form.CaptureDateTo
                 if (form.CaptureDateTo != null)
                 {
-                    photos = photos.Where(p => p.CaptureDate <= form.CaptureDateTo);
+                    pics = pics.Where(p => p.CaptureDate <= form.CaptureDateTo);
                 }
 
-                // filter photos by form.PicSubjects
                 var selectedIds = form.PicSubjects
                     .Where(m => m.IsSelected)
                     .Select(m => m.MemberId)
@@ -70,21 +66,21 @@ namespace PicsOfUs.Controllers
 
                 if (selectedIds.Any())
                 {
-                    if (form.hasOnlySelectedMembers)
+                    if (form.RequireAll)
                     {
-                        photos = photos.Where(p => p.Members
+                        pics = pics.Where(p => p.Subjects
                                 .All(m => selectedIds
                                     .Contains(m.Id)));
                     }
                     else
                     {
-                        photos = photos.Where(p => p.Members
+                        pics = pics.Where(p => p.Subjects
                                             .Any(m => selectedIds
                                                 .Contains(m.Id)));
                     }
                 }
 
-                viewModel.ResultPics = photos.ToList();
+                viewModel.ResultPics = pics.ToList();
             }
 
             return View(viewModel);
@@ -92,9 +88,9 @@ namespace PicsOfUs.Controllers
 
         public ActionResult New()
         {
-            var viewModel = new PhotoFormViewModel
+            var viewModel = new PicFormViewModel
             {
-                Photo = new Photo(),
+                Pic = new Pic(),
                 Members = _context.Members
                     .AsEnumerable()
                     .Select(m => new MemberSelectViewModel
@@ -105,74 +101,74 @@ namespace PicsOfUs.Controllers
                     }).ToList()
             };
 
-            return View("PhotoForm", viewModel);
+            return View("PicForm", viewModel);
         }
 
         public ActionResult Edit(int id)
         {
-            var photo = _context.Photos
-                .Include(p => p.Members)
+            var pic = _context.Pics
+                .Include(p => p.Subjects)
                 .SingleOrDefault(p => p.Id == id);
 
-            if (photo == null)
+            if (pic == null)
                 return HttpNotFound();
 
-            var viewModel = new PhotoFormViewModel
+            var viewModel = new PicFormViewModel
             {
-                Photo = photo,
+                Pic = pic,
                 Members = _context.Members
                     .AsEnumerable()
                     .Select(m => new MemberSelectViewModel
                     {
                         MemberId = m.Id,
                         Name = m.Name,
-                        IsSelected = photo.Members.Contains(m)
+                        IsSelected = pic.Subjects.Contains(m)
                     }).ToList()
             };
 
-            return View("PhotoForm", viewModel);
+            return View("PicForm", viewModel);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Save(PhotoFormViewModel viewModel)
+        public ActionResult Save(PicFormViewModel viewModel)
         {
             if (!ModelState.IsValid)
             {
-                View("PhotoForm", viewModel);
+                View("PicForm", viewModel);
             }
 
-            var photo = viewModel.Photo;
+            var pic = viewModel.Pic;
 
-            photo.Url = UploadToFolder(viewModel.File);
-
-            var userId = User.Identity.GetUserId();
-            photo.Uploader = _context.Users.Single(u => u.Id == userId);
-
-            photo.UploadDate = DateTime.Now;
-
+            pic.Url = SaveToUploadsSubfolder(viewModel.File);
+            
             var selectedMemberIds = viewModel.Members
                     .Where(m => m.IsSelected)
                     .Select(m => m.MemberId);
 
-            photo.Members = _context.Members
+            pic.Subjects = _context.Members
                 .Where(m => selectedMemberIds.Contains(m.Id))
                 .ToList();
 
-            if (photo.Id == 0)
+            if (pic.Id == 0)
             {
-                _context.Photos.Add(photo);
+                var userId = User.Identity.GetUserId();
+                pic.Uploader = _context.Users.Single(u => u.Id == userId);
+
+                pic.UploadDate = DateTime.Now;
+
+                _context.Pics.Add(pic);
             }
             else
             {
-                var photoInDb = _context.Photos
-                    .Include(p => p.Members)
-                    .Single(p => p.Id == viewModel.Photo.Id);
+                var picInDb = _context.Pics
+                    .Include(p => p.Subjects)
+                    .Single(p => p.Id == pic.Id);
 
-                photoInDb.Url = photo.Url;
-                photoInDb.Caption = photo.Caption;
-                photoInDb.CaptureDate = photo.CaptureDate;
-                photoInDb.Members = photo.Members;
+                picInDb.Url = pic.Url;
+                picInDb.Caption = pic.Caption;
+                picInDb.CaptureDate = pic.CaptureDate;
+                picInDb.Subjects = pic.Subjects;
             }
 
             _context.SaveChanges();
@@ -180,7 +176,7 @@ namespace PicsOfUs.Controllers
             return RedirectToAction("Index", "Browse");
         }
 
-        private string UploadToFolder(HttpPostedFileBase pic)
+        private string SaveToUploadsSubfolder(HttpPostedFileBase pic)
         {
             //var uploadedFile = new byte[pic.InputStream.Length];
             //pic.InputStream.Read(uploadedFile, 0, uploadedFile.Length);
@@ -200,20 +196,20 @@ namespace PicsOfUs.Controllers
 
         public ActionResult Delete(int id)
         {
-            var photo = _context.Photos.SingleOrDefault(p => p.Id == id);
+            var pic = _context.Pics.SingleOrDefault(p => p.Id == id);
 
-            if (photo == null)
+            if (pic == null)
             {
                 return HttpNotFound();
             }
 
-            var fullPath = Request.MapPath($"~{photo.Url}");
+            var fullPath = Request.MapPath($"~{pic.Url}");
             if (System.IO.File.Exists(fullPath))
             {
                 System.IO.File.Delete(fullPath);
             }
 
-            _context.Photos.Remove(photo);
+            _context.Pics.Remove(pic);
             _context.SaveChanges();
 
             return RedirectToAction("Uploads", "Account"); ;

@@ -91,7 +91,7 @@ $(function () {
     lightboxContainer.scrollTop(0);
 
     const resultPicMaxId = parseInt(
-      $('#results-body .photo-result:last-child').attr('data-result-id')
+      $('#results-body .pic-result:last-child').attr('data-result-id')
     );
     leftArrow.removeClass('hidden');
     rightArrow.removeClass('hidden');
@@ -99,40 +99,38 @@ $(function () {
     if (resultId === resultPicMaxId) rightArrow.addClass('hidden');
     else if (resultId === 0) leftArrow.addClass('hidden');
 
-    const photoId = $('#results-body')
+    const picId = $('#results-body')
       .find(`[data-result-id=${resultId}]`)
-      .attr('data-photo-id');
+      .attr('data-pic-id');
     const def = $.Deferred();
     def
       .then(function () {
-        return $.get(`/api/photos/${photoId}`).done(function (photo) {
-          console.log('photo loaded to lightbox', photo);
+        return $.get(`/api/pics/${picId}`).done(function (pic) {
+          console.log('pic loaded to lightbox', pic);
 
           lightboxContainer.attr('data-result-id', resultId);
-          lightboxContainer.attr('data-photo-id', photoId);
+          lightboxContainer.attr('data-pic-id', picId);
 
-          const pic = $('#lightbox-pic');
-          pic.attr('src', photo.url);
-          pic.attr('alt', photo.caption);
+          const lightboxPic = $('#lightbox-pic');
+          lightboxPic.attr('src', pic.url);
+          lightboxPic.attr('alt', pic.caption);
 
-          $('#caption').text(photo.caption);
+          $('#caption').text(pic.caption);
 
           const captureArea = $('#capture-date');
 
-          if (photo.captureDate !== null) {
-            const formattedDate = new Date(photo.captureDate);
+          if (pic.captureDate !== null) {
+            const formattedDate = new Date(pic.captureDate);
             captureArea.text(formattedDate.toLocaleDateString());
             captureArea.removeClass('hidden');
           } else {
             captureArea.addClass('hidden');
           }
 
-          // set initial loved pic val
-          // toggleLovePic(!photo.isLoved);
-          setLovedPic(photo.isLoved);
+          setLovedPic(pic.isLoved);
         });
       })
-      .then(function (photo) {
+      .then(function (pic) {
         return $.get('/Static/PicProfile.html').done(function (emptyProfile) {
 
           console.log('html loaded', emptyProfile);
@@ -140,10 +138,10 @@ $(function () {
           const subjectsArea = $('#pic-subjects');
           subjectsArea.html('');
 
-          if (photo.members) {
-            $.each(photo.members, function (index, member) {
+          if (pic.subjects) {
+            $.each(pic.subjects, function (index, subject) {
 
-              const picProfile = insertIntoProfile(member, emptyProfile, photo.captureDate);
+              const picProfile = insertIntoProfile(subject, emptyProfile, pic.captureDate);
               picProfile.appendTo(subjectsArea);
             });
           }
@@ -163,7 +161,7 @@ $(function () {
     def
       .then(function () {
         return $.ajax({
-          url: "/api/photos/" + lightboxContainer.attr("data-photo-id"),
+          url: "/api/pics/" + lightboxContainer.attr("data-pic-id"),
           type: "PATCH",
           contentType: "application/json",
           data: JSON.stringify({

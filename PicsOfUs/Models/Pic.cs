@@ -1,21 +1,19 @@
-﻿using PicsOfUs.Models;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Web;
 
-namespace PicsOfUs.Dtos
+namespace PicsOfUs.Models
 {
-    public class PhotoDto
+    public class Pic
     {
         public int Id { get; set; }
-
-        [Required]
         public string Url { get; set; }
         public string Caption { get; set; }
         public DateTime? CaptureDate { get; set; }
-        public ICollection<MiniMemberDto> Members { get; set; }
+        public ICollection<Member> Subjects { get; set; }
+        public ICollection<ApplicationUser> Lovers { get; set; }
         public bool IsLoved { get; set; }
+        public ApplicationUser Uploader { get; set; }
+        public DateTime UploadDate { get; set; }
     }
 }
