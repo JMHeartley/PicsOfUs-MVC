@@ -8,27 +8,26 @@ namespace PicsOfUs
         public static void RegisterBundles(BundleCollection bundles)
         {
             bundles.Add(new ScriptBundle("~/bundles/lib").Include(
-                        "~/Scripts/jQuery/jquery-{version}.js", 
-                        "~/Scripts/bootbox.js",
-                        "~/Scripts/bootstrap.js",
-                        "~/Scripts/Popper/popper.js"));
+                        "~/Content/Scripts/jQuery/jquery-{version}.js", 
+                        "~/Content/Scripts/Bootbox/bootbox.js",
+                        "~/Content/Scripts/Bootstrap/bootstrap.js",
+                        "~/Content/Scripts/Popper/popper.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/internal").Include(
-                        "~/Scripts/ajax-common.js",
-                        "~/Scripts/My Scripts/*.js"));
+                        "~/Content/Scripts/My Scripts/*.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/jqueryval").Include(
-                        "~/Scripts/jQuery/jquery.validate*"));
+                        "~/Content/Scripts/jQuery.validate/*.js"));
 
             // Use the development version of Modernizr to develop with and learn from. Then, when you're
             // ready for production, use the build tool at https://modernizr.com to pick only the tests you need.
             bundles.Add(new ScriptBundle("~/bundles/modernizr").Include(
-                        "~/Scripts/modernizr-*"));
+                        "~/Content/Scripts/modernizr-*"));
 
             bundles.Add(new StyleBundle("~/Content/css").Include(
-                      "~/Content/bootstrap-4-darkly.css",
-                      "~/Content/site.css",
-                      "~/Content/lightbox.css"));
+                      "~/Content/css/bootstrap-4-darkly.css",
+                      "~/Content/css/site.css",
+                      "~/Content/css/lightbox.css"));
         }
     }
 }
