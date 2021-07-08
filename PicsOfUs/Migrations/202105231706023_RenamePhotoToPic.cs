@@ -8,16 +8,16 @@ namespace PicsOfUs.Migrations
         public override void Up()
         {
             RenameTable(name: "dbo.Photos", newName: "Pics");
-            RenameTable(name: "dbo.PhotoMembers", newName: "PicSubjects");
-            RenameColumn(table: "dbo.PicSubjects", name: "Photo_Id", newName: "Pic_Id");
-            RenameIndex(table: "dbo.PicSubjects", name: "IX_Photo_Id", newName: "IX_Pic_Id");
+            RenameTable(name: "dbo.PhotoMembers", newName: "PicMembers");
+            RenameColumn(table: "dbo.PicMembers", name: "Photo_Id", newName: "Pic_Id");
+            RenameIndex(table: "dbo.PicMembers", name: "IX_Photo_Id", newName: "IX_Pic_Id");
         }
         
         public override void Down()
         {
-            RenameIndex(table: "dbo.PicSubjects", name: "IX_Pic_Id", newName: "IX_Photo_Id");
-            RenameColumn(table: "dbo.PicSubjects", name: "Pic_Id", newName: "Photo_Id");
-            RenameTable(name: "dbo.PicSubjects", newName: "PhotoMembers");
+            RenameIndex(table: "dbo.PicMembers", name: "IX_Pic_Id", newName: "IX_Photo_Id");
+            RenameColumn(table: "dbo.PicMembers", name: "Pic_Id", newName: "Photo_Id");
+            RenameTable(name: "dbo.PicMembers", newName: "PhotoMembers");
             RenameTable(name: "dbo.Pics", newName: "Photos");
         }
     }

@@ -253,6 +253,14 @@
     <Compile Include="Migrations\202105231706023_RenamePhotoToPic.Designer.cs">
       <DependentUpon>202105231706023_RenamePhotoToPic.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202107080044089_RenamePicMembersTableToPicSubjects.cs" />
+    <Compile Include="Migrations\202107080044089_RenamePicMembersTableToPicSubjects.Designer.cs">
+      <DependentUpon>202107080044089_RenamePicMembersTableToPicSubjects.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202107080045521_FixPicLoversTableColumnMixup.cs" />
+    <Compile Include="Migrations\202107080045521_FixPicLoversTableColumnMixup.Designer.cs">
+      <DependentUpon>202107080045521_FixPicLoversTableColumnMixup.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\ApplicationDbContext.cs" />
@@ -484,6 +492,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202105231706023_RenamePhotoToPic.resx">
       <DependentUpon>202105231706023_RenamePhotoToPic.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202107080044089_RenamePicMembersTableToPicSubjects.resx">
+      <DependentUpon>202107080044089_RenamePicMembersTableToPicSubjects.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202107080045521_FixPicLoversTableColumnMixup.resx">
+      <DependentUpon>202107080045521_FixPicLoversTableColumnMixup.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
