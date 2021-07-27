@@ -135,7 +135,13 @@ namespace PicsOfUs.Controllers
         {
             if (!ModelState.IsValid)
             {
-                View("PicForm", viewModel);
+                return View("PicForm", viewModel);
+            }
+
+            if (!IsImage(viewModel.File))
+            {
+                TempData["Error"] = "The uploaded image is an unsupported file type.";
+                return View("PicForm", viewModel);
             }
 
             var pic = viewModel.Pic;
@@ -178,10 +184,11 @@ namespace PicsOfUs.Controllers
 
         private string SaveToUploadsSubfolder(HttpPostedFileBase pic)
         {
+            //TODO: Do I need this code for better file uploading?
             //var uploadedFile = new byte[pic.InputStream.Length];
             //pic.InputStream.Read(uploadedFile, 0, uploadedFile.Length);
 
-            var fileName = $"{DateTime.Now:yyyyMMddHHmmssff}{pic.FileName}";
+            var fileName = $"{DateTime.Now:MM-dd-yyyy--HH-mm-ss-ff}{Path.GetExtension(pic.FileName)}";
 
             var userId = User.Identity.GetUserId();
             var appUser = _context.Users.Single(u => u.Id == userId);
@@ -192,6 +199,17 @@ namespace PicsOfUs.Controllers
 
             var url = $"{appUser.UploadsFolder}/{fileName}"; 
             return url;
+        }
+
+        private bool IsImage(HttpPostedFileBase file)
+        {
+            if (file.ContentType.Contains("image"))
+            {
+                return true;
+            }
+
+            var formats = new[] { ".jpg", ".png", ".heic", ".ciff", ".jpeg" }; 
+            return formats.Any(item => file.FileName.EndsWith(item, StringComparison.OrdinalIgnoreCase));
         }
 
         public ActionResult Delete(int id)
