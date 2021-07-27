@@ -15,13 +15,11 @@
         @Html.Partial("_Navbar")
 
     }
-<div>
     @RenderBody()
-    <hr />
+    @*<hr />
     <footer>
         <p>&copy; @DateTime.Now.Year - Pics of. Us</p>
-    </footer>
-</div>
+    </footer>*@
     @Scripts.Render("~/bundles/lib")
     @RenderSection("scripts", required: false)
 

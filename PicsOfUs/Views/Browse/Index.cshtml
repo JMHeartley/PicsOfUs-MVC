@@ -1,133 +1,115 @@
 ﻿@using PicsOfUs.Models
 @model BrowseIndexViewModel
 @{
-    ViewBag.Title = "Index";
+    ViewBag.Title = "Browse";
 }
 
-@Html.ActionLink("Add Pic", "New", null, new { @class = "btn btn-primary my-3" })
-
-@Html.ActionLink("Add Member", "New", "Member", null, new { @class = "btn btn-primary my-3" })
-
-<div class="row no-gutters justify-content-center">
-    <div class="px-5 my-3 ml-md-5 text-center">
-        <h4>Date</h4>
-        <a href="#" class="btn btn-primary">Add date</a>
-    </div>
-    <div class="px-5 my-3 ml-md-5 text-center">
-        <h4>People</h4>
-        <a href="#" class="btn btn-primary">Add person</a>
-    </div>
-</div>
-@using (Html.BeginForm("Index", "Browse"))
-{
-    <div class="form-group">
-        @Html.LabelFor(m => m.SearchForm.CaptureDateFrom)
-        @Html.TextBoxFor(m => m.SearchForm.CaptureDateFrom, "{0:MM/dd/yyyy}", new { @class = "form-control" })
-    </div>
-
-    <div class="form-group">
-        @Html.LabelFor(m => m.SearchForm.CaptureDateTo)
-        @Html.TextBoxFor(m => m.SearchForm.CaptureDateTo, "{0:MM/dd/yyyy}", new { @class = "form-control" })
-    </div>
-
-    <label>Subjects</label>
-    <div class="overflow-auto mb-3 member-select-overflow">
-        @Html.EditorFor(m => m.SearchForm.PicSubjects)
-    </div>
-
-    <div class="form-group">
-        <label>Show me pics with only the selected members</label>
-        @Html.CheckBoxFor(m => m.SearchForm.RequireAll)
-    </div>
-
-    <button type="submit" class="btn btn-primary">Search</button>
-}
-<div>
-    <h4 class="text-md-left text-center ml-md-5 pl-md-5">Results</h4>
-    <div class="d-flex p-2" id="results-body">
-        @if (Model.ResultPics == null || !Model.ResultPics.Any())
+<div class="row">
+    <div class="col-md-4 order-md-2">
+        @using (Html.BeginForm("Index", "Browse"))
         {
-            <p>There are no pics to display...</p>
+            <h4>Date</h4>
+            <div class="input-group input-daterange mb-3" data-provide="datepicker">
+                <div class="input-group-prepend">
+                    <span class="input-group-text">From</span>
+                </div>
+                @Html.TextBoxFor(m => m.SearchForm.CaptureDateFrom, "{0:MM/dd/yyyy}", new { @class = "form-control" })
+            </div>
+            <div class="input-group input-daterange mb-3" data-provide="datepicker">
+                <div class="input-group-prepend">
+                    <span class="input-group-text">To</span>
+                </div>
+                @Html.TextBoxFor(m => m.SearchForm.CaptureDateTo, "{0:MM/dd/yyyy}", new { @class = "form-control" })
+            </div>
+
+            <h4>People</h4>
+            <div class="overflow-auto mb-1 px-3 member-select-overflow border border-light rounded">
+                @Html.EditorFor(m => m.SearchForm.PicSubjects)
+            </div>
+
+            <div class="form-group">
+                @Html.CheckBoxFor(m => m.SearchForm.RequireAll, new { @class = "mr-1" })
+                @Html.LabelFor(m => m.SearchForm.RequireAll)
+            </div>
+
+            <button type="submit" class="btn btn-primary">Search</button>
         }
-        else
-        {
-            for (var i = 0; i < Model.ResultPics.Count(); i++)
+    </div>
+    <div class="col-md-8 order-md-1">
+        <div class="d-flex flex-wrap p-2 rounded" id="results-body">
+            @if (Model.ResultPics == null)
             {
-                <div class="pic-result trigger m-2" data-result-id="@i" data-pic-id="@Model.ResultPics[i].Id">
-                    <img src="@Model.ResultPics[i].Url" alt="@Model.ResultPics[i].Caption" class="image-fluid" />
-                </div>
+                <p>Press <i>Search</i> to begin reminiscing...</p>
             }
-        }
+            else if (!Model.ResultPics.Any())
+            {
+                <p>There are no pics to matching that search...</p>
+            }
+            else
+            {
+                for (var i = 0; i < Model.ResultPics.Count(); i++)
+                {
+                    <div class="pic-result trigger m-2" data-result-id="@i" data-pic-id="@Model.ResultPics[i].Id">
+                        <img src="@Model.ResultPics[i].Url" alt="@Model.ResultPics[i].Caption" class="image-fluid" />
+                    </div>
+                }
+            }
+        </div>
     </div>
 </div>
-<div class="row no-gutters hidden add-mobile-nav-buffer scroll-y-no-bar" id="lightbox-container">
-    <div id="lightbox" class="col-12 col-lg-10 row no-gutters">
-        <i class="fas fa-times-circle lightbox-closer" aria-hidden="true" id="lightbox-closer-x"></i>
-        <div class="col-12 col-lg-8 d-flex justify-content-center" id="lightbox-main">
 
-            <div id="left-arrow">
-                <i class="fas fa-arrow-left" aria-hidden="true"></i>
-            </div>
-            <img src="" alt="" id="lightbox-pic" class="image-fluid">
-            <div id="right-arrow">
-                <i class="fas fa-arrow-right" aria-hidden="true"></i>
-            </div>
+<div class="row no-gutters hidden add-mobile-nav-buffer scroll-y-no-bar vh-100 vw-100" id="lightbox">
+    <div class="col-12 col-lg-8 d-flex justify-content-center vh-100">
+        <div id="left-arrow">
+            <i class="fas fa-arrow-left" aria-hidden="true"></i>
         </div>
-        <div class="lightbox-closer d-flex justify-content-center align-items-center mobile-nav-button hidden" id="lightbox-closer-button">
-            <h4 class="font-weight-normal">Back</h4>
+        <img src="" alt="" id="lightbox-pic" class="image-fluid">
+        <div id="right-arrow">
+            <i class="fas fa-arrow-right" aria-hidden="true"></i>
         </div>
-        <div id="lightbox-details" class="col-12 col-lg-4 pt-3 px-3 d-flex">
-            <h3 id="caption" class="font-weight-bolder">
-                <!--Caption!-->
-            </h3>
-            <p id="capture-date" class="font-weight-lighter">
-                <!--CaptureDate-->
-            </p>
-            <div class="d-flex align-items-center" id="love-pic" data-is-loved="false">
-                <i class="far fa-heart mx-2" aria-hidden="true"></i>
-                <span class="font-weight-normal">
-                    <!--Love Pic-->
-                </span>
-            </div>
-            <div id="pic-subjects" class="my-1 p-1 d-flex scroll-y-no-bar">
-                <!-- this is where the mini profiles go! -->
-            </div>
-            <!--
-            <div id="comments" class="mb-3 blue-border scroll-y-no-bar">
-                <div class="make-long">
-                    <!--this is where the comments go!- ->
-                </div>
-            </div>
-            -->
+    </div>
+    <div class="lightbox-closer d-flex justify-content-center align-items-center mobile-nav-button hidden" id="lightbox-closer-button">
+        <h4 class="font-weight-normal">Back</h4>
+    </div>
+    <div id="lightbox-details" class="col-12 col-lg-4 pt-3 px-3 d-flex">
+        <h3 id="caption" class="font-weight-bolder">
+            <!--Caption!-->
+        </h3>
+        <p id="capture-date" class="font-weight-lighter">
+            <!--CaptureDate-->
+        </p>
+        <div class="d-flex align-items-center" id="love-pic" data-is-loved="false">
+            <i class="far fa-heart mx-2" aria-hidden="true"></i>
+            <span class="font-weight-normal">
+                <!--IsLoved-->
+            </span>
         </div>
-        <div id="member-details" class="hidden row no-gutters add-mobile-nav-buffer scroll-y-no-bar">
-            <i class="fas fa-times-circle member-details-closer" aria-hidden="true" id="member-details-closer-x"></i>
-            <div class="col-12 col-lg-6 row no-gutters red-border" id="member-summary">
-                <div class="col-6 p-3 red-border">
-                    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/7/7e/Circle-icons-profile.svg/1024px-Circle-icons-profile.svg.png1" alt="profile pic" class="profile-pic" />
-                </div>
-                <div class="col-6 p-2 green-border">
-                    <h5>Birthday</h5>
-                    <p id="member-birthday"></p>
-                    <h5>Details</h5>
-                    <p>Blah blah blah...</p>
-                </div>
-                <div class="col-12 text-center red-border">
-                    <h3 id="member-name"></h3>
-                </div>
-            </div>
-            <div class="col-12 col-lg-6 blue-border add-mobile-nav-buffer">
-                <h5>Parents</h5>
-                <div id="member-parents"></div>
-
-                <h5>Siblings</h5>
-                <div id="member-siblings"></div>
-
-                <h5>Children</h5>
-                <div id="member-children"></div>
-            </div>
-
-            <div class="d-flex justify-content-center align-items-center mobile-nav-button member-details-closer">Back to Pic</div>
+        <div id="pic-subjects" class="my-1 p-1 d-flex flex-wrap scroll-y-no-bar">
+            <!-- this is where the mini profiles go! -->
+        </div>
+    </div>
+    <div id="member-details" class="hidden container-fluid scroll-y-no-bar">
+        <div class="row no-gutters">
+            <img src="" alt="profile pic" class="image-fluid" />
+        </div>
+        <div class="row no-gutters">
+            <h4 id="member-name"></h4>
+        </div>
+        <div class="row no-gutters">
+            <h5>Birthday</h5>
+            <span id="member-birthday"></span>
+        </div>
+        <div class="row no-gutters">
+            <h5>Parents</h5>
+            <div id="member-parents"></div>
+        </div>
+        <div class="row no-gutters">
+            <h5>Siblings</h5>
+            <div id="member-siblings"></div>
+        </div>
+        <div class="row no-gutters">
+            <h5>Children</h5>
+            <div id="member-children"></div>
         </div>
     </div>
 </div>

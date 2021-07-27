@@ -1,7 +1,7 @@
 ﻿@model PicsOfUs.Models.MemberSelectViewModel
 
 <div class="form-group memberselect">
-    @Html.CheckBoxFor(m => m.IsSelected)
+    @Html.CheckBoxFor(m => m.IsSelected, new { @class = "mr-1"})
     @Html.LabelFor(m => m.IsSelected, Model.Name)
 </div>
 

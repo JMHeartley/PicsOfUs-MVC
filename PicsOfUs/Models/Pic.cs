@@ -9,6 +9,8 @@ namespace PicsOfUs.Models
         public int Id { get; set; }
         public string Url { get; set; }
         public string Caption { get; set; }
+
+        [Display(Name = "Capture Date")]
         public DateTime? CaptureDate { get; set; }
         public ICollection<Member> Subjects { get; set; }
         public ICollection<ApplicationUser> Lovers { get; set; }

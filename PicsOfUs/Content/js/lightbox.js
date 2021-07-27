@@ -1,26 +1,26 @@
 $(function () {
+    let isLightboxOpen = false;
+    let isMembersDetailsOpen = false;
+
   const navbarDesktop = $('#navbar-desktop');
   const navbarMobile = $('#navbar-mobile');
 
-  const lightboxContainer = $('#lightbox-container');
+  const lightboxContainer = $('#lightbox');
   const lightboxCloserButton = $('#lightbox-closer-button');
   const memberDetailsSection = $('#member-details');
   const lovePic = $('#love-pic');
   const leftArrow = $('#left-arrow');
   const rightArrow = $('#right-arrow');
-  const mobileNavHeight = navbarMobile.height() +
-    parseInt(navbarMobile.css('padding-top')) +
-    parseInt(navbarMobile.css('padding-bottom'));
 
   //#region Move to site.js
 
   // dynamically set the height of the mobile nav buttons, which will overlay on the mobile navbar
   const mobileNavButtons = $('.mobile-nav-button');
   const mobileNavBuffers = $('.add-mobile-nav-buffer');
-  // let mobileNavHeight =
-  //   navbarMobile.height() +
-  //   parseInt(navbarMobile.css('padding-top')) +
-  //   parseInt(navbarMobile.css('padding-bottom'));
+  const mobileNavHeight =
+     navbarMobile.height() +
+     parseInt(navbarMobile.css('padding-top')) +
+     parseInt(navbarMobile.css('padding-bottom'));
   mobileNavButtons.height(mobileNavHeight);
   mobileNavBuffers.css('padding-bottom', mobileNavHeight);
 
@@ -32,9 +32,21 @@ $(function () {
     const resultId = parseInt($(this).attr('data-result-id'));
     openLightbox(resultId);
   });
+
   $('.lightbox-closer').on('click', '', function () {
     closeLightbox();
   });
+    $(document).on('keyup', function(event) {
+        if (event.key === 'Escape') {
+            if (isMembersDetailsOpen) {
+                closeMemberDetails();
+            }
+            else if (isLightboxOpen) {
+                closeLightbox();
+            }
+      }
+    });
+
   leftArrow.on('click', '', function () {
     moveToPic(parseInt(lightboxContainer.attr('data-result-id')) - 1);
   });
@@ -44,10 +56,10 @@ $(function () {
   lovePic.on('click', '', function () {
     toggleLovePic(lovePic.attr('data-is-loved') === 'true');
   });
-  $('#pic-subjects').on('click', '.fake-profile', function () {
+  $('#pic-subjects').on('click', '.mini-profile', function () {
     openMemberDetails(parseInt($(this).attr('data-member-id')));
   });
-  memberDetailsSection.on('click', '.fake-profile', function () {
+  memberDetailsSection.on('click', '.mini-profile', function () {
     resetMemberDetails();
     openMemberDetails(parseInt($(this).attr('data-member-id')));
   });
@@ -73,7 +85,8 @@ $(function () {
     navbarMobile.addClass('hidden');
     moveToPic(resultId);
     //lightboxContainer.css('padding-bottom', mobileNavHeight);
-    $('body').addClass('restrict-scroll');
+      $('body').addClass('restrict-scroll');
+      isLightboxOpen = true;
   }
 
   function closeLightbox() {
@@ -84,6 +97,7 @@ $(function () {
     closeMemberDetails();
     //lightboxContainer.css('padding-bottom', 0);
     $('body').removeClass('restrict-scroll');
+    isLightboxOpen = false;
   }
 
   function moveToPic(resultId) {
@@ -93,11 +107,11 @@ $(function () {
     const resultPicMaxId = parseInt(
       $('#results-body .pic-result:last-child').attr('data-result-id')
     );
+
     leftArrow.removeClass('hidden');
     rightArrow.removeClass('hidden');
-
     if (resultId === resultPicMaxId) rightArrow.addClass('hidden');
-    else if (resultId === 0) leftArrow.addClass('hidden');
+    if (resultId === 0) leftArrow.addClass('hidden');
 
     const picId = $('#results-body')
       .find(`[data-result-id=${resultId}]`)
@@ -153,30 +167,6 @@ $(function () {
     def.resolve();
   }
 
-  function toggleLovePic(isLoved) {
-
-    isLoved = !isLoved;
-
-    let def = $.Deferred();
-    def
-      .then(function () {
-        return $.ajax({
-          url: "/api/pics/" + lightboxContainer.attr("data-pic-id"),
-          type: "PATCH",
-          contentType: "application/json",
-          data: JSON.stringify({
-            IsLoved: isLoved
-          })
-        });
-      })
-      .then(function () {
-        setLovedPic(isLoved)
-      })
-      .fail(function (error) {
-        console.log("An error occurred", error);
-      });
-    def.resolve();
-  }
 
   function openMemberDetails(memberId) {
 
@@ -204,7 +194,6 @@ $(function () {
 
           const parentsArea = $('#member-parents');
 
-
           $.each(member.parents, function (index, parent) {
             console.log('insert parent', parent.name);
 
@@ -231,6 +220,7 @@ $(function () {
           });
         });
       })
+      .then(isMembersDetailsOpen = true)
       .fail(function (error) {
         console.log('member call failed, display message and log to global logger', error);
       })
@@ -239,6 +229,8 @@ $(function () {
         lightboxContainer.addClass('restrict-scroll');
         memberDetailsSection.removeClass('hidden');
         //memberDetailsSection.css('padding-bottom', mobileNavHeight);
+        console.log("open?", isMembersDetailsOpen);
+        
       });
     def.resolve();
   }
@@ -247,6 +239,8 @@ $(function () {
     memberDetailsSection.addClass('hidden');
     lightboxContainer.removeClass('restrict-scroll');
     //memberDetailsSection.css('padding-bottom', 0);
+      isMembersDetailsOpen = false;
+      console.log('open?', isMembersDetailsOpen);
   }
 
   function resetMemberDetails() {
@@ -255,31 +249,49 @@ $(function () {
     memberDetailsSection.find('#member-children').empty();
   }
 
-  function insertIntoProfile(member, emptyProfile, captureDate) {
-    console.log(`insertIntoProfile: member: ${member}\ncaptureDate: ${captureDate}\npicProfile: ${emptyProfile}`);
-    const cloneProfile = $(emptyProfile).clone();
+  function insertIntoProfile(member, emptyProfile, picCaptureDate) {
+    console.log(`insertIntoProfile: member: ${member}\ncaptureDate: ${picCaptureDate}\npicProfile: ${emptyProfile}`);
+    const memberProfile = $(emptyProfile).clone();
+    memberProfile.filter('.mini-profile').attr('data-member-id', member.id);
+    memberProfile.find('.name').text(member.name);
 
-    cloneProfile
-      .filter('.fake-profile')
-      .attr('data-member-id', member.id);
+    if (picCaptureDate) {
 
-    cloneProfile.find('.name').text(member.name);
+      const ageInMilliseconds = Math.abs(Date.parse(picCaptureDate) - Date.parse(member.birthDate));
+      const oneYearInMilliseconds = 1000 * 3600 * 24 * 365;
+      const ageInYears = Math.floor(ageInMilliseconds / oneYearInMilliseconds);
 
-    const ageArea = cloneProfile.find('.age');
-    if (captureDate) {
-
-      const captureDateClass = Date.parse(captureDate);
-      const birthDateClass = Date.parse(member.birthDate);
-      const timeDifferenceInMilliseconds = Math.abs(captureDateClass - birthDateClass);
-
-      const yearsInMilliseconds = 1000 * 3600 * 24 * 365;
-      const ageInYears = Math.floor(timeDifferenceInMilliseconds / yearsInMilliseconds);
+      const ageArea = memberProfile.find('.age');
       ageArea.append(ageInYears);
-
       ageArea.removeClass('hidden');
     }
 
-    return cloneProfile;
+    return memberProfile;
+  }
+
+  function toggleLovePic(isLoved) {
+
+    isLoved = !isLoved;
+
+    let def = $.Deferred();
+    def
+      .then(function () {
+        return $.ajax({
+          url: "/api/pics/" + lightboxContainer.attr("data-pic-id"),
+          type: "PATCH",
+          contentType: "application/json",
+          data: JSON.stringify({
+            IsLoved: isLoved
+          })
+        });
+      })
+      .then(function () {
+        setLovedPic(isLoved)
+      })
+      .fail(function (error) {
+        console.log("An error occurred", error);
+      });
+    def.resolve();
   }
 
   function setLovedPic(isLoved) {

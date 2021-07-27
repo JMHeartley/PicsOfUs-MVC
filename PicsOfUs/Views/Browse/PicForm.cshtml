@@ -2,59 +2,52 @@
 @model PicsOfUs.Models.PicFormViewModel
 
 @{
-    ViewBag.Title = "PicForm";
+    ViewBag.Title = (Model.Pic.Id == 0) ? "New Pic" : "Edit Pic";
 }
 
-@if (Model.Pic.Id == 0)
-{
-    <h2>New Pic</h2>
-}
-else
-{
-    <h2>Edit Pic</h2>
-}
-
-
-<div class="d-flex align-items-center">
+<div class="d-flex align-items-stretch">
     <div class="col">
+        <img src="https://bit.ly/2UsFBtW" alt="" class="image-fluid red-border">
+    </div>
+    <div class="col">
+        @if (Model.Pic.Id == 0)
+        {
+            <h2>New Pic</h2>
+        }
+        else
+        {
+            <h2>Edit Pic</h2>
+        }
         @using (Html.BeginForm("Save", "Browse", FormMethod.Post, new { enctype = "multipart/form-data" }))
         {
             <div class="form-group">
-                @Html.TextBoxFor(m => m.File, new {@class = "form-control-file", type = "file"})
+                @Html.TextBoxFor(m => m.File, new { @class = "form-control-file", type = "file" })
             </div>
             <div class="form-group">
                 @Html.LabelFor(p => p.Pic.Caption)
-                @Html.TextBoxFor(p => p.Pic.Caption, new {@class = "form-control"})
+                @Html.TextBoxFor(p => p.Pic.Caption, new { @class = "form-control" })
             </div>
             <div class="form-group">
                 @Html.LabelFor(p => p.Pic.CaptureDate)
-                @Html.TextBoxFor(p => p.Pic.CaptureDate, "{0:MM/dd/yyyy}", new {@class = "form-control"})
+                <div class="form-group">
+                    <div class="input-group mb-3 date" data-provide="datepicker">
+                        <span class="input-group-text">
+                            <i class="far fa-calendar-alt"></i>
+                        </span>
+                        @Html.TextBoxFor(p => p.Pic.CaptureDate, "{0:MM/dd/yyyy}", new { @class = "form-control" })
+                    </div>
+                </div>
             </div>
-
             <label>Subjects</label>
             <div class="overflow-auto mb-3 member-select-overflow">
                 @Html.EditorFor(m => m.Members)
             </div>
-
+            @Html.ActionLink("Add a new member?", "New", "Member", null, new { @class = "btn btn-primary my-3" })
+            <br />
             @Html.HiddenFor(m => m.Pic.Id)
             @Html.AntiForgeryToken()
 
             <button type="submit" class="btn btn-primary">Save</button>
         }
     </div>
-    <div class="col text-center">
-                <div class="text-center mb-4">
-            <button class="btn btn-primary" onclick="preview()">Preview Pic</button>
-        </div>
-        <img src="@Model.Pic.Url" alt="@Model.Pic.Caption" class="img-fluid" id="picform-preview">
-    </div>
 </div>
-
-<script>
-    var urlInput = document.querySelector("#Pic_Url");
-    var picPreview = document.querySelector("#picform-preview");
-
-    function preview () {
-        picPreview.src = urlInput.value;
-    };
-</script>

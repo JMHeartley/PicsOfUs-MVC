@@ -44,93 +44,21 @@ body {
     width: 100%;
 }
 
-.gradient-wrap {
-	background: linear-gradient(135deg, var(--red), var(--blue));
-	padding: 0.125rem;
-	border-radius: 1rem;
-}
-
-.gradient-background {
-	background: black;
-	border-radius: 1rem;
-}
-
-.mini-profile {
-	max-width: 20rem;
-}
-
-.mini-profile img {
-	width: 6rem;
-}
-
 .result-pic {
 	max-height: 9.375rem;
 	margin: 0.313rem;
 }
 
-#results-body {
-    flex-wrap: wrap;
-} 
 #results-body > div {
     height: 12rem;
 }
 
-#main-pic {
-	height: 40vh;
-}
-
-#main-pic,
-#loved-pics-body,
 #results-body {
 	background-color: hsla(0, 0%, 0%, 0.5);
-	border-radius: 0.5rem;
-}
-
-#loved-pics,
-#account {
-	margin: 1rem auto;
-	padding: 1vh 5vw;
-	max-width: 1000px;
-}
-
-#account img {
-	width: 15vh;
-	min-width: 6.25rem;
-}
-
-#account #name {
-	font-size: 1.5rem;
 }
 
 .member-select-overflow {
 	max-height: 10rem;
-	border: 1px dashed white;
-	border-radius: 0.25rem;
-    padding: 0 1rem;
-}
-
-#picform-preview {
-	height: 20rem;
-    border: 1px dotted purple;
-}
-
-.memberselect > input {
-    margin-right: 0.25rem;
-}
-
-.card {
-	width: 12rem;
-}
-
-.card-img-wrap {
-	height: 8rem;
-	background-color: rgba(0, 0, 0, 20%);
-}
-
-.card-img-wrap > img {
-	width: auto;
-	max-width: 100%;
-	height: 100%;
 }
 
 /* laptops and larger */
@@ -165,6 +93,7 @@ body {
     height: 0 !important;
     overflow: hidden !important;
     z-index: -10 !important;
+    padding: 0 !important;
 }
 
 .trigger {
@@ -194,12 +123,6 @@ body {
 .image-fluid {
     width: auto;
     height: 100%;
-    max-width: 100%;
-    object-fit: contain;
-}
-
-.profile-pic {
-    width: auto;
     max-width: 100%;
     object-fit: contain;
 }
