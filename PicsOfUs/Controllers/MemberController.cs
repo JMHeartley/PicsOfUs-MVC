@@ -27,33 +27,21 @@ namespace PicsOfUs.Controllers
 
         public ActionResult New()
         {
+            var memberSelectViewModels = _context.Members
+                .AsEnumerable()
+                .Select(m => new MemberSelectViewModel
+                {
+                    MemberId = m.Id,
+                    Name = m.Name,
+                    IsSelected = false
+                }).ToList();
+
             var viewModel = new MemberFormViewModel
             {
                 Member = new Member(),
-                Siblings = _context.Members
-                    .AsEnumerable()
-                    .Select(m => new MemberSelectViewModel
-                    {
-                        MemberId = m.Id,
-                        Name = m.Name,
-                        IsSelected = false
-                    }).ToList(),
-                Parents = _context.Members
-                    .AsEnumerable()
-                    .Select(m => new MemberSelectViewModel
-                    {
-                        MemberId = m.Id,
-                        Name = m.Name,
-                        IsSelected = false
-                    }).ToList(),
-                Children = _context.Members
-                    .AsEnumerable()
-                    .Select(m => new MemberSelectViewModel
-                    {
-                        MemberId = m.Id,
-                        Name = m.Name,
-                        IsSelected = false
-                    }).ToList()
+                Siblings = memberSelectViewModels,
+                Parents = memberSelectViewModels,
+                Children = memberSelectViewModels
             };
 
             return View("MemberForm", viewModel);

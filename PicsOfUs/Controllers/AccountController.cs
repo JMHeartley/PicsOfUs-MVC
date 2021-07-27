@@ -169,34 +169,32 @@ namespace PicsOfUs.Controllers
             };
             var result = await UserManager.CreateAsync(user, viewModel.Password);
 
-            if (result.Succeeded)
+            if (!result.Succeeded)
             {
-                //AssignRoleCanManagePicsAndTree();
-                
-                await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
-
-                // For more information on how to enable account confirmation and password reset please visit https://go.microsoft.com/fwlink/?LinkID=320771
-                // Send an email with this link
-                // string code = await UserManager.GenerateEmailConfirmationTokenAsync(user.Id);
-                // var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);
-                // await UserManager.SendEmailAsync(user.Id, "Confirm your account", "Please confirm your account by clicking <a href=\"" + callbackUrl + "\">here</a>");
-
-                return RedirectToAction("Index", "Home");
-
-                async void AssignRoleCanManagePicsAndTree()
-                {
-                    var roleStore = new RoleStore<IdentityRole>(new ApplicationDbContext());
-                    var roleManager = new RoleManager<IdentityRole>(roleStore);
-                    await roleManager.CreateAsync(new IdentityRole("CanManagePicsAndTree"));
-
-                    await UserManager.AddToRoleAsync(user.Id, "CanManagePicsAndTree");
-                }
-
+                AddErrors(result);
+                return View(viewModel);
             }
-            AddErrors(result);
 
-            // If we got this far, something failed, redisplay form
-            return View(viewModel);
+            //AssignRoleCanManagePicsAndTree();
+                
+            await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
+
+            // For more information on how to enable account confirmation and password reset please visit https://go.microsoft.com/fwlink/?LinkID=320771
+            // Send an email with this link
+            // string code = await UserManager.GenerateEmailConfirmationTokenAsync(user.Id);
+            // var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);
+            // await UserManager.SendEmailAsync(user.Id, "Confirm your account", "Please confirm your account by clicking <a href=\"" + callbackUrl + "\">here</a>");
+
+            return RedirectToAction("Index", "Home");
+
+            async void AssignRoleCanManagePicsAndTree()
+            {
+                var roleStore = new RoleStore<IdentityRole>(new ApplicationDbContext());
+                var roleManager = new RoleManager<IdentityRole>(roleStore);
+                await roleManager.CreateAsync(new IdentityRole("CanManagePicsAndTree"));
+
+                await UserManager.AddToRoleAsync(user.Id, "CanManagePicsAndTree");
+            }
 
             string CreateUploadsSubfolder()
             {
