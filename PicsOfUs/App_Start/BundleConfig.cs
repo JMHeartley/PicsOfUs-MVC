@@ -11,6 +11,7 @@ namespace PicsOfUs
                         "~/Content/Js/Plugins/jQuery/jquery-{version}.js", 
                         "~/Content/Js/Plugins/Bootbox/bootbox.js",
                         "~/Content/Js/Plugins/Bootstrap/bootstrap.js",
+                        "~/Content/Js/Plugins/Bootstrap-Datepicker/bootstrap-datepicker.js",
                         "~/Content/Js/Plugins/Popper/popper.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/internal").Include(
@@ -26,6 +27,7 @@ namespace PicsOfUs
 
             bundles.Add(new StyleBundle("~/Content/css").Include(
                       "~/Content/Css/bootstrap-4-darkly.css",
+                      "~/Content/Css/Bootstrap-Datepicker/bootstrap-datepicker.css",
                       "~/Content/Css/site.css",
                       "~/Content/Css/lightbox.css"));
         }
