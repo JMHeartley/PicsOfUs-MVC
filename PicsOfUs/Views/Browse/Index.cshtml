@@ -58,8 +58,12 @@
     </div>
 </div>
 
-<div class="row no-gutters hidden add-mobile-nav-buffer scroll-y-no-bar vh-100 vw-100" id="lightbox">
+<div class="row no-gutters hidden scroll-y-no-bar vh-100 vw-100" id="lightbox">
     <div class="col-12 col-lg-8 d-flex justify-content-center vh-100">
+        <div id="lightbox-closer-x">
+            <i class="far fa-times-circle"></i>
+            <span class="d-none d-lg-block">ESC to close</span>
+        </div>
         <div id="left-arrow">
             <i class="fas fa-arrow-left" aria-hidden="true"></i>
         </div>
@@ -67,9 +71,6 @@
         <div id="right-arrow">
             <i class="fas fa-arrow-right" aria-hidden="true"></i>
         </div>
-    </div>
-    <div class="lightbox-closer d-flex justify-content-center align-items-center mobile-nav-button hidden" id="lightbox-closer-button">
-        <h4 class="font-weight-normal">Back</h4>
     </div>
     <div id="lightbox-details" class="col-12 col-lg-4 pt-3 px-3 d-flex">
         <h3 id="caption" class="font-weight-bolder">
@@ -90,7 +91,7 @@
     </div>
     <div id="member-details" class="hidden container-fluid scroll-y-no-bar">
         <div class="row no-gutters">
-            <img src="" alt="profile pic" class="image-fluid" />
+            <img src="" alt="profile pic" class="image-fluid"/>
         </div>
         <div class="row no-gutters">
             <h4 id="member-name"></h4>

@@ -5,6 +5,18 @@
     background-color: black;
 }
 
+#lightbox-closer-x {
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 10;
+}
+
+#lightbox-closer-x > .fa-times-circle {
+    font-size: 2rem;
+    cursor: pointer;
+}
+
 #left-arrow,
 #right-arrow {
     position: absolute;

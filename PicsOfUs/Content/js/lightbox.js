@@ -6,8 +6,7 @@ const Lightbox = {
         navbarDesktop: $('#navbar-desktop'),
         navbarMobile: $('#navbar-mobile'),
         lightbox: $('#lightbox'),
-        closerButton: $('#lightbox-closer-button'),
-        closer: $('.lightbox-closer'),
+        closerX: $('#lightbox-closer-x'),
         memberDetailsSection: $('#member-details'),
         lovePic: $('#love-pic'),
         leftArrow: $('#left-arrow'),
@@ -28,25 +27,19 @@ const Lightbox = {
         s.mobileNavBuffers.css('padding-bottom', s.mobileNavHeight);
     },
     bindUIEvents: function () {
+
         s.resultsBody.on('click', '.trigger', function () {
             const resultId = parseInt($(this).attr('data-result-id'));
             Lightbox.openLightbox(resultId);
         });
-
-        s.closer.on('click', '', function () {
-            Lightbox.closeLightbox();
-        });
         $(document).on('keyup', function (event) {
             if (event.key === 'Escape') {
-                if (s.isMembersDetailsOpen) {
-                    Lightbox.closeMemberDetails();
-                }
-                else if (s.isLightboxOpen) {
-                    Lightbox.closeLightbox();
-                }
+                Lightbox.closeMemberDetailsOrLightbox();
             }
         });
-
+        s.closerX.on('click', '', function () {
+            Lightbox.closeMemberDetailsOrLightbox();
+        });
         s.leftArrow.on('click', '', function () {
             Lightbox.moveToPic(parseInt(s.lightbox.attr('data-result-id')) - 1);
         });
@@ -66,14 +59,14 @@ const Lightbox = {
         $('.member-details-closer').on('click', '', function () {
             Lightbox.closeMemberDetails();
         });
-
-        s.lightbox.on('scroll', '', function () {
-            if (s.lightbox.scrollTop() > s.mobileNavHeight / 2) {
-                s.closerButton.removeClass('hidden');
-            } else {
-                s.closerButton.addClass('hidden');
-            }
-        });
+    },
+    closeMemberDetailsOrLightbox: function () {
+        if (s.isMembersDetailsOpen) {
+            Lightbox.closeMemberDetails();
+        }
+        else if (s.isLightboxOpen) {
+            Lightbox.closeLightbox();
+        }
     },
     openLightbox: function (resultId) {
         s.lightbox.removeClass('hidden');
@@ -86,7 +79,6 @@ const Lightbox = {
     },
     closeLightbox: function () {
         s.lightbox.addClass('hidden');
-        s.closerButton.addClass('hidden');
         s.navbarDesktop.removeClass('hidden');
         s.navbarMobile.removeClass('hidden');
         Lightbox.closeMemberDetails();
@@ -116,7 +108,6 @@ const Lightbox = {
         def
             .then(function () {
                 return $.get(`/api/pics/${picId}`).done(function (pic) {
-                    console.log('pic loaded to lightbox', pic);
 
                     s.lightbox.attr('data-result-id', resultId);
                     s.lightbox.attr('data-pic-id', picId);
@@ -129,7 +120,7 @@ const Lightbox = {
 
                     const captureArea = $('#capture-date');
 
-                    if (pic.captureDate !== null) {
+                    if (pic.captureDate) {
                         const formattedDate = new Date(pic.captureDate);
                         captureArea.text(formattedDate.toLocaleDateString());
                         captureArea.removeClass('hidden');
@@ -222,8 +213,6 @@ const Lightbox = {
                 s.lightbox.scrollTop(0);
                 s.lightbox.addClass('restrict-scroll');
                 s.memberDetailsSection.removeClass('hidden');
-                //memberDetailsSection.css('padding-bottom', s.mobileNavHeight);
-                console.log("open?", s.isMembersDetailsOpen);
             });
         def.resolve();
     },
@@ -232,7 +221,6 @@ const Lightbox = {
         s.lightbox.removeClass('restrict-scroll');
         //memberDetailsSection.css('padding-bottom', 0);
         s.isMembersDetailsOpen = false;
-        console.log('open?', s.isMembersDetailsOpen);
     },
     resetMemberDetails: function () {
         s.memberDetailsSection.find('#member-parents').empty();
@@ -240,7 +228,7 @@ const Lightbox = {
         s.memberDetailsSection.find('#member-children').empty();
     },
     insertIntoProfile: function (member, emptyProfile, picCaptureDate) {
-        console.log(`insertIntoProfile: member: ${member}\ncaptureDate: ${picCaptureDate}\npicProfile: ${emptyProfile}`);
+
         const memberProfile = $(emptyProfile).clone();
         memberProfile.filter('.mini-profile').attr('data-member-id', member.id);
         memberProfile.find('.name').text(member.name);
@@ -261,23 +249,21 @@ const Lightbox = {
 
         isLoved = !isLoved;
 
-        let def = $.Deferred();
+        const def = $.Deferred();
         def
             .then(function () {
                 return $.ajax({
-                    url: "/api/pics/" + s.lightbox.attr("data-pic-id"),
-                    type: "PATCH",
-                    contentType: "application/json",
-                    data: JSON.stringify({
-                        IsLoved: isLoved
-                    })
+                    url: `/api/pics/${s.lightbox.attr('data-pic-id')}`,
+                    type: 'PATCH',
+                    contentType: 'application/json',
+                    data: JSON.stringify({ IsLoved: isLoved })
                 });
             })
             .then(function () {
-                Lightbox.setLovedPic(isLoved)
+                Lightbox.setLovedPic(isLoved);
             })
             .fail(function (error) {
-                console.log("An error occurred", error);
+                console.log('An error occurred', error);
             });
         def.resolve();
     },
