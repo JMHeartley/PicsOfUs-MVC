@@ -5,8 +5,9 @@
 }
 
 <div class="row">
-    <div class="col-md-4 order-md-2">
-        @using (Html.BeginForm("Index", "Browse"))
+    <div class="col-md-4">
+        <button class="btn btn-primary d-md-none" type="button" data-toggle="collapse" data-target="#search-form" aria-expanded="false">Filters</button>
+        @using (Html.BeginForm("Index", "Browse", FormMethod.Post, new { @class = "max-vh-100 scroll-y-no-bar collapse", id = "search-form" }))
         {
             <h4>Date</h4>
             <div class="input-group input-daterange mb-3" data-provide="datepicker">
@@ -35,8 +36,8 @@
             <button type="submit" class="btn btn-primary">Search</button>
         }
     </div>
-    <div class="col-md-8 order-md-1">
-        <div class="d-flex flex-wrap p-2 rounded" id="results-body">
+    <div class="col-md-8">
+        <div class="d-flex flex-wrap p-2 vh-100 overflow-auto" id="results-body">
             @if (Model.ResultPics == null)
             {
                 <p>Press <i>Search</i> to begin reminiscing...</p>
@@ -59,10 +60,20 @@
 </div>
 
 <div class="row no-gutters hidden scroll-y-no-bar vh-100 vw-100" id="lightbox">
+
+    <div class="vh-100 vw-100 text-center hidden" id="loader">
+        <div id="loader-image">
+            <div class="progress w-50">
+                <div class="progress-bar progress-bar-striped progress-bar-animated w-100" role="progressbar" aria-valuenow="1" aria-valuemin="0" aria-valuemax="1"></div>
+            </div>
+        </div>
+    </div>
     <div class="col-12 col-lg-8 d-flex justify-content-center vh-100">
-        <div id="lightbox-closer-x">
-            <i class="far fa-times-circle"></i>
-            <span class="d-none d-lg-block">ESC to close</span>
+        <div class="p-2" id="lightbox-closer-x">
+            <div class="text-center">
+                <i class="far fa-times-circle"></i>
+                <span class="d-none d-lg-block user-select-none font-weight-normal">ESC</span>
+            </div>
         </div>
         <div id="left-arrow">
             <i class="fas fa-arrow-left" aria-hidden="true"></i>
@@ -91,7 +102,7 @@
     </div>
     <div id="member-details" class="hidden container-fluid scroll-y-no-bar">
         <div class="row no-gutters">
-            <img src="" alt="profile pic" class="image-fluid"/>
+            <img src="" alt="profile pic" class="image-fluid" />
         </div>
         <div class="row no-gutters">
             <h4 id="member-name"></h4>
