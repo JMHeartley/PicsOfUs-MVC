@@ -12,19 +12,17 @@ const Lightbox = {
         leftArrow: $('#left-arrow'),
         rightArrow: $('#right-arrow'),
         resultsBody: $('#results-body'),
-        mobileNavButtons: $('.mobile-nav-button'),
-        mobileNavBuffers: $('.add-mobile-nav-buffer'),
-        mobileNavHeight: null
+        mobileNavHeight: null,
+        lightboxPic: $('#lightbox-pic'),
+        lightboxCaption: $('#caption'),
+        captureDateArea: $('#capture-date'),
+        subjectsArea: $('#pic-subjects'),
+        loader: $('#loader')
     },
-    init: function () {
+    initialize: function () {
         s = this.settings;
 
         this.bindUIEvents();
-        s.mobileNavHeight = s.navbarMobile.height() +
-            parseInt(s.navbarMobile.css('padding-top')) +
-            parseInt(s.navbarMobile.css('padding-bottom'));
-        s.mobileNavButtons.height(s.mobileNavHeight);
-        s.mobileNavBuffers.css('padding-bottom', s.mobileNavHeight);
     },
     bindUIEvents: function () {
 
@@ -53,7 +51,6 @@ const Lightbox = {
             Lightbox.openMemberDetails(parseInt($(this).attr('data-member-id')));
         });
         s.memberDetailsSection.on('click', '.mini-profile', function () {
-            Lightbox.resetMemberDetails();
             Lightbox.openMemberDetails(parseInt($(this).attr('data-member-id')));
         });
         $('.member-details-closer').on('click', '', function () {
@@ -69,11 +66,11 @@ const Lightbox = {
         }
     },
     openLightbox: function (resultId) {
+        Lightbox.resetLightbox();
+        Lightbox.moveToPic(resultId);
         s.lightbox.removeClass('hidden');
         s.navbarDesktop.addClass('hidden');
         s.navbarMobile.addClass('hidden');
-        Lightbox.moveToPic(resultId);
-        //lightbox.css('padding-bottom', s.mobileNavHeight);
         $('body').addClass('restrict-scroll');
         s.isLightboxOpen = true;
     },
@@ -82,26 +79,24 @@ const Lightbox = {
         s.navbarDesktop.removeClass('hidden');
         s.navbarMobile.removeClass('hidden');
         Lightbox.closeMemberDetails();
-        //lightbox.css('padding-bottom', 0);
         $('body').removeClass('restrict-scroll');
         s.isLightboxOpen = false;
+    },
+    resetLightbox: function () {
+        s.lightboxPic.attr('src', '');
+        s.lightboxPic.attr('alt', '');
+        s.lightboxCaption.text('');
+        s.captureDateArea.text('');
+        Lightbox.setLovedPic(false);
+        s.subjectsArea.html('');
     },
     moveToPic: function (resultId) {
 
         s.lightbox.scrollTop(0);
 
-        const resultPicMaxId = parseInt(
-            $('#results-body .pic-result:last-child').attr('data-result-id')
-        );
+        Lightbox.showArrowsBasedOnResultId(resultId);
 
-        s.leftArrow.removeClass('hidden');
-        s.rightArrow.removeClass('hidden');
-        if (resultId === resultPicMaxId)
-            s.rightArrow.addClass('hidden');
-        if (resultId === 0)
-            s.leftArrow.addClass('hidden');
-
-        const picId = $('#results-body')
+        const picId = s.resultsBody
             .find(`[data-result-id=${resultId}]`)
             .attr('data-pic-id');
         const def = $.Deferred();
@@ -112,20 +107,17 @@ const Lightbox = {
                     s.lightbox.attr('data-result-id', resultId);
                     s.lightbox.attr('data-pic-id', picId);
 
-                    const lightboxPic = $('#lightbox-pic');
-                    lightboxPic.attr('src', pic.url);
-                    lightboxPic.attr('alt', pic.caption);
+                    s.lightboxPic.attr('src', pic.url);
+                    s.lightboxPic.attr('alt', pic.caption);
 
-                    $('#caption').text(pic.caption);
-
-                    const captureArea = $('#capture-date');
+                    s.lightboxCaption.text(pic.caption);
 
                     if (pic.captureDate) {
                         const formattedDate = new Date(pic.captureDate);
-                        captureArea.text(formattedDate.toLocaleDateString());
-                        captureArea.removeClass('hidden');
+                        s.captureDateArea.text(formattedDate.toLocaleDateString());
+                        s.captureDateArea.removeClass('hidden');
                     } else {
-                        captureArea.addClass('hidden');
+                        s.captureDateArea.addClass('hidden');
                     }
 
                     Lightbox.setLovedPic(pic.isLoved);
@@ -133,93 +125,91 @@ const Lightbox = {
             })
             .then(function (pic) {
                 return $.get('/Static/PicProfile.html').done(function (emptyProfile) {
-
+                    s.subjectsArea.html('');
                     console.log('html loaded', emptyProfile);
-
-                    const subjectsArea = $('#pic-subjects');
-                    subjectsArea.html('');
 
                     if (pic.subjects) {
                         $.each(pic.subjects, function (index, subject) {
 
-                            const picProfile = Lightbox.insertIntoProfile(subject, emptyProfile, pic.captureDate);
-                            picProfile.appendTo(subjectsArea);
+                            const picProfile = Lightbox.insertMemberIntoProfile(subject, emptyProfile, pic.captureDate);
+                            picProfile.appendTo(s.subjectsArea);
                         });
                     }
                 });
             })
+            .then(function () { s.loader.addClass('hidden'); })
             .fail(function (error) {
                 console.log('there was an error!, log to global logger', error);
+                if (confirm('Something went wrong... reload the pic?')) {
+                    Lightbox.moveToPic(resultId);
+                } else {
+                    Lightbox.closeLightbox();
+                }
             });
+        s.loader.removeClass('hidden');
         def.resolve();
     },
+    fillInTheMembersDetails: function (member) {
+        console.log('loading member-details', member);
+
+        s.memberDetailsSection.find('#member-name').text(member.name);
+
+        const months =
+            ['January', 'February', 'March', 'April', 'May', 'June', 'July',
+                'August', 'September', 'October', 'November', 'December'];
+        const birthDate = new Date(member.birthDate);
+        const birthMonth = months[birthDate.getMonth()];
+        const birthday = birthMonth + ' ' + birthDate.getDate();
+        s.memberDetailsSection.find('#member-birthday').text(birthday);
+    },
+    fillInRelativeInfo: function (emptyProfile) {
+            const parentsArea = $('#member-parents');
+            Lightbox.insertProfilesIntoArea(member.parents, emptyProfile, parentsArea);
+
+            const siblingsArea = $('#member-siblings');
+            Lightbox.insertProfilesIntoArea(member.siblings, emptyProfile, siblingsArea);
+
+            const childrenArea = $('#member-children');
+            Lightbox.insertProfilesIntoArea(member.children, emptyProfile, childrenArea);
+    },
+    something: function (params) {
+        
+    },
     openMemberDetails: function (memberId) {
+        Lightbox.resetMemberDetails();
 
         console.log(`open the details section for member with id: ${memberId}`);
 
         const def = $.Deferred();
         def
             .then(function () {
-                return $.get(`/api/members/${memberId}`).done(function (data) {
-                    console.log('loading member-details', data);
-
-                    s.memberDetailsSection.find('#member-name').text(data.name);
-
-                    const months =
-                        ['January', 'February', 'March', 'April', 'May', 'June', 'July',
-                            'August', 'September', 'October', 'November', 'December'];
-                    const birthDate = new Date(data.birthDate);
-                    const birthMonth = months[birthDate.getMonth()];
-                    const birthday = birthMonth + ' ' + birthDate.getDate();
-                    s.memberDetailsSection.find('#member-birthday').text(birthday);
-                });
+                return $.get(`/api/members/${memberId}`).done(Lightbox.fillInTheMembersDetails);
             })
             .then(function (member) {
-                return $.get('/Static/PicProfile.html').done(function (emptyProfile) {
-
-                    const parentsArea = $('#member-parents');
-
-                    $.each(member.parents, function (index, parent) {
-                        console.log('insert parent', parent.name);
-
-                        const newProfile = Lightbox.insertIntoProfile(parent, emptyProfile);
-                        newProfile.appendTo(parentsArea);
-                    });
-
-                    const siblingsArea = $('#member-siblings');
-
-                    $.each(member.siblings, function (index, sibling) {
-                        console.log('insert sibling', sibling.name);
-
-                        const newProfile = Lightbox.insertIntoProfile(sibling, emptyProfile);
-                        newProfile.appendTo(siblingsArea);
-                    });
-
-                    const childrenArea = $('#member-children');
-
-                    $.each(member.children, function (index, child) {
-                        console.log('insert child', child.name);
-
-                        const newProfile = Lightbox.insertIntoProfile(child, emptyProfile);
-                        newProfile.appendTo(childrenArea);
-                    });
-                });
+                return $.get('/Static/PicProfile.html').done(Lightbox.fillInRelativeInfo);
             })
-            .then(s.isMembersDetailsOpen = true)
+            .then(function () {
+                s.loader.addClass('hidden');
+                s.isMembersDetailsOpen = true;
+                s.memberDetailsSection.removeClass('hidden');
+                s.lightbox.addClass('restrict-scroll');
+                s.lightbox.scrollTop(0);
+            })
             .fail(function (error) {
                 console.log('member call failed, display message and log to global logger', error);
-            })
-            .always(function () {
-                s.lightbox.scrollTop(0);
-                s.lightbox.addClass('restrict-scroll');
-                s.memberDetailsSection.removeClass('hidden');
+                if (confirm('Something went wrong... reload?')) {
+                    Lightbox.openMemberDetails(memberId);
+                } else {
+                    Lightbox.closeMemberDetails();
+                    s.loader.addClass('hidden');
+                }
             });
+        s.loader.removeClass('hidden');
         def.resolve();
     },
     closeMemberDetails: function () {
         s.memberDetailsSection.addClass('hidden');
         s.lightbox.removeClass('restrict-scroll');
-        //memberDetailsSection.css('padding-bottom', 0);
         s.isMembersDetailsOpen = false;
     },
     resetMemberDetails: function () {
@@ -227,7 +217,7 @@ const Lightbox = {
         s.memberDetailsSection.find('#member-siblings').empty();
         s.memberDetailsSection.find('#member-children').empty();
     },
-    insertIntoProfile: function (member, emptyProfile, picCaptureDate) {
+    insertMemberIntoProfile: function (member, emptyProfile, picCaptureDate) {
 
         const memberProfile = $(emptyProfile).clone();
         memberProfile.filter('.mini-profile').attr('data-member-id', member.id);
@@ -244,6 +234,12 @@ const Lightbox = {
             ageArea.removeClass('hidden');
         }
         return memberProfile;
+    },
+    insertProfilesIntoArea: function (members, emptyProfile, area) {
+        $.each(members, function (index, member) {
+            const newProfile = Lightbox.insertMemberIntoProfile(member, emptyProfile);
+            newProfile.appendTo(area);
+        });
     },
     toggleLovePic: function (isLoved) {
 
@@ -282,7 +278,19 @@ const Lightbox = {
             lovedPicIcon.addClass('far');
             lovedPicIcon.removeClass('fas');
         }
-    }
+    },
+    showArrowsBasedOnResultId: function (resultId) {
+        const resultPicMaxId = parseInt(
+            $('#results-body .pic-result:last-child').attr('data-result-id')
+        );
+
+        s.leftArrow.removeClass('hidden');
+        s.rightArrow.removeClass('hidden');
+        if (resultId === resultPicMaxId)
+            s.rightArrow.addClass('hidden');
+        if (resultId === 0)
+            s.leftArrow.addClass('hidden');
+    },
 };
 
-$(function () { Lightbox.init(); });
+$(function () { Lightbox.initialize(); });
