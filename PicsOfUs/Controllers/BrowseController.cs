@@ -26,62 +26,68 @@ namespace PicsOfUs.Controllers
         {
             _context.Dispose();
         }
-
-        public ActionResult Index(BrowseIndexViewModel viewModel)
+        public ActionResult Index()
         {
-            if (viewModel.SearchForm == null)
+            var viewModel = new BrowseIndexViewModel
             {
-                viewModel.SearchForm = new SearchFormViewModel
+                SearchForm = new SearchFormViewModel
                 {
                     PicSubjects = _context.Members
-                        .AsEnumerable()
-                        .Select(m => new MemberSelectViewModel
-                        {
-                            MemberId = m.Id,
-                            Name = m.Name,
-                            IsSelected = false
-                        }).ToList()
-                };
-            }
-            else if (ModelState.IsValid)
+                    .AsEnumerable()
+                    .Select(m => new MemberSelectViewModel
+                    {
+                        MemberId = m.Id,
+                        Name = m.Name,
+                        IsSelected = false
+                    }).ToList()
+                }
+            };
+            return View(viewModel);
+        }
+
+        [HttpPost]
+        public ActionResult Index(BrowseIndexViewModel viewModel)
+        {
+            if (!ModelState.IsValid)
             {
-                var form = viewModel.SearchForm;
-
-                var pics = _context.Pics.Include(p => p.Subjects).AsQueryable();
-
-                if (form.CaptureDateFrom != null)
-                {
-                    pics = pics.Where(p => p.CaptureDate >= form.CaptureDateFrom);
-                }
-
-                if (form.CaptureDateTo != null)
-                {
-                    pics = pics.Where(p => p.CaptureDate <= form.CaptureDateTo);
-                }
-
-                var selectedIds = form.PicSubjects
-                    .Where(m => m.IsSelected)
-                    .Select(m => m.MemberId)
-                    .ToList();
-
-                if (selectedIds.Any())
-                {
-                    if (form.RequireAll)
-                    {
-                        pics = pics.Where(p => p.Subjects
-                                .All(m => selectedIds
-                                    .Contains(m.Id)));
-                    }
-                    else
-                    {
-                        pics = pics.Where(p => p.Subjects
-                                            .Any(m => selectedIds
-                                                .Contains(m.Id)));
-                    }
-                }
-
-                viewModel.ResultPics = pics.ToList();
+                return View(viewModel);
             }
+            var form = viewModel.SearchForm;
+
+            var pics = _context.Pics.Include(p => p.Subjects).AsQueryable();
+
+            if (form.CaptureDateFrom != null)
+            {
+                pics = pics.Where(p => p.CaptureDate >= form.CaptureDateFrom);
+            }
+
+            if (form.CaptureDateTo != null)
+            {
+                pics = pics.Where(p => p.CaptureDate <= form.CaptureDateTo);
+            }
+
+            var selectedIds = form.PicSubjects
+                .Where(m => m.IsSelected)
+                .Select(m => m.MemberId)
+                .ToList();
+
+            if (selectedIds.Any())
+            {
+                if (form.RequireAll)
+                {
+                    pics = pics.Where(p => p.Subjects
+                            .All(m => selectedIds
+                                .Contains(m.Id)));
+                }
+                else
+                {
+                    pics = pics.Where(p => p.Subjects
+                                        .Any(m => selectedIds
+                                            .Contains(m.Id)));
+                }
+            }
+
+            viewModel.ResultPics = pics.ToList();
 
             return View(viewModel);
         }
@@ -147,7 +153,7 @@ namespace PicsOfUs.Controllers
             var pic = viewModel.Pic;
 
             pic.Url = SaveToUploadsSubfolder(viewModel.File);
-            
+
             var selectedMemberIds = viewModel.Members
                     .Where(m => m.IsSelected)
                     .Select(m => m.MemberId);
@@ -197,7 +203,7 @@ namespace PicsOfUs.Controllers
             var savedFileName = Path.Combine(filePath, fileName);
             pic.SaveAs(savedFileName);
 
-            var url = $"{appUser.UploadsFolder}/{fileName}"; 
+            var url = $"{appUser.UploadsFolder}/{fileName}";
             return url;
         }
 
@@ -208,7 +214,7 @@ namespace PicsOfUs.Controllers
                 return true;
             }
 
-            var formats = new[] { ".jpg", ".png", ".heic", ".ciff", ".jpeg" }; 
+            var formats = new[] { ".jpg", ".png", ".heic", ".ciff", ".jpeg" };
             return formats.Any(item => file.FileName.EndsWith(item, StringComparison.OrdinalIgnoreCase));
         }
 
