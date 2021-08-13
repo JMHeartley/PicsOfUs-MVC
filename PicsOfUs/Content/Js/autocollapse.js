@@ -12,86 +12,57 @@
     initialize: function () {
         this.bindUIEvents();
 
-        Autocollapse.collapse();
+        Autocollapse.autocollapse();
     },
     bindUIEvents: function () {
-        $(window).on('resize', Autocollapse.collapse);
+        $(window).on('resize', Autocollapse.autocollapse);
     },
-    collapse: function () {
+    autocollapse: function () {
         if ($(window).width() < Autocollapse.settings.SmBreakpoint) {
             // extra small screens
-            Autocollapse.collapseSm();
-            Autocollapse.collapseMd();
-            Autocollapse.collapseLg();
+            Autocollapse.hide(Autocollapse.settings.Sm);
+            Autocollapse.hide(Autocollapse.settings.Md);
+            Autocollapse.hide(Autocollapse.settings.Lg);
+            Autocollapse.hide(Autocollapse.settings.Xl);
         }
         else if ($(window).width() >= Autocollapse.settings.SmBreakpoint && $(window).width() < Autocollapse.settings.MdBreakpoint) {
             // small screens
-            Autocollapse.showSm();
-            Autocollapse.collapseMd();
-            Autocollapse.collapseLg();
-            Autocollapse.collapseXl();
+            Autocollapse.show(Autocollapse.settings.Sm);
+            Autocollapse.hide(Autocollapse.settings.Md);
+            Autocollapse.hide(Autocollapse.settings.Lg);
+            Autocollapse.hide(Autocollapse.settings.Xl);
         }
         else if ($(window).width() >= Autocollapse.settings.MdBreakpoint && $(window).width() < Autocollapse.settings.LgBreakpoint) {
             // medium screens
-            Autocollapse.showSm();
-            Autocollapse.showMd()
-            Autocollapse.collapseLg();
-            Autocollapse.collapseXl();
-
+            Autocollapse.show(Autocollapse.settings.Sm);
+            Autocollapse.show(Autocollapse.settings.Md);
+            Autocollapse.hide(Autocollapse.settings.Lg);
+            Autocollapse.hide(Autocollapse.settings.Xl);
         }
         else if ($(window).width() >= Autocollapse.settings.LgBreakpoint && $(window).width() < Autocollapse.settings.XlBreakpoint) {
             // large screens
-            Autocollapse.showSm();
-            Autocollapse.showMd()
-            Autocollapse.showLg()
-            Autocollapse.collapseXl();
+            Autocollapse.show(Autocollapse.settings.Sm);
+            Autocollapse.show(Autocollapse.settings.Md);
+            Autocollapse.show(Autocollapse.settings.Lg);
+            Autocollapse.hide(Autocollapse.settings.Xl);
+
         }
         else if ($(window).width() >= Autocollapse.settings.XlBreakpoint) {
             // large screens
-            Autocollapse.showSm();
-            Autocollapse.showMd()
-            Autocollapse.showLg()
-            Autocollapse.showXl()
+            Autocollapse.show(Autocollapse.settings.Sm);
+            Autocollapse.show(Autocollapse.settings.Md);
+            Autocollapse.show(Autocollapse.settings.Lg);
+            Autocollapse.show(Autocollapse.settings.Xl);
         }
     },
-    collapseSm: function () {
-        if (Autocollapse.settings.Sm) {
-            Autocollapse.settings.Sm.collapse('hide');
+    hide: function (setting) {
+        if (setting) {
+            setting.collapse('hide');
         }
     },
-    showSm: function () {
-        if (Autocollapse.settings.Sm) {
-            Autocollapse.settings.Sm.collapse('show');
-        }
-    },
-    collapseMd: function () {
-        if (Autocollapse.settings.Md) {
-            Autocollapse.settings.Md.collapse('hide');
-        }
-    },
-    showMd: function () {
-        if (Autocollapse.settings.Md) {
-            Autocollapse.settings.Md.collapse('show');
-        }
-    },
-    collapseLg: function () {
-        if (Autocollapse.settings.Lg) {
-            Autocollapse.settings.Lg.collapse('hide');
-        }
-    },
-    showLg: function () {
-        if (Autocollapse.settings.Lg) {
-            Autocollapse.settings.Lg.collapse('show');
-        }
-    },
-    collapseXl: function () {
-        if (Autocollapse.settings.Xl) {
-            Autocollapse.settings.Xl.collapse('hide');
-        }
-    },
-    showXl: function () {
-        if (Autocollapse.settings.Xl) {
-            Autocollapse.settings.Xl.collapse('show');
+    show: function (setting) {
+        if (setting) {
+            setting.collapse('show');
         }
     }
 };
