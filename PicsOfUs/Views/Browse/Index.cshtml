@@ -53,7 +53,7 @@
             }
             else
             {
-                var j = 0;
+                var resultId = 0;
                 foreach (var group in Model.ResultGroups)
                 {
                     <div class="m-2">
@@ -61,10 +61,10 @@
                         <div class="d-flex flex-wrap">
                             @foreach (var item in group)
                             {
-                                <div class="result-pic trigger m-1 max-vh-25" data-result-id="@j" data-pic-id="@item.Id">
+                                <div class="result-pic trigger m-1 max-vh-25" data-result-id="@resultId" data-pic-id="@item.Id">
                                     <img src="@item.Url" alt="@item.Caption" class="image-fluid" />
                                 </div>
-                                j++;
+                                resultId++;
                             }
                         </div>
                     </div>
