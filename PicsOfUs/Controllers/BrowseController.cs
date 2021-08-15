@@ -9,6 +9,7 @@ using System.Linq;
 using System.Security.Permissions;
 using System.Web;
 using System.Web.Mvc;
+using System.Web.UI.WebControls;
 using Microsoft.AspNet.Identity;
 
 namespace PicsOfUs.Controllers
@@ -87,7 +88,19 @@ namespace PicsOfUs.Controllers
                 }
             }
 
-            viewModel.ResultPics = pics.ToList();
+            var groups = pics.GroupBy(p => p.CaptureDate ?? default);
+
+            switch (form.SortBy)
+            {
+                case SortBy.NewestFirst:
+                    viewModel.ResultGroups = groups.OrderByDescending(g => g.Key).ToList();
+                    break;
+                case SortBy.OldestFirst:
+                    viewModel.ResultGroups = groups.OrderBy(g => g.Key).ToList();
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
 
             return View(viewModel);
         }
@@ -190,10 +203,6 @@ namespace PicsOfUs.Controllers
 
         private string SaveToUploadsSubfolder(HttpPostedFileBase pic)
         {
-            //TODO: Do I need this code for better file uploading?
-            //var uploadedFile = new byte[pic.InputStream.Length];
-            //pic.InputStream.Read(uploadedFile, 0, uploadedFile.Length);
-
             var fileName = $"{DateTime.Now:MM-dd-yyyy--HH-mm-ss-ff}{Path.GetExtension(pic.FileName)}";
 
             var userId = User.Identity.GetUserId();
