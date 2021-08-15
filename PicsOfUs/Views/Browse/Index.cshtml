@@ -37,21 +37,31 @@
         }
     </div>
     <div class="col-md-8">
-        <div class="d-flex flex-wrap p-2 vh-100 overflow-auto" id="results-body">
-            @if (Model.ResultPics == null)
+        <div class="vh-100 overflow-auto" id="results-body">
+            @if (Model.ResultGroups == null)
             {
                 <p>Press <i>Search</i> to begin reminiscing...</p>
             }
-            else if (!Model.ResultPics.Any())
+            else if (!Model.ResultGroups.Any())
             {
                 <p>There are no pics to matching that search...</p>
             }
             else
             {
-                for (var i = 0; i < Model.ResultPics.Count(); i++)
+                var j = 0;
+                foreach (var group in Model.ResultGroups)
                 {
-                    <div class="pic-result trigger m-2" data-result-id="@i" data-pic-id="@Model.ResultPics[i].Id">
-                        <img src="@Model.ResultPics[i].Url" alt="@Model.ResultPics[i].Caption" class="image-fluid" />
+                    <div class="py-1">
+                        <span>@group.Key.ToString("d")</span>
+                        <div class="d-flex flex-wrap p-2">
+                            @foreach (var item in group)
+                            {
+                                <div class="result-pic trigger m-2 max-vh-25" data-result-id="@j" data-pic-id="@item.Id">
+                                    <img src="@item.Url" alt="@item.Caption" class="image-fluid" />
+                                </div>
+                                j++;
+                            }
+                        </div>
                     </div>
                 }
             }

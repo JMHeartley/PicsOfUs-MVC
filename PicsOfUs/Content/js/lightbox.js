@@ -17,11 +17,12 @@ const Lightbox = {
         lightboxCaption: $('#caption'),
         captureDateArea: $('#capture-date'),
         subjectsArea: $('#pic-subjects'),
-        loader: $('#loader')
+        loader: $('#loader'),
+        resultPicMaxId: 0
     },
     initialize: function () {
         s = this.settings;
-
+        this.calculateResultPicMaxId();
         this.bindUIEvents();
     },
     bindUIEvents: function () {
@@ -162,18 +163,17 @@ const Lightbox = {
         const birthday = birthMonth + ' ' + birthDate.getDate();
         s.memberDetailsSection.find('#member-birthday').text(birthday);
     },
-    fillInRelativeInfo: function (emptyProfile) {
-            const parentsArea = $('#member-parents');
-            Lightbox.insertProfilesIntoArea(member.parents, emptyProfile, parentsArea);
+    fillInRelativeInfo: function (member, emptyProfile) {
+        console.log('member', member);
+        console.log('emptyProfile', emptyProfile);
+        const parentsArea = $('#member-parents');
+        Lightbox.insertProfilesIntoArea(member.parents, emptyProfile, parentsArea);
 
-            const siblingsArea = $('#member-siblings');
-            Lightbox.insertProfilesIntoArea(member.siblings, emptyProfile, siblingsArea);
+        const siblingsArea = $('#member-siblings');
+        Lightbox.insertProfilesIntoArea(member.siblings, emptyProfile, siblingsArea);
 
-            const childrenArea = $('#member-children');
-            Lightbox.insertProfilesIntoArea(member.children, emptyProfile, childrenArea);
-    },
-    something: function (params) {
-        
+        const childrenArea = $('#member-children');
+        Lightbox.insertProfilesIntoArea(member.children, emptyProfile, childrenArea);
     },
     openMemberDetails: function (memberId) {
         Lightbox.resetMemberDetails();
@@ -186,7 +186,9 @@ const Lightbox = {
                 return $.get(`/api/members/${memberId}`).done(Lightbox.fillInTheMembersDetails);
             })
             .then(function (member) {
-                return $.get('/Static/PicProfile.html').done(Lightbox.fillInRelativeInfo);
+                return $.get('/Static/PicProfile.html').done(function(emptyProfile) {
+                    Lightbox.fillInRelativeInfo(member, emptyProfile);
+                });
             })
             .then(function () {
                 s.loader.addClass('hidden');
@@ -195,102 +197,110 @@ const Lightbox = {
                 s.lightbox.addClass('restrict-scroll');
                 s.lightbox.scrollTop(0);
             })
-            .fail(function (error) {
-                console.log('member call failed, display message and log to global logger', error);
-                if (confirm('Something went wrong... reload?')) {
-                    Lightbox.openMemberDetails(memberId);
-                } else {
-                    Lightbox.closeMemberDetails();
-                    s.loader.addClass('hidden');
-                }
-            });
-        s.loader.removeClass('hidden');
-        def.resolve();
-    },
+        .fail(function (error) {
+            console.log('member call failed, display message and log to global logger', error);
+            if (confirm('Something went wrong... reload?')) {
+                Lightbox.openMemberDetails(memberId);
+            } else {
+                Lightbox.closeMemberDetails();
+                s.loader.addClass('hidden');
+            }
+        });
+    s.loader.removeClass('hidden');
+    def.resolve();
+},
     closeMemberDetails: function () {
         s.memberDetailsSection.addClass('hidden');
-        s.lightbox.removeClass('restrict-scroll');
-        s.isMembersDetailsOpen = false;
+s.lightbox.removeClass('restrict-scroll');
+s.isMembersDetailsOpen = false;
     },
-    resetMemberDetails: function () {
-        s.memberDetailsSection.find('#member-parents').empty();
-        s.memberDetailsSection.find('#member-siblings').empty();
-        s.memberDetailsSection.find('#member-children').empty();
-    },
-    insertMemberIntoProfile: function (member, emptyProfile, picCaptureDate) {
+resetMemberDetails: function () {
+    s.memberDetailsSection.find('#member-parents').empty();
+    s.memberDetailsSection.find('#member-siblings').empty();
+    s.memberDetailsSection.find('#member-children').empty();
+},
+insertMemberIntoProfile: function (member, emptyProfile, picCaptureDate) {
 
-        const memberProfile = $(emptyProfile).clone();
-        memberProfile.filter('.mini-profile').attr('data-member-id', member.id);
-        memberProfile.find('.name').text(member.name);
+    const memberProfile = $(emptyProfile).clone();
+    memberProfile.filter('.mini-profile').attr('data-member-id', member.id);
+    memberProfile.find('.name').text(member.name);
 
-        if (picCaptureDate) {
+    if (picCaptureDate) {
 
-            const ageInMilliseconds = Math.abs(Date.parse(picCaptureDate) - Date.parse(member.birthDate));
-            const oneYearInMilliseconds = 1000 * 3600 * 24 * 365;
-            const ageInYears = Math.floor(ageInMilliseconds / oneYearInMilliseconds);
+        const ageInMilliseconds = Math.abs(Date.parse(picCaptureDate) - Date.parse(member.birthDate));
+        const oneYearInMilliseconds = 1000 * 3600 * 24 * 365;
+        const ageInYears = Math.floor(ageInMilliseconds / oneYearInMilliseconds);
 
-            const ageArea = memberProfile.find('.age');
-            ageArea.append(ageInYears);
-            ageArea.removeClass('hidden');
-        }
-        return memberProfile;
-    },
-    insertProfilesIntoArea: function (members, emptyProfile, area) {
-        $.each(members, function (index, member) {
-            const newProfile = Lightbox.insertMemberIntoProfile(member, emptyProfile);
-            newProfile.appendTo(area);
-        });
-    },
-    toggleLovePic: function (isLoved) {
+        const ageArea = memberProfile.find('.age');
+        ageArea.append(ageInYears);
+        ageArea.removeClass('hidden');
+    }
+    return memberProfile;
+},
+insertProfilesIntoArea: function (members, emptyProfile, area) {
+    $.each(members, function (index, member) {
+        const newProfile = Lightbox.insertMemberIntoProfile(member, emptyProfile);
+        newProfile.appendTo(area);
+    });
+},
+toggleLovePic: function (isLoved) {
 
-        isLoved = !isLoved;
+    isLoved = !isLoved;
 
-        const def = $.Deferred();
-        def
-            .then(function () {
-                return $.ajax({
-                    url: `/api/pics/${s.lightbox.attr('data-pic-id')}`,
-                    type: 'PATCH',
-                    contentType: 'application/json',
-                    data: JSON.stringify({ IsLoved: isLoved })
-                });
-            })
-            .then(function () {
-                Lightbox.setLovedPic(isLoved);
-            })
-            .fail(function (error) {
-                console.log('An error occurred', error);
+    const def = $.Deferred();
+    def
+        .then(function () {
+            return $.ajax({
+                url: `/api/pics/${s.lightbox.attr('data-pic-id')}`,
+                type: 'PATCH',
+                contentType: 'application/json',
+                data: JSON.stringify({ IsLoved: isLoved })
             });
-        def.resolve();
-    },
-    setLovedPic: function (isLoved) {
-        s.lovePic.attr('data-is-loved', isLoved.toString());
+        })
+        .then(function () {
+            Lightbox.setLovedPic(isLoved);
+        })
+        .fail(function (error) {
+            console.log('An error occurred', error);
+        });
+    def.resolve();
+},
+setLovedPic: function (isLoved) {
+    s.lovePic.attr('data-is-loved', isLoved.toString());
 
-        const lovedPicIcon = s.lovePic.children('.fa-heart');
-        const lovedPicText = s.lovePic.children('span');
+    const lovedPicIcon = s.lovePic.children('.fa-heart');
+    const lovedPicText = s.lovePic.children('span');
 
-        if (isLoved) {
-            lovedPicText.text('Loved');
-            lovedPicIcon.addClass('fas');
-            lovedPicIcon.removeClass('far');
-        } else {
-            lovedPicText.text('Love');
-            lovedPicIcon.addClass('far');
-            lovedPicIcon.removeClass('fas');
-        }
-    },
-    showArrowsBasedOnResultId: function (resultId) {
-        const resultPicMaxId = parseInt(
-            $('#results-body .pic-result:last-child').attr('data-result-id')
-        );
+    if (isLoved) {
+        lovedPicText.text('Loved');
+        lovedPicIcon.addClass('fas');
+        lovedPicIcon.removeClass('far');
+    } else {
+        lovedPicText.text('Love');
+        lovedPicIcon.addClass('far');
+        lovedPicIcon.removeClass('fas');
+    }
+},
+calculateResultPicMaxId: function () {
+    const resultPics = $('#results-body .result-pic');
 
-        s.leftArrow.removeClass('hidden');
-        s.rightArrow.removeClass('hidden');
-        if (resultId === resultPicMaxId)
-            s.rightArrow.addClass('hidden');
-        if (resultId === 0)
-            s.leftArrow.addClass('hidden');
-    },
+    resultPics.each(function () {
+        const value = parseInt($(this).attr('data-result-id'));
+        s.resultPicMaxId = value > s.resultPicMaxId ? value : s.resultPicMaxId;
+    });
+},
+showArrowsBasedOnResultId: function (resultId) {
+    console.log('resultId', resultId);
+    console.log('resultPicMaxId', s.resultPicMaxId);
+    console.log('all results', $('#results-body .result-pic'));
+
+    s.leftArrow.removeClass('hidden');
+    s.rightArrow.removeClass('hidden');
+    if (resultId === 0)
+        s.leftArrow.addClass('hidden');
+    if (resultId === s.resultPicMaxId)
+        s.rightArrow.addClass('hidden');
+}
 };
 
 $(function () { Lightbox.initialize(); });

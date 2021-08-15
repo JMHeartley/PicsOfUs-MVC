@@ -8,6 +8,6 @@ namespace PicsOfUs.Models
     public class BrowseIndexViewModel
     {
         public SearchFormViewModel SearchForm { get; set; }
-        public List<Pic> ResultPics { get; set; }
+        public List<IGrouping<DateTime, Pic>> ResultGroups { get; set; }
     }
 }

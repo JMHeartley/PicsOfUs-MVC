@@ -43,15 +43,6 @@ body {
     width: 100%;
 }
 
-.result-pic {
-	max-height: 9.375rem;
-	margin: 0.313rem;
-}
-
-#results-body > div {
-    height: 12rem;
-}
-
 #results-body {
 	background-color: hsla(0, 0%, 0%, 0.5);
 }
@@ -117,6 +108,10 @@ body {
 
 .max-vh-100 {
     max-height: 100vh !important;
+}
+
+.max-vh-25 {
+	max-height: 25vh;
 }
 
 .red-border {

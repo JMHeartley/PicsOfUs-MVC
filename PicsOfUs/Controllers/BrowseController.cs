@@ -87,7 +87,7 @@ namespace PicsOfUs.Controllers
                 }
             }
 
-            viewModel.ResultPics = pics.ToList();
+            viewModel.ResultGroups = pics.GroupBy(p => p.CaptureDate ?? default).ToList();
 
             return View(viewModel);
         }
