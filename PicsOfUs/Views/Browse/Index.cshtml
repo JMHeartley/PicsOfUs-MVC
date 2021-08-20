@@ -6,8 +6,8 @@
 
 <div class="row">
     <div class="col-md-4">
-        <button class="btn btn-primary d-md-none" type="button" data-toggle="collapse" data-target="#search-form" aria-expanded="false">Filters</button>
-        @using (Html.BeginForm("Index", "Browse", FormMethod.Post, new { @class = "max-vh-100 scroll-y-no-bar collapse", id = "search-form", data_autocollapse = "md" }))
+        <button class="btn btn-primary d-md-none mb-3" type="button" data-toggle="collapse" data-target="#search-form" aria-expanded="false">Filters</button>
+        @using (Html.BeginForm("Index", "Browse", FormMethod.Post, new { @class = "max-vh-100 scroll-y-no-bar collapse mb-3", id = "search-form", data_autocollapse = "md" }))
         {
             <h4>Date</h4>
             <div class="input-group input-daterange mb-3" data-provide="datepicker">
@@ -41,7 +41,7 @@
             <button type="submit" class="btn btn-primary">Search</button>
         }
     </div>
-    <div class="p-1 col-md-8">
+    <div class="col-md-8">
         <div class="vh-100 overflow-auto" id="results-body">
             @if (Model.ResultGroups == null)
             {
@@ -49,7 +49,7 @@
             }
             else if (!Model.ResultGroups.Any())
             {
-                <p>There are no pics to matching that search...</p>
+                <p>There are no pics that match those filters...</p>
             }
             else
             {
