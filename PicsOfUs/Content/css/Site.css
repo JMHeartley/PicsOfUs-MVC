@@ -30,7 +30,10 @@ textarea {
 }
 
 body {
-	padding: 0 1.875rem;
+    padding-left: 1.875rem;
+    padding-right: 1.875rem;
+    padding-top: 1rem;
+    padding-bottom: 5.375rem;
 }
 
 #navbar-desktop {
@@ -62,7 +65,10 @@ body {
         display: none;
     }
 
-
+    body {
+        padding-top: 5rem;
+        padding-bottom: 0;
+    }
 }
 
 /****** utility styling *********/
