@@ -67,24 +67,27 @@ namespace PicsOfUs.Controllers
                 pics = pics.Where(p => p.CaptureDate <= form.CaptureDateTo);
             }
 
-            var selectedIds = form.PicSubjects
-                .Where(m => m.IsSelected)
-                .Select(m => m.MemberId)
-                .ToList();
-
-            if (selectedIds.Any())
+            if (form.PicSubjects != null)
             {
-                if (form.RequireAll)
+                var selectedIds = form.PicSubjects
+                    .Where(m => m.IsSelected)
+                    .Select(m => m.MemberId)
+                    .ToList();
+
+                if (selectedIds.Any())
                 {
-                    pics = pics.Where(p => p.Subjects
-                            .All(m => selectedIds
-                                .Contains(m.Id)));
-                }
-                else
-                {
-                    pics = pics.Where(p => p.Subjects
-                                        .Any(m => selectedIds
-                                            .Contains(m.Id)));
+                    if (form.RequireAll)
+                    {
+                        pics = pics.Where(p => p.Subjects
+                                .All(m => selectedIds
+                                    .Contains(m.Id)));
+                    }
+                    else
+                    {
+                        pics = pics.Where(p => p.Subjects
+                                            .Any(m => selectedIds
+                                                .Contains(m.Id)));
+                    }
                 }
             }
 
