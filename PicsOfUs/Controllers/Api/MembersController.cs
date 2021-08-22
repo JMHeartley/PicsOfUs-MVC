@@ -1,13 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
-using System.Net.Http;
-using System.Web.Http;
-using AutoMapper;
+﻿using AutoMapper;
+using Microsoft.AspNet.Identity;
 using PicsOfUs.Dtos;
 using PicsOfUs.Models;
+using PicsOfUs.Utilities;
+using System;
 using System.Data.Entity;
+using System.Linq;
+using System.Net;
+using System.Web.Http;
 
 namespace PicsOfUs.Controllers.Api
 {
@@ -23,6 +23,7 @@ namespace PicsOfUs.Controllers.Api
         // GET  /api/members
         public IHttpActionResult GetMembers()
         {
+            NLogger.GetInstance().Info($"User (id: {User.Identity.GetUserId()}) requesting all members");
             return Ok(
                 _context.Members
                     .Include(m => m.Siblings)
@@ -44,9 +45,11 @@ namespace PicsOfUs.Controllers.Api
 
             if (member == null)
             {
-                return BadRequest();
+                NLogger.GetInstance().Warning($"Bad GET request by user (id: {User.Identity.GetUserId()}), member (id: {id}) not found");
+                return NotFound();
             }
 
+            NLogger.GetInstance().Info($"User (id: {User.Identity.GetUserId()}) requested member (id: {member.Id})");
             return Ok(Mapper.Map<Member, MemberDto>(member));
         }
 
@@ -56,7 +59,8 @@ namespace PicsOfUs.Controllers.Api
         {
             if (!ModelState.IsValid)
             {
-                BadRequest();
+                NLogger.GetInstance().Warning($"Bad POST request by user (id: {User.Identity.GetUserId()}");
+                return BadRequest();
             }
 
             var member = Mapper.Map<MemberDto, Member>(memberDto);
@@ -65,7 +69,8 @@ namespace PicsOfUs.Controllers.Api
 
             memberDto.Id = member.Id;
 
-            return Created(new Uri(Request.RequestUri + "/api/members/" + memberDto.Id), memberDto);
+            NLogger.GetInstance().Info($"User (id: {User.Identity.GetUserId()}) created member (id: {member.Id})");
+            return Created(new Uri($"{Request.RequestUri}/api/members/{memberDto.Id}"), memberDto);
         }
 
         // PUT /api/member/1
@@ -74,6 +79,7 @@ namespace PicsOfUs.Controllers.Api
         {
             if (!ModelState.IsValid)
             {
+                NLogger.GetInstance().Warning($"Bad PUT request by user (id: {User.Identity.GetUserId()}) for member (id: {id})");
                 return BadRequest();
             }
 
@@ -85,6 +91,7 @@ namespace PicsOfUs.Controllers.Api
 
             if (memberInDb == null)
             {
+                NLogger.GetInstance().Warning($"Bad PUT request by user (id: {User.Identity.GetUserId()}), member (id: {id}) not found");
                 return NotFound();
             }
 
@@ -92,6 +99,7 @@ namespace PicsOfUs.Controllers.Api
 
             _context.SaveChanges();
 
+            NLogger.GetInstance().Info($"User (id: {User.Identity.GetUserId()}) updated member (id: {id})");
             return StatusCode(HttpStatusCode.NoContent);
         }
 
@@ -107,12 +115,14 @@ namespace PicsOfUs.Controllers.Api
 
             if (member == null)
             {
-                throw new HttpResponseException(HttpStatusCode.NotFound);
+                NLogger.GetInstance().Warning($"Bad DELETE request by user (id: {User.Identity.GetUserId()}), member (id: {id}) not found");
+                NotFound();
             }
 
             _context.Members.Remove(member);
             _context.SaveChanges();
 
+            NLogger.GetInstance().Info($"User (id: {User.Identity.GetUserId()}) deleted member (id: {member.Id})");
             return StatusCode(HttpStatusCode.NoContent);
         }
     }

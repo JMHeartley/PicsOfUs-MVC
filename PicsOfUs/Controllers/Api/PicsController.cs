@@ -1,15 +1,13 @@
 ﻿using AutoMapper;
+using Microsoft.AspNet.Identity;
 using PicsOfUs.Dtos;
 using PicsOfUs.Models;
+using PicsOfUs.Utilities;
 using System;
-using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
 using System.Net;
-using System.Net.Http;
 using System.Web.Http;
-using System.Data.Entity;
-using System.Net.Configuration;
-using Microsoft.AspNet.Identity;
 
 namespace PicsOfUs.Controllers.Api
 {
@@ -25,6 +23,7 @@ namespace PicsOfUs.Controllers.Api
         // GET  /api/pics
         public IHttpActionResult GetPics()
         {
+            NLogger.GetInstance().Info($"User (id: {User.Identity.GetUserId()}) requesting all pics");
             return Ok(
                 _context.Pics
                     .Include(p => p.Subjects)
@@ -43,12 +42,14 @@ namespace PicsOfUs.Controllers.Api
 
             if (pic == null)
             {
-                return BadRequest();
+                NLogger.GetInstance().Warning($"Bad GET request by user (id: {User.Identity.GetUserId()}) for pic (id: {id})");
+                return NotFound();
             }
 
             pic.IsLoved = pic.Lovers.Select(u => u.Id)
                 .Contains(User.Identity.GetUserId());
 
+            NLogger.GetInstance().Info($"User (id: {User.Identity.GetUserId()}) requested pic (id: {pic.Id})");
             return Ok(Mapper.Map<Pic, PicDto>(pic));
         }
 
@@ -58,7 +59,8 @@ namespace PicsOfUs.Controllers.Api
         {
             if (!ModelState.IsValid)
             {
-                BadRequest();
+                NLogger.GetInstance().Warning($"Bad POST request by user (id: {User.Identity.GetUserId()}");
+                return BadRequest();
             }
 
             var pic = Mapper.Map<PicDto, Pic>(picDto);
@@ -67,7 +69,8 @@ namespace PicsOfUs.Controllers.Api
 
             picDto.Id = pic.Id;
 
-            return Created(new Uri(Request.RequestUri + "/api/pics/" + picDto.Id), picDto);
+            NLogger.GetInstance().Info($"User (id: {User.Identity.GetUserId()}) created pic (id: {pic.Id})");
+            return Created(new Uri($"{Request.RequestUri}/api/pics/{picDto.Id}"), picDto);
         }
 
         // PUT /api/pic/1
@@ -76,6 +79,7 @@ namespace PicsOfUs.Controllers.Api
         {
             if (!ModelState.IsValid)
             {
+                NLogger.GetInstance().Warning($"Bad PUT request by user (id: {User.Identity.GetUserId()}) for pic (id: {id})");
                 return BadRequest();
             }
 
@@ -84,6 +88,7 @@ namespace PicsOfUs.Controllers.Api
 
             if (picInDb == null)
             {
+                NLogger.GetInstance().Warning($"Bad PUT request by user (id: {User.Identity.GetUserId()}), pic (id: {id}) not found");
                 return NotFound();
             }
 
@@ -91,6 +96,7 @@ namespace PicsOfUs.Controllers.Api
 
             _context.SaveChanges();
 
+            NLogger.GetInstance().Info($"User (id: {User.Identity.GetUserId()}) updated pic (id: {id})");
             return StatusCode(HttpStatusCode.NoContent);
         }
 
@@ -100,6 +106,7 @@ namespace PicsOfUs.Controllers.Api
         {
             if (!ModelState.IsValid)
             {
+                NLogger.GetInstance().Warning($"Bad PATCH request by user (id: {User.Identity.GetUserId()}) for pic (id: {id})");
                 return BadRequest();
             }
 
@@ -109,6 +116,7 @@ namespace PicsOfUs.Controllers.Api
 
             if (picInDb == null)
             {
+                NLogger.GetInstance().Warning($"Bad PATCH request by user (id: {User.Identity.GetUserId()}), pic (id: {id}) not found");
                 return NotFound();
             }
 
@@ -116,10 +124,12 @@ namespace PicsOfUs.Controllers.Api
 
             if (lovedDto.IsLoved)
             {
+                NLogger.GetInstance().Info($"User (id: {User.Identity.GetUserId()}) loved pic (id: {id})");
                 picInDb.Lovers.Add(_context.Users.Single(u => u.Id == userId));
             }
             else
             {
+                NLogger.GetInstance().Info($"User (id: {User.Identity.GetUserId()}) unloved pic (id: {id})");
                 picInDb.Lovers.Remove(_context.Users.Single(u => u.Id == userId));
             }
 
@@ -136,12 +146,14 @@ namespace PicsOfUs.Controllers.Api
 
             if (pic == null)
             {
-                throw new HttpResponseException(HttpStatusCode.NotFound);
+                NLogger.GetInstance().Warning($"Bad DELETE request by user (id: {User.Identity.GetUserId()}), pic (id: {id}) not found");
+                return NotFound();
             }
 
             _context.Pics.Remove(pic);
             _context.SaveChanges();
 
+            NLogger.GetInstance().Info($"User (id: {User.Identity.GetUserId()}) deleted pic (id: {pic.Id})");
             return StatusCode(HttpStatusCode.NoContent);
         }
     }
