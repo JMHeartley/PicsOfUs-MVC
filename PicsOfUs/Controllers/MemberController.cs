@@ -1,8 +1,9 @@
-﻿using System.Linq;
-using System.Web.Mvc;
+﻿using Microsoft.AspNet.Identity;
 using PicsOfUs.Models;
+using PicsOfUs.Utilities;
 using System.Data.Entity;
-using System.EnterpriseServices;
+using System.Linq;
+using System.Web.Mvc;
 
 namespace PicsOfUs.Controllers
 {
@@ -44,6 +45,7 @@ namespace PicsOfUs.Controllers
                 Children = memberSelectViewModels
             };
 
+            NLogger.GetInstance().Info($"User (id: {User.Identity.GetUserId()}) requested new member form");
             return View("MemberForm", viewModel);
         }
 
@@ -53,6 +55,7 @@ namespace PicsOfUs.Controllers
         {
             if (!ModelState.IsValid)
             {
+                NLogger.GetInstance().Warning($"Member form not valid for user (id: {User.Identity.GetUserId()})");
                 return View("MemberForm", viewModel);
             }
 
@@ -85,6 +88,7 @@ namespace PicsOfUs.Controllers
             if (member.Id == 0)
             {
                 _context.Members.Add(member);
+                NLogger.GetInstance().Info($"User (id: {User.Identity.GetUserId()}) created member (id: {member.Id})");
             }
             else
             {
@@ -102,6 +106,8 @@ namespace PicsOfUs.Controllers
                 memberInDb.Siblings = member.Siblings;
                 memberInDb.Parents = member.Parents;
                 memberInDb.Children = member.Children;
+
+                NLogger.GetInstance().Info($"User (id: {User.Identity.GetUserId()}) edited member (id: {member.Id})");
             }
 
             _context.SaveChanges();
