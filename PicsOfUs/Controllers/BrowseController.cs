@@ -1,16 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using Microsoft.AspNet.Identity;
 using PicsOfUs.Models;
+using PicsOfUs.Utilities;
+using System;
 using System.Data.Entity;
-using System.Diagnostics.Eventing.Reader;
-using System.EnterpriseServices;
 using System.IO;
 using System.Linq;
-using System.Security.Permissions;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.UI.WebControls;
-using Microsoft.AspNet.Identity;
 
 namespace PicsOfUs.Controllers
 {
@@ -43,6 +40,8 @@ namespace PicsOfUs.Controllers
                     }).ToList()
                 }
             };
+
+            NLogger.GetInstance().Info($"User (id: {User.Identity.GetUserId()}) requested Browse index");
             return View(viewModel);
         }
 
@@ -51,10 +50,11 @@ namespace PicsOfUs.Controllers
         {
             if (!ModelState.IsValid)
             {
+                NLogger.GetInstance().Warning($"Browse index form not valid for user (id: {User.Identity.GetUserId()})");
                 return View(viewModel);
             }
-            var form = viewModel.SearchForm;
 
+            var form = viewModel.SearchForm;
             var pics = _context.Pics.Include(p => p.Subjects).AsQueryable();
 
             if (form.CaptureDateFrom != null)
@@ -102,9 +102,11 @@ namespace PicsOfUs.Controllers
                     viewModel.ResultGroups = groups.OrderBy(g => g.Key).ToList();
                     break;
                 default:
+                    NLogger.GetInstance().Error("SortBy had an ArgumentOutOfRange Exception", form.SortBy.ToString());
                     throw new ArgumentOutOfRangeException();
             }
 
+            NLogger.GetInstance().Info($"User (id: {User.Identity.GetUserId()} filtered pics with Browse index form");
             return View(viewModel);
         }
 
@@ -123,6 +125,7 @@ namespace PicsOfUs.Controllers
                     }).ToList()
             };
 
+            NLogger.GetInstance().Info($"User (id: {User.Identity.GetUserId()}) requested new pic form");
             return View("PicForm", viewModel);
         }
 
@@ -133,7 +136,10 @@ namespace PicsOfUs.Controllers
                 .SingleOrDefault(p => p.Id == id);
 
             if (pic == null)
+            {
+                NLogger.GetInstance().Warning($"User (id: {User.Identity.GetUserId()}) requested edit pic form, pic (id: {id}) not found");
                 return HttpNotFound();
+            }
 
             var viewModel = new PicFormViewModel
             {
@@ -148,6 +154,7 @@ namespace PicsOfUs.Controllers
                     }).ToList()
             };
 
+            NLogger.GetInstance().Info($"User (id: {User.Identity.GetUserId()}) requested edit pic form (pic id: {pic.Id})");
             return View("PicForm", viewModel);
         }
 
@@ -157,11 +164,13 @@ namespace PicsOfUs.Controllers
         {
             if (!ModelState.IsValid)
             {
+                NLogger.GetInstance().Warning($"Pic form not valid for user (id: {User.Identity.GetUserId()})");
                 return View("PicForm", viewModel);
             }
 
-            if (!IsImage(viewModel.File))
+            if (!IsSupportedImageType(viewModel.File))
             {
+                NLogger.GetInstance().Warning($"User (id: {User.Identity.GetUserId()}) tried saving an unsupported file type");
                 TempData["Error"] = "The uploaded image is an unsupported file type.";
                 return View("PicForm", viewModel);
             }
@@ -170,13 +179,16 @@ namespace PicsOfUs.Controllers
 
             pic.Url = SaveToUploadsSubfolder(viewModel.File);
 
-            var selectedMemberIds = viewModel.Members
-                    .Where(m => m.IsSelected)
-                    .Select(m => m.MemberId);
+            if (viewModel.Members != null)
+            {
+                var selectedMemberIds = viewModel.Members
+                        .Where(m => m.IsSelected)
+                        .Select(m => m.MemberId);
 
-            pic.Subjects = _context.Members
-                .Where(m => selectedMemberIds.Contains(m.Id))
-                .ToList();
+                pic.Subjects = _context.Members
+                    .Where(m => selectedMemberIds.Contains(m.Id))
+                    .ToList();
+            }
 
             if (pic.Id == 0)
             {
@@ -186,6 +198,7 @@ namespace PicsOfUs.Controllers
                 pic.UploadDate = DateTime.Now;
 
                 _context.Pics.Add(pic);
+                NLogger.GetInstance().Info($"User (id: {User.Identity.GetUserId()}) created member (id: {pic.Id})");
             }
             else
             {
@@ -197,6 +210,8 @@ namespace PicsOfUs.Controllers
                 picInDb.Caption = pic.Caption;
                 picInDb.CaptureDate = pic.CaptureDate;
                 picInDb.Subjects = pic.Subjects;
+
+                NLogger.GetInstance().Info($"User (id: {User.Identity.GetUserId()}) edited member (id: {pic.Id})");
             }
 
             _context.SaveChanges();
@@ -219,15 +234,15 @@ namespace PicsOfUs.Controllers
             return url;
         }
 
-        private bool IsImage(HttpPostedFileBase file)
+        private bool IsSupportedImageType(HttpPostedFileBase file)
         {
             if (file.ContentType.Contains("image"))
             {
                 return true;
             }
 
-            var formats = new[] { ".jpg", ".png", ".heic", ".ciff", ".jpeg" };
-            return formats.Any(item => file.FileName.EndsWith(item, StringComparison.OrdinalIgnoreCase));
+            var supportedFormats = new[] { ".jpg", ".png", ".heic", ".ciff", ".jpeg" };
+            return supportedFormats.Any(item => file.FileName.EndsWith(item, StringComparison.OrdinalIgnoreCase));
         }
 
         public ActionResult Delete(int id)
@@ -236,6 +251,7 @@ namespace PicsOfUs.Controllers
 
             if (pic == null)
             {
+                NLogger.GetInstance().Warning($"User (id: {User.Identity.GetUserId()}) requested to delete pic, pic (id: {id}) not found");
                 return HttpNotFound();
             }
 
@@ -248,6 +264,7 @@ namespace PicsOfUs.Controllers
             _context.Pics.Remove(pic);
             _context.SaveChanges();
 
+            NLogger.GetInstance().Info($"User (id: {User.Identity.GetUserId()}) deleted pic (id: {pic.Id})");
             return RedirectToAction("Uploads", "Account"); ;
         }
     }
