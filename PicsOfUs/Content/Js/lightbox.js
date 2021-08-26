@@ -1,4 +1,3 @@
-let s;
 const Lightbox = {
     settings: {
         isLightboxOpen: false,
@@ -21,104 +20,101 @@ const Lightbox = {
         resultPicMaxId: 0
     },
     initialize: function () {
-        s = this.settings;
         this.calculateResultPicMaxId();
         this.bindUIEvents();
     },
     bindUIEvents: function () {
-
-        s.resultsBody.on('click', '.trigger', function () {
+        Lightbox.settings.resultsBody.on('click', '.trigger', function () {
             const resultId = parseInt($(this).attr('data-result-id'));
-            Lightbox.openLightbox(resultId);
+            Lightbox.open(resultId);
         });
         $(document).on('keyup', function (event) {
             if (event.key === 'Escape') {
-                Lightbox.closeMemberDetailsOrLightbox();
+                Lightbox.closeActiveWindow();
             }
         });
-        s.closerX.on('click', '', function () {
-            Lightbox.closeMemberDetailsOrLightbox();
+        Lightbox.settings.closerX.on('click', '', function () {
+            Lightbox.closeActiveWindow();
         });
-        s.leftArrow.on('click', '', function () {
-            Lightbox.moveToPic(parseInt(s.lightbox.attr('data-result-id')) - 1);
+        Lightbox.settings.leftArrow.on('click', '', function () {
+            Lightbox.moveToPic(parseInt(Lightbox.settings.lightbox.attr('data-result-id')) - 1);
         });
-        s.rightArrow.on('click', '', function () {
-            Lightbox.moveToPic(parseInt(s.lightbox.attr('data-result-id')) + 1);
+        Lightbox.settings.rightArrow.on('click', '', function () {
+            Lightbox.moveToPic(parseInt(Lightbox.settings.lightbox.attr('data-result-id')) + 1);
         });
-        s.lovePic.on('click', '', function () {
-            Lightbox.toggleLovePic(s.lovePic.attr('data-is-loved') === 'true');
+        Lightbox.settings.lovePic.on('click', '', function () {
+            Lightbox.toggleLovePic(Lightbox.settings.lovePic.attr('data-is-loved') === 'true');
         });
         $('#pic-subjects').on('click', '.mini-profile', function () {
             Lightbox.openMemberDetails(parseInt($(this).attr('data-member-id')));
         });
-        s.memberDetailsSection.on('click', '.mini-profile', function () {
+        Lightbox.settings.memberDetailsSection.on('click', '.mini-profile', function () {
             Lightbox.openMemberDetails(parseInt($(this).attr('data-member-id')));
         });
         $('.member-details-closer').on('click', '', function () {
             Lightbox.closeMemberDetails();
         });
     },
-    closeMemberDetailsOrLightbox: function () {
-        if (s.isMembersDetailsOpen) {
+    closeActiveWindow: function () {
+        if (Lightbox.settings.isMembersDetailsOpen) {
             Lightbox.closeMemberDetails();
         }
-        else if (s.isLightboxOpen) {
-            Lightbox.closeLightbox();
+        else if (Lightbox.settings.isLightboxOpen) {
+            Lightbox.close();
         }
     },
-    openLightbox: function (resultId) {
-        Lightbox.resetLightbox();
+    open: function (resultId) {
+        Lightbox.reset();
         Lightbox.moveToPic(resultId);
-        s.lightbox.removeClass('hidden');
-        s.navbarDesktop.addClass('hidden');
-        s.navbarMobile.addClass('hidden');
+        Lightbox.settings.lightbox.removeClass('hidden');
+        Lightbox.settings.navbarDesktop.addClass('hidden');
+        Lightbox.settings.navbarMobile.addClass('hidden');
         $('body').addClass('restrict-scroll');
-        s.isLightboxOpen = true;
+        Lightbox.settings.isLightboxOpen = true;
     },
-    closeLightbox: function () {
-        s.lightbox.addClass('hidden');
-        s.navbarDesktop.removeClass('hidden');
-        s.navbarMobile.removeClass('hidden');
+    close: function () {
+        Lightbox.settings.lightbox.addClass('hidden');
+        Lightbox.settings.navbarDesktop.removeClass('hidden');
+        Lightbox.settings.navbarMobile.removeClass('hidden');
         Lightbox.closeMemberDetails();
         $('body').removeClass('restrict-scroll');
-        s.isLightboxOpen = false;
+        Lightbox.settings.isLightboxOpen = false;
     },
-    resetLightbox: function () {
-        s.lightboxPic.attr('src', '');
-        s.lightboxPic.attr('alt', '');
-        s.lightboxCaption.text('');
-        s.captureDateArea.text('');
+    reset: function () {
+        Lightbox.settings.lightboxPic.attr('src', '');
+        Lightbox.settings.lightboxPic.attr('alt', '');
+        Lightbox.settings.lightboxCaption.text('');
+        Lightbox.settings.captureDateArea.text('');
         Lightbox.setLovedPic(false);
-        s.subjectsArea.html('');
+        Lightbox.settings.subjectsArea.html('');
     },
     moveToPic: function (resultId) {
 
-        s.lightbox.scrollTop(0);
+        Lightbox.settings.lightbox.scrollTop(0);
 
         Lightbox.showArrowsBasedOnResultId(resultId);
 
-        const picId = s.resultsBody
+        const picId = Lightbox.settings.resultsBody
             .find(`[data-result-id=${resultId}]`)
             .attr('data-pic-id');
         const def = $.Deferred();
         def
             .then(function () {
                 return $.get(`/api/pics/${picId}`).done(function (pic) {
+                    Lightbox.settings.lightbox.attr('data-result-id', resultId);
+                    Lightbox.settings.lightbox.attr('data-pic-id', picId);
 
-                    s.lightbox.attr('data-result-id', resultId);
-                    s.lightbox.attr('data-pic-id', picId);
+                    Lightbox.settings.lightboxPic.attr('src', pic.url);
+                    Lightbox.settings.lightboxPic.attr('alt', pic.caption);
 
-                    s.lightboxPic.attr('src', pic.url);
-                    s.lightboxPic.attr('alt', pic.caption);
-
-                    s.lightboxCaption.text(pic.caption);
+                    Lightbox.settings.lightboxCaption.text(pic.caption);
 
                     if (pic.captureDate) {
                         const formattedDate = new Date(pic.captureDate);
-                        s.captureDateArea.text(formattedDate.toLocaleDateString());
-                        s.captureDateArea.removeClass('hidden');
+                        Lightbox.settings.captureDateArea.text(formattedDate.toLocaleDateString());
+                        Lightbox.settings.captureDateArea.removeClass('hidden');
                     } else {
-                        s.captureDateArea.addClass('hidden');
+                        Lightbox.settings.captureDateArea.addClass('hidden');
                     }
 
                     Lightbox.setLovedPic(pic.isLoved);
@@ -126,34 +122,34 @@ const Lightbox = {
             })
             .then(function (pic) {
                 return $.get('/Static/PicProfile.html').done(function (emptyProfile) {
-                    s.subjectsArea.html('');
+                    Lightbox.settings.subjectsArea.html('');
                     console.log('html loaded', emptyProfile);
 
                     if (pic.subjects) {
                         $.each(pic.subjects, function (index, subject) {
 
                             const picProfile = Lightbox.insertMemberIntoProfile(subject, emptyProfile, pic.captureDate);
-                            picProfile.appendTo(s.subjectsArea);
+                            picProfile.appendTo(Lightbox.settings.subjectsArea);
                         });
                     }
                 });
             })
-            .then(function () { s.loader.addClass('hidden'); })
+            .then(function () { Lightbox.settings.loader.addClass('hidden'); })
             .fail(function (error) {
                 console.log('there was an error!, log to global logger', error);
                 if (confirm('Something went wrong... reload the pic?')) {
                     Lightbox.moveToPic(resultId);
                 } else {
-                    Lightbox.closeLightbox();
+                    Lightbox.close();
                 }
             });
-        s.loader.removeClass('hidden');
+        Lightbox.settings.loader.removeClass('hidden');
         def.resolve();
     },
     fillInTheMembersDetails: function (member) {
         console.log('loading member-details', member);
 
-        s.memberDetailsSection.find('#member-name').text(member.name);
+        Lightbox.settings.memberDetailsSection.find('#member-name').text(member.name);
 
         const months =
             ['January', 'February', 'March', 'April', 'May', 'June', 'July',
@@ -161,7 +157,7 @@ const Lightbox = {
         const birthDate = new Date(member.birthDate);
         const birthMonth = months[birthDate.getMonth()];
         const birthday = birthMonth + ' ' + birthDate.getDate();
-        s.memberDetailsSection.find('#member-birthday').text(birthday);
+        Lightbox.settings.memberDetailsSection.find('#member-birthday').text(birthday);
     },
     fillInRelativeInfo: function (member, emptyProfile) {
         console.log('member', member);
@@ -191,11 +187,11 @@ const Lightbox = {
                 });
             })
             .then(function () {
-                s.loader.addClass('hidden');
-                s.isMembersDetailsOpen = true;
-                s.memberDetailsSection.removeClass('hidden');
-                s.lightbox.addClass('restrict-scroll');
-                s.lightbox.scrollTop(0);
+                Lightbox.settings.loader.addClass('hidden');
+                Lightbox.settings.isMembersDetailsOpen = true;
+                Lightbox.settings.memberDetailsSection.removeClass('hidden');
+                Lightbox.settings.lightbox.addClass('restrict-scroll');
+                Lightbox.settings.lightbox.scrollTop(0);
             })
             .fail(function (error) {
                 console.log('member call failed, display message and log to global logger', error);
@@ -203,21 +199,21 @@ const Lightbox = {
                     Lightbox.openMemberDetails(memberId);
                 } else {
                     Lightbox.closeMemberDetails();
-                    s.loader.addClass('hidden');
+                    Lightbox.settings.loader.addClass('hidden');
                 }
             });
-        s.loader.removeClass('hidden');
+        Lightbox.settings.loader.removeClass('hidden');
         def.resolve();
     },
     closeMemberDetails: function () {
-        s.memberDetailsSection.addClass('hidden');
-        s.lightbox.removeClass('restrict-scroll');
-        s.isMembersDetailsOpen = false;
+        Lightbox.settings.memberDetailsSection.addClass('hidden');
+        Lightbox.settings.lightbox.removeClass('restrict-scroll');
+        Lightbox.settings.isMembersDetailsOpen = false;
     },
     resetMemberDetails: function () {
-        s.memberDetailsSection.find('#member-parents').empty();
-        s.memberDetailsSection.find('#member-siblings').empty();
-        s.memberDetailsSection.find('#member-children').empty();
+        Lightbox.settings.memberDetailsSection.find('#member-parents').empty();
+        Lightbox.settings.memberDetailsSection.find('#member-siblings').empty();
+        Lightbox.settings.memberDetailsSection.find('#member-children').empty();
     },
     insertMemberIntoProfile: function (member, emptyProfile, picCaptureDate) {
 
@@ -251,7 +247,7 @@ const Lightbox = {
         def
             .then(function () {
                 return $.ajax({
-                    url: `/api/pics/${s.lightbox.attr('data-pic-id')}`,
+                    url: `/api/pics/${Lightbox.settings.lightbox.attr('data-pic-id')}`,
                     type: 'PATCH',
                     contentType: 'application/json',
                     data: JSON.stringify({ IsLoved: isLoved })
@@ -266,10 +262,10 @@ const Lightbox = {
         def.resolve();
     },
     setLovedPic: function (isLoved) {
-        s.lovePic.attr('data-is-loved', isLoved.toString());
+        Lightbox.settings.lovePic.attr('data-is-loved', isLoved.toString());
 
-        const lovedPicIcon = s.lovePic.children('.fa-heart');
-        const lovedPicText = s.lovePic.children('span');
+        const lovedPicIcon = Lightbox.settings.lovePic.children('.fa-heart');
+        const lovedPicText = Lightbox.settings.lovePic.children('span');
 
         if (isLoved) {
             lovedPicText.text('Loved');
@@ -286,20 +282,20 @@ const Lightbox = {
 
         resultPics.each(function () {
             const value = parseInt($(this).attr('data-result-id'));
-            s.resultPicMaxId = value > s.resultPicMaxId ? value : s.resultPicMaxId;
+            Lightbox.settings.resultPicMaxId = value > Lightbox.settings.resultPicMaxId ? value : Lightbox.settings.resultPicMaxId;
         });
     },
     showArrowsBasedOnResultId: function (resultId) {
         console.log('resultId', resultId);
-        console.log('resultPicMaxId', s.resultPicMaxId);
+        console.log('resultPicMaxId', Lightbox.settings.resultPicMaxId);
         console.log('all results', $('#results-body .result-pic'));
 
-        s.leftArrow.removeClass('hidden');
-        s.rightArrow.removeClass('hidden');
+        Lightbox.settings.leftArrow.removeClass('hidden');
+        Lightbox.settings.rightArrow.removeClass('hidden');
         if (resultId === 0)
-            s.leftArrow.addClass('hidden');
-        if (resultId === s.resultPicMaxId)
-            s.rightArrow.addClass('hidden');
+            Lightbox.settings.leftArrow.addClass('hidden');
+        if (resultId === Lightbox.settings.resultPicMaxId)
+            Lightbox.settings.rightArrow.addClass('hidden');
     }
 };
 
