@@ -329,4 +329,4 @@ const Lightbox = {
     }
 };
 
-$(function () { Lightbox.initialize(); });
+$( Lightbox.initialize() );

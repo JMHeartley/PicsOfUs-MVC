@@ -67,4 +67,4 @@
     }
 };
 
-$(function () { Autocollapse.initialize(); });
+$( Autocollapse.initialize() );
