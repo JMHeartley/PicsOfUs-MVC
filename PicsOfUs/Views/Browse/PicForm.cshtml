@@ -1,27 +1,25 @@
-﻿@using System.Activities.Expressions
-@model PicsOfUs.Models.PicFormViewModel
+﻿@model PicsOfUs.Models.PicFormViewModel
 
 @{
-    ViewBag.Title = (Model.Pic.Id == 0) ? "New Pic" : "Edit Pic";
+    ViewBag.Title = (Model.Pic.Id == 0) ? "Upload Pic(s)" : "Edit Pic";
 }
 
 <div class="d-flex align-items-stretch">
     <div class="col">
-        <img src="https://bit.ly/2UsFBtW" alt="" class="image-fluid red-border">
+        <img src="@Model.Pic.Url" alt="Pic Preview Thumbnail" class="image-fluid red-border" id="preview-image">
     </div>
     <div class="col">
-        @if (Model.Pic.Id == 0)
+        @if (TempData["Error"] != null)
         {
-            <h2>New Pic</h2>
-        }
-        else
-        {
-            <h2>Edit Pic</h2>
+            <div class="alert alert-dismissible alert-danger">
+                @TempData["Error"]
+            </div>
         }
         @using (Html.BeginForm("Save", "Browse", FormMethod.Post, new { enctype = "multipart/form-data" }))
         {
             <div class="form-group">
                 @Html.TextBoxFor(m => m.File, new { @class = "form-control-file", type = "file" })
+                @Html.ValidationMessageFor(m => m.File, "", new { @class = "text-danger" })
             </div>
             <div class="form-group">
                 @Html.LabelFor(p => p.Pic.Caption)
@@ -39,12 +37,12 @@
                 </div>
             </div>
             <label>Subjects</label>
-            <div class="overflow-auto mb-3 member-select-overflow">
+            <div class="overflow-auto mb-3 px-3 member-select-overflow border border-light rounded">
                 @Html.EditorFor(m => m.Members)
             </div>
             @Html.ActionLink("Add a new member?", "New", "Member", null, new { @class = "btn btn-primary my-3" })
-            <br />
             @Html.HiddenFor(m => m.Pic.Id)
+            @Html.HiddenFor(m => m.Pic.Url)
             @Html.AntiForgeryToken()
 
             <button type="submit" class="btn btn-primary">Save</button>
