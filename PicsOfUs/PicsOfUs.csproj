@@ -538,6 +538,8 @@
     <Content Include="Content\Js\Plugins\Popper\esm\popper.js.map" />
     <Content Include="Content\Js\Plugins\Popper\esm\popper-utils.min.js.map" />
     <Content Include="Content\Js\Plugins\Popper\esm\popper-utils.js.map" />
+    <Content Include="Views\Shared\_MemeberFormPartial.cshtml" />
+    <Content Include="Views\Shared\_BrowseLightbox.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
