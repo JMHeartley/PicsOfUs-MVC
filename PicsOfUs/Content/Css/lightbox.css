@@ -90,6 +90,12 @@
     z-index: 100;
 }
 
+#lightbox-edit,
+#lightbox-delete {
+    font-size: 2rem;
+    cursor: pointer;
+}
+
 /* laptops and larger */
 @media (min-width: 992px) {
     #lightbox-container {

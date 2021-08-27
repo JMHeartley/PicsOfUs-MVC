@@ -35,7 +35,7 @@
 
             <h4>@Html.DisplayNameFor(m => m.SearchForm.SortBy)</h4>
             <div class="form-group">
-                @Html.EnumDropDownListFor(m => m.SearchForm.SortBy, new {@class = "form-control"})
+                @Html.EnumDropDownListFor(m => m.SearchForm.SortBy, new { @class = "form-control" })
             </div>
 
             <button type="submit" class="btn btn-primary">Search</button>
@@ -98,7 +98,7 @@
             <i class="fas fa-arrow-right" aria-hidden="true"></i>
         </div>
     </div>
-    <div id="lightbox-details" class="col-12 col-lg-4 pt-3 px-3 d-flex">
+    <div id="lightbox-details" class="col-12 col-lg-4 pt-3 px-3 d-flex flex-column">
         <h3 id="caption" class="font-weight-bolder">
             <!--Caption!-->
         </h3>
@@ -113,6 +113,14 @@
         </div>
         <div id="pic-subjects" class="my-1 p-1 d-flex flex-wrap scroll-y-no-bar">
             <!-- this is where the mini profiles go! -->
+        </div>
+        <div class="row text-center w-100 mt-auto mb-3">
+            <div class="col text-info" id="lightbox-edit">
+                <i class="fas fa-edit"></i>
+            </div>
+            <div class="col text-danger" id="lightbox-delete">
+                <i class="fas fa-trash"></i>
+            </div>
         </div>
     </div>
     <div id="member-details" class="hidden container-fluid scroll-y-no-bar">

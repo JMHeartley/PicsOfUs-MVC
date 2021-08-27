@@ -11,13 +11,14 @@ const Lightbox = {
         leftArrow: $('#left-arrow'),
         rightArrow: $('#right-arrow'),
         resultsBody: $('#results-body'),
-        mobileNavHeight: null,
         lightboxPic: $('#lightbox-pic'),
         lightboxCaption: $('#caption'),
         captureDateArea: $('#capture-date'),
         subjectsArea: $('#pic-subjects'),
         loader: $('#loader'),
-        resultPicMaxId: 0
+        resultPicMaxId: 0,
+        editButton: $('#lightbox-edit'),
+        deleteButton: $('#lightbox-delete')
     },
     initialize: function () {
         this.calculateResultPicMaxId();
@@ -45,7 +46,7 @@ const Lightbox = {
         Lightbox.settings.lovePic.on('click', '', function () {
             Lightbox.toggleLovePic(Lightbox.settings.lovePic.attr('data-is-loved') === 'true');
         });
-        $('#pic-subjects').on('click', '.mini-profile', function () {
+        Lightbox.settings.subjectsArea.on('click', '.mini-profile', function () {
             Lightbox.openMemberDetails(parseInt($(this).attr('data-member-id')));
         });
         Lightbox.settings.memberDetailsSection.on('click', '.mini-profile', function () {
@@ -53,6 +54,12 @@ const Lightbox = {
         });
         $('.member-details-closer').on('click', '', function () {
             Lightbox.closeMemberDetails();
+        });
+        Lightbox.settings.editButton.on('click', '', function () {
+            Lightbox.edit(Lightbox.settings.lightbox.attr('data-pic-id'));
+        });
+        Lightbox.settings.deleteButton.on('click', '', function () {
+            Lightbox.delete(Lightbox.settings.lightbox.attr('data-pic-id'));
         });
     },
     closeActiveWindow: function () {
@@ -194,8 +201,8 @@ const Lightbox = {
                 Lightbox.settings.lightbox.scrollTop(0);
             })
             .fail(function (error) {
-                console.log('member call failed, display message and log to global logger', error);
-                if (confirm('Something went wrong... reload?')) {
+                console.log('Member call failed', error);
+                if (confirm('Something went wrong :( Do you want to try again?')) {
                     Lightbox.openMemberDetails(memberId);
                 } else {
                     Lightbox.closeMemberDetails();
@@ -296,6 +303,29 @@ const Lightbox = {
             Lightbox.settings.leftArrow.addClass('hidden');
         if (resultId === Lightbox.settings.resultPicMaxId)
             Lightbox.settings.rightArrow.addClass('hidden');
+    },
+    edit: function (picId) {
+        window.location.href = `/Browse/Edit/${picId}`;
+    },
+    delete: function (picId) {
+        if (confirm("Are you sure you want to delete this pic?")) {
+            let def = $.Deferred();
+            def
+                .then(function () {
+                    return $.ajax({
+                        url: `/api/pics/${picId}`,
+                        type: 'DELETE'
+                    }).done(function () {
+                        const searchFormSubmitButton = $('#search-form button[type="submit"]')[0];
+                        searchFormSubmitButton.click();
+                    });
+                })
+                .fail(function (error) {
+                    console.log('Pic deletion failed!', error);
+                    alert(`The pic wasn't deleted!`);
+                });
+            def.resolve();
+        }
     }
 };
 
