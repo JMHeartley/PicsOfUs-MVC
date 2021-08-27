@@ -280,6 +280,7 @@
     <Compile Include="Models\MemberSelectViewModel.cs" />
     <Compile Include="Models\Pic.cs" />
     <Compile Include="Models\PicFormViewModel.cs" />
+    <Compile Include="Models\RequiredIfPicDoesNotExist.cs" />
     <Compile Include="Models\RoleName.cs" />
     <Compile Include="Models\SearchFormViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

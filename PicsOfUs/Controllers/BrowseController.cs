@@ -168,16 +168,19 @@ namespace PicsOfUs.Controllers
                 return View("PicForm", viewModel);
             }
 
-            if (!IsSupportedImageType(viewModel.File))
-            {
-                NLogger.GetInstance().Warning($"User (id: {User.Identity.GetUserId()}) tried saving an unsupported file type");
-                TempData["Error"] = "The uploaded image is an unsupported file type.";
-                return View("PicForm", viewModel);
-            }
-
             var pic = viewModel.Pic;
 
-            pic.Url = SaveToUploadsSubfolder(viewModel.File);
+            if (viewModel.File != null)
+            {
+                if (!IsSupportedImageType(viewModel.File))
+                {
+                    NLogger.GetInstance().Warning($"User (id: {User.Identity.GetUserId()}) tried saving an unsupported image type");
+                    TempData["Error"] = "The selected file is an unsupported image type.";
+                    return View("PicForm", viewModel);
+                }
+
+                pic.Url = SaveToUploadsSubfolder(viewModel.File);
+            }
 
             if (viewModel.Members != null)
             {
@@ -198,7 +201,7 @@ namespace PicsOfUs.Controllers
                 pic.UploadDate = DateTime.Now;
 
                 _context.Pics.Add(pic);
-                NLogger.GetInstance().Info($"User (id: {User.Identity.GetUserId()}) created member (id: {pic.Id})");
+                NLogger.GetInstance().Info($"User (id: {User.Identity.GetUserId()}) created pic (id: {pic.Id})");
             }
             else
             {
@@ -206,12 +209,27 @@ namespace PicsOfUs.Controllers
                     .Include(p => p.Subjects)
                     .Single(p => p.Id == pic.Id);
 
+                if (pic.Url != picInDb.Url)
+                {
+                    DeletePreviousImage();
+                }
+
                 picInDb.Url = pic.Url;
                 picInDb.Caption = pic.Caption;
                 picInDb.CaptureDate = pic.CaptureDate;
                 picInDb.Subjects = pic.Subjects;
 
-                NLogger.GetInstance().Info($"User (id: {User.Identity.GetUserId()}) edited member (id: {pic.Id})");
+                NLogger.GetInstance().Info($"User (id: {User.Identity.GetUserId()}) edited pic (id: {pic.Id})");
+
+                void DeletePreviousImage()
+                {
+                    string fullPath = Request.MapPath($"~{picInDb.Url}");
+                    if (System.IO.File.Exists(fullPath))
+                    {
+                        System.IO.File.Delete(fullPath);
+                        NLogger.GetInstance().Info($"Image file for pic (id: {pic.Id} was replaced");
+                    }
+                }
             }
 
             _context.SaveChanges();
